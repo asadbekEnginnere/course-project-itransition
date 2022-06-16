@@ -1,0 +1,34 @@
+<div class="sidebar">
+    <div class="brand-logo"><a class="full-logo" th:href="@{/admin/dashboard}">
+        <img th:src="@{/images/pcm.png}" alt="" ></a></div>
+    <div class="menu">
+        <ul>
+            <li>
+                <a th:href="@{/admin/dashboard}">
+                    <span><i class="ri-layout-grid-fill"></i></span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="">
+                <a th:href="@{/admin/user}">
+                    <span><i class="ri-user-line"></i></span>
+                    <span class="nav-text">Users</span></a>
+            </li>
+            <li class="">
+                <a href="./collection.html">
+                    <span><i class="ri-star-line"></i></span>
+                    <span class="nav-text">Collection</span></a>
+            </li>
+            <li class="">
+                <a href="./profile.html">
+                    <span><i class="ri-account-box-line"></i></span>
+                    <span class="nav-text">Profile</span></a>
+            </li>
+            <li class=""><a href="/logout">
+                <span><i class="ri-logout-circle-line"></i></span>
+                <span class="nav-text">Signout</span>
+               </a>
+            </li>
+        </ul>
+    </div>
+</div>

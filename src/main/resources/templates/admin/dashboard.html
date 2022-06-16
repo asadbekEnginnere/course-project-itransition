@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="/layouts/head.html :: head"> </head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+
+<div id="main-wrapper" class="admin">
+
+    <div th:insert="/admin/topheader.html :: div"> </div>
+    <div th:insert="/admin/sidebar.html :: div"> </div>
+
+    <div class="content-body">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-xxl-3 col-xl-12">
+                    <div class="row">
+                        <div class="col-xxl-12 col-xl-4 col-md-4 col-sm-6">
+                            <div class="stat-widget d-flex align-items-center">
+                                <div class="widget-icon me-3 bg-primary"><span><i class="ri-wallet-line"></i></span>
+                                </div>
+                                <div class="widget-content">
+                                    <h3>24K</h3>
+                                    <p>Artworks</p>
+                                </div>
+                                <div class="widget-arrow">
+                                    <p class="text-success mb-0">+168.001% <span><i class="bi bi-arrow-up"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-xl-4 col-md-4 col-sm-6">
+                            <div class="stat-widget d-flex align-items-center">
+                                <div class="widget-icon me-3 bg-secondary"><span><i class="ri-wallet-2-line"></i></span>
+                                </div>
+                                <div class="widget-content">
+                                    <h3>82K</h3>
+                                    <p>Auction</p>
+                                </div>
+                                <div class="widget-arrow">
+                                    <p class="text-danger mb-0">+168.001% <span><i class="bi bi-arrow-down"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-xl-4 col-md-4 col-sm-6">
+                            <div class="stat-widget d-flex align-items-center">
+                                <div class="widget-icon me-3 bg-success"><span><i class="ri-wallet-3-line"></i></span>
+                                </div>
+                                <div class="widget-content">
+                                    <h3>1K</h3>
+                                    <p>Creators</p>
+                                </div>
+                                <div class="widget-arrow">
+                                    <p class="text-success mb-0">+168.001% <span><i class="bi bi-arrow-up"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6 col-xl-8 col-lg-6">
+                    <h4 class="card-title mb-3">ETH Price</h4>
+                    <div id="user-activity" class="card">
+                        <div class="card-body">
+                            <canvas height="280" width="670" id="activity"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" col-xxl-3 col-xl-4 col-lg-6">
+                    <h4 class="card-title mb-3">Statistics</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas height="280" width="295" id="most-selling-items"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/chartjs/chart.bundle.min.js}"></script>
+<script th:src="@{/js/plugins/chartjs-line-init.js}"></script>
+<script th:src="@{/js/plugins/chartjs-donut.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>

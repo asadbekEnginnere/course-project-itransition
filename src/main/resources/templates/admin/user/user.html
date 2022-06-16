@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="/layouts/head.html :: head"> </head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+
+<div id="main-wrapper" class="admin">
+
+    <div th:insert="/admin/topheader.html :: div"> </div>
+    <div th:insert="/admin/sidebar.html :: div"> </div>
+
+    <div class="content-body">
+        <div class="container">
+            <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="page-title-content">
+                            <h3>User Management</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div th:if="${status}=='success'">
+                        <div  class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div th:if="${status}=='error'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+                    <h4 class="card-title mb-3">User List
+                        <div style="float:right"><button class="btn btn-primary btn-sm"><i class="ri-plus-bin-line"></i> Add</button></div>
+                    </h4>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive table-icon">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Activity</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                        <th colspan="3">Settings</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <th:block th:each="user,loop : ${users}">
+                                    <tr>
+                                        <td th:text="${loop.index+1}"></td>
+                                        <td th:text="${user.username}"></td>
+                                        <td th:text="${user.email}"></td>
+                                        <td th:text="${#temporals.format(user.lastLoginTime, 'yyyy-MM-dd HH:mm')}"></td>
+                                        <div th:if="${user.isBlocked}==false">
+                                            <td>Active</td>
+                                        </div>
+                                        <div th:if="${user.isBlocked}==true">
+                                            <td>Blocked</td>
+                                        </div>
+                                        <div th:if="${user.isBlocked}==false">
+                                            <td><a th:href="@{'/block/'+${user.id}}" class="btn btn-danger btn-rounded btn-sm" >Block</a></td>
+                                        </div>
+                                        <div th:if="${user.isBlocked}==true">
+                                            <td><a th:href="@{'/unblock/'+${user.id}}" class="btn btn-success btn-rounded btn-sm" >UnBlock</a></td>
+                                        </div>
+                                        <td>
+                                            <a class="btn btn-info btn-sm">Edit</a>
+                                        </td>
+                                        <td>
+                                            <form th:action="@{'/admin/user/'+${user.id}}" class="inline-flex"
+                                                  method="POST">
+                                                <button onclick="return confirm('Are you sure you want to delete?');"
+                                                        class="btn btn-danger btn-sm" type="submit">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                    </tr>
+                                    </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>

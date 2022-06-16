@@ -1,0 +1,64 @@
+<div class="header landing">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="navigation">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <div class="brand-logo">
+                            <a th:href="@{/}">
+                                <img th:src="@{/images/pcm.png}" alt="" class="logo-primary">
+                                <img th:src="@{/images/pcm.png}" alt="" class="logo-white">
+                            </a>
+                        </div>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <br>
+                            <form method="get" action="">
+                                <input type="search" th:placeholder="#{search}" class="form-control">
+                            </form>
+                            <ul class="navbar-nav me-auto">
+                                <li class="nav-item dropdown"><a class="nav-link" href="" th:text="#{home}"></a></li>
+                                <li class="nav-item"><a class="nav-link" href="collection.html" th:text="#{collection}"></a></li>
+                                <li class="nav-item"><a class="nav-link" href="item.html" th:text="#{item}"></a></li>
+
+                                <p sec:authorize="!isAuthenticated()">
+                                <li class="nav-item"><a class="nav-link" th:href="@{/auth/signing}" th:text="#{signin}"></a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/auth/signup}" th:text="#{signup}"></a></li>
+                                </p>
+
+                                <p sec:authorize="hasRole('ROLE_USER')">
+                                    <li class="nav-item"><a class="nav-link" href="profile.html" th:text="#{profile}"></a></li>
+                                </p>
+                                <p sec:authorize="hasRole('ROLE_SUPER_ADMIN')">
+                                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/dashboard}">Dashboard</a></li>
+                                </p>
+                                <p sec:authorize="isAuthenticated()">
+                                    <li class="nav-item"><a class="nav-link" th:href="@{/logout}" th:text="#{signout}"></a></li>
+                                </p>
+
+                                <li class="nav-item dropdown">
+                                    <a th:text="#{language}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="/?lang=uz">UZB</a>
+                                        <a class="dropdown-item" href="/?lang=en">ENG</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="signin-btn d-flex align-items-center">
+                            <div class="dark-light-toggle theme-switch" onclick="themeToggle()">
+                                <span class="dark"><i class="ri-moon-line"></i></span>
+                                <span class="light"><i class="ri-sun-line"></i></span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
