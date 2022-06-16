@@ -33,8 +33,8 @@
                                 <p sec:authorize="hasRole('ROLE_USER')">
                                     <li class="nav-item"><a class="nav-link" href="profile.html" th:text="#{profile}"></a></li>
                                 </p>
-                                <p sec:authorize="hasRole('ROLE_SUPER_ADMIN')">
-                                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/dashboard}">Dashboard</a></li>
+                                <p sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')">
+                                    <li class="nav-item"><a class="nav-link" th:href="@{/admin/dashboard}">[[#{dashboard}]]</a></li>
                                 </p>
                                 <p sec:authorize="isAuthenticated()">
                                     <li class="nav-item"><a class="nav-link" th:href="@{/logout}" th:text="#{signout}"></a></li>
@@ -44,8 +44,8 @@
                                     <a th:text="#{language}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/?lang=uz">UZB</a>
-                                        <a class="dropdown-item" href="/?lang=en">ENG</a>
+                                        <a class="dropdown-item" th:href="@{''(lang=uz)}">UZB</a>
+                                        <a class="dropdown-item" th:href="@{''(lang=en)}">ENG</a>
                                     </div>
                                 </li>
                             </ul>

@@ -1,32 +1,32 @@
 <div class="sidebar">
-    <div class="brand-logo"><a class="full-logo" th:href="@{/admin/dashboard}">
+    <div class="brand-logo"><a class="full-logo" th:href="@{/}">
         <img th:src="@{/images/pcm.png}" alt="" ></a></div>
     <div class="menu">
         <ul>
             <li>
                 <a th:href="@{/admin/dashboard}">
                     <span><i class="ri-layout-grid-fill"></i></span>
-                    <span class="nav-text">Dashboard</span>
+                    <span class="nav-text">[[#{dashboard}]]</span>
                 </a>
             </li>
             <li class="">
                 <a th:href="@{/admin/user}">
                     <span><i class="ri-user-line"></i></span>
-                    <span class="nav-text">Users</span></a>
+                    <span class="nav-text">[[#{users}]]</span></a>
             </li>
             <li class="">
                 <a href="./collection.html">
                     <span><i class="ri-star-line"></i></span>
-                    <span class="nav-text">Collection</span></a>
+                    <span class="nav-text">[[#{collection}]]</span></a>
             </li>
             <li class="">
-                <a href="./profile.html">
+                <a th:href="@{/admin/profile}">
                     <span><i class="ri-account-box-line"></i></span>
-                    <span class="nav-text">Profile</span></a>
+                    <span class="nav-text">[[#{profile}]]</span></a>
             </li>
             <li class=""><a href="/logout">
                 <span><i class="ri-logout-circle-line"></i></span>
-                <span class="nav-text">Signout</span>
+                <span class="nav-text">[[#{signout}]]</span>
                </a>
             </li>
         </ul>

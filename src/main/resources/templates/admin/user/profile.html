@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="/layouts/head.html :: head"> </head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+
+<div id="main-wrapper" class="admin">
+
+    <div th:insert="/admin/topheader.html :: div"> </div>
+    <div th:insert="/admin/sidebar.html :: div"> </div>
+
+    <div class="content-body">
+        <div class="container">
+            <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="page-title-content">
+                            <h3 th:text="#{user}+' '+'Role : '+${user.role}"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xxl-4 col-xl-12">
+                    <div class="card welcome-profile">
+                        <div class="card-body">
+                            <div style="float: right">
+                                <a th:href="@{'/admin/user/edit/'+${user.id}}" class="btn btn-success btn-sm">Edit</a>
+                            </div>
+                            <img th:src="@{/images/profile/3.png}" alt="">
+                            <h4>[[${user.firstName}]] [[${user.lastName}]]</h4>
+                            <p></p>
+                            <ul>
+                                <li><a th:href="@{/admin/profile}"><span class="verified"><i class="ri-check-line"></i></span>[[${user.username}]]</a></li>
+                                <li><a th:href="@{/admin/profile}"><span class="not-verified"><i
+                                        class="ri-shield-check-line"></i></span>[[${user.email}]]</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>

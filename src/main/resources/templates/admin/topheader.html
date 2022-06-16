@@ -7,13 +7,23 @@
                         <div class="brand-logo"><a class="mini-logo" href=""><img th:src="@{/images/logoi.png}" alt=""
                                                                                   width="40"></a></div>
                         <div class="search">
-                            <form action="dashboard.html#"><span><i class="ri-search-line"></i></span><input type="text" placeholder="Search Here"></form>
+                            <form action="dashboard.html#"><span><i class="ri-search-line"></i></span><input type="text" th:placeholder="#{search}"></form>
                         </div>
                     </div>
                     <div class="header-right">
                         <div class="dark-light-toggle theme-switch" onclick="themeToggle()">
-                            <span class="dark"><i class="ri-moon-line"></i></span>
+                            <span class="dark"><i class="ri-moon-line"></i> </span>
                             <span class="light"><i class="ri-sun-line"></i></span>
+                        </div>
+                        <div class="dropdown profile_log dropdown">
+                            <div data-bs-toggle="dropdown">
+                                <div class="user icon-menu active"><span th:text="#{language}"></span>
+                                </div>
+                            </div>
+                            <div tabindex="-1" class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" th:href="@{''(lang=uz)}">UZB</a>
+                                <a class="dropdown-item" th:href="@{''(lang=en)}">ENG</a>
+                            </div>
                         </div>
                         <div class="dropdown profile_log dropdown">
                             <div data-bs-toggle="dropdown">
@@ -33,10 +43,10 @@
                                     </div>
                                 </div>
                                 <a class="dropdown-item" href="profile.html">
-                                    <span><i class="ri-user-line"></i></span>Profile
+                                    <span><i class="ri-user-line"></i></span>[[#{profile}]]
                                 </a>
                                 <a class="dropdown-item logout" href="/logout">
-                                    <i class="ri-logout-circle-line"></i>Signout
+                                    <i class="ri-logout-circle-line"></i>[[#{signout}]]
                                 </a>
                             </div>
                         </div>

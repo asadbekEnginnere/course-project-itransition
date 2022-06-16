@@ -82,6 +82,17 @@ public class User implements UserDetails {
         return true;
     }
 
+    public User(Integer id, String firstName, String lastName, String username, String email, String password, Role role, boolean isBlocked) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.isBlocked = isBlocked;
+    }
+
     public User(String firstName, String lastName, String username, String email, String password, Role role, boolean isBlocked) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -91,4 +102,5 @@ public class User implements UserDetails {
         this.role = role;
         this.isBlocked = isBlocked;
     }
+
 }

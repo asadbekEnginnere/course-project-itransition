@@ -15,7 +15,7 @@
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
                         <div class="page-title-content">
-                            <h3>User Management</h3>
+                            <h3>[[#{user_management}]]</h3>
                         </div>
                     </div>
                 </div>
@@ -34,8 +34,8 @@
                             [[${message}]]
                         </div>
                     </div>
-                    <h4 class="card-title mb-3">User List
-                        <div style="float:right"><button class="btn btn-primary btn-sm"><i class="ri-plus-bin-line"></i> Add</button></div>
+                    <h4 class="card-title mb-3">[[#{user_list}]]
+                        <div style="float:right"><a th:href="@{/admin/user/create}" class="btn btn-primary btn-sm"><i class="ri-plus-bin-line"></i> [[#{add}]]</a></div>
                     </h4>
 
                     <div class="card">
@@ -45,12 +45,12 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Activity</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                        <th colspan="3">Settings</th>
+                                        <th>[[#{username}]]</th>
+                                        <th>[[#{email}]]</th>
+                                        <th>[[#{activity}]]</th>
+                                        <th>[[#{status}]]</th>
+                                        <th>[[#{action}]]</th>
+                                        <th colspan="3">[[#{settings}]]</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -61,26 +61,26 @@
                                         <td th:text="${user.email}"></td>
                                         <td th:text="${#temporals.format(user.lastLoginTime, 'yyyy-MM-dd HH:mm')}"></td>
                                         <div th:if="${user.isBlocked}==false">
-                                            <td>Active</td>
+                                            <td>[[#{active}]]</td>
                                         </div>
                                         <div th:if="${user.isBlocked}==true">
-                                            <td>Blocked</td>
+                                            <td>[[#{block}]]</td>
                                         </div>
                                         <div th:if="${user.isBlocked}==false">
-                                            <td><a th:href="@{'/block/'+${user.id}}" class="btn btn-danger btn-rounded btn-sm" >Block</a></td>
+                                            <td><a th:href="@{'/admin/user/block/'+${user.id}}" class="btn btn-danger btn-rounded btn-sm" >[[#{block}]]</a></td>
                                         </div>
                                         <div th:if="${user.isBlocked}==true">
-                                            <td><a th:href="@{'/unblock/'+${user.id}}" class="btn btn-success btn-rounded btn-sm" >UnBlock</a></td>
+                                            <td><a th:href="@{'/admin/user/unblock/'+${user.id}}" class="btn btn-success btn-rounded btn-sm" >[[#{unblock}]]</a></td>
                                         </div>
                                         <td>
-                                            <a class="btn btn-info btn-sm">Edit</a>
+                                            <a th:href="@{'/admin/user/edit/'+${user.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
                                         </td>
                                         <td>
                                             <form th:action="@{'/admin/user/'+${user.id}}" class="inline-flex"
                                                   method="POST">
                                                 <button onclick="return confirm('Are you sure you want to delete?');"
                                                         class="btn btn-danger btn-sm" type="submit">
-                                                    Delete
+                                                    [[#{delete}]]
                                                 </button>
                                             </form>
                                     </tr>
