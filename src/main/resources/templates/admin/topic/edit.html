@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="layouts/head :: admin-header"> </head>
+<head th:replace="admin/master/head :: admin-header"> </head>
 <body class="@@dashboard">
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
 <div id="main-wrapper" class="admin">
 
-    <div th:replace="layouts/topheader :: admin-topheader"> </div>
-    <div th:replace="layouts/sidebar :: admin-sidebar"> </div>
+    <div th:replace="admin/master/topheader :: admin-topheader"> </div>
+    <div th:replace="admin/master/sidebar :: admin-sidebar"> </div>
     <div class="content-body">
         <div class="container">
             <div class="page-title">
