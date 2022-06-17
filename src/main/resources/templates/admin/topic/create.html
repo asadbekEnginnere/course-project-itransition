@@ -1,10 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<head th:insert="/layouts/head.html :: head"> </head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
+<div id="main-wrapper" class="admin">
+
+    <div th:insert="/admin/topheader.html :: div"> </div>
+    <div th:insert="/admin/sidebar.html :: div"> </div>
+    <div class="content-body">
+        <div class="container">
+            <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="page-title-content">
+                            <h3>[[#{add_topic}]]</h3>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div th:if="${status}=='success'">
+                        <div  class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div th:if="${status}=='error'">
+                        <div class="alert alert-danger" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <form th:action="@{/admin/topic/create}" th:object="${topic}" method="post">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
+                                        <label class="form-label">[[#{name}]]
+                                        </label>
+                                        <input th:field="*{name}"  type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary mr-2">[[#{save}]]</button>
+                                    <a th:href="@{/admin/topic}" class="btn btn-info mr-2">[[#{back}]]</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
 </body>
+
 </html>

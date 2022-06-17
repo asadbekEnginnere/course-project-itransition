@@ -27,11 +27,11 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String getUserManagementPage(Model model,
-                                        @RequestParam(required = false)String search,
-                                        @RequestParam(required = false)Integer page,
-                                        @RequestParam(required = false)Integer size){
-        List<UserDto> allUsers = userService.getAllUsers();
-        model.addAttribute("users",allUsers);
+                                        @RequestParam(required = false) String search,
+                                        @RequestParam(required = false) Integer page,
+                                        @RequestParam(required = false) Integer size){
+        List<UserDto> allUser = userService.getAllUsers();
+        model.addAttribute("users",allUser);
         return "admin/user/user";
     }
 

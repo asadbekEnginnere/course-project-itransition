@@ -12,4 +12,6 @@ public interface TopicRepository extends JpaRepository<Topic,Integer> {
 
     @Query("SELECT new com.itransition.courseproject.dto.TopicDto(topic.id, topic.name) FROM com.itransition.courseproject.entity.collection.Topic topic")
     List<TopicDto> getAllTopic();
+
+    Topic findByName(String name);
 }

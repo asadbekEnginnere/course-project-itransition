@@ -28,4 +28,9 @@ public class Topic {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Timestamp createdAt;
+
+    public Topic(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

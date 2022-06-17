@@ -5,8 +5,12 @@ package com.itransition.courseproject.service;
 
 
 import com.itransition.courseproject.dto.UserDto;
+import com.itransition.courseproject.dto.UserRegisterDto;
+import com.itransition.courseproject.entity.enums.Role;
+import com.itransition.courseproject.entity.enums.ValidationResult;
 import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.repository.UserRepository;
+import com.itransition.courseproject.service.interfaces.UserRegistrationValidator;
 import com.itransition.courseproject.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +64,11 @@ public class UserServiceImpl implements
     @Override
     public List<UserDto> getAllUsers() {
         return userRepository.getAllUsers();
+    }
+
+    @Override
+    public List<UserDto> getAllUsers(int pageId,int total) {
+        return null;
     }
 
     @Override
@@ -176,6 +186,7 @@ public class UserServiceImpl implements
                 userRepository.save(user);
                 ra.addFlashAttribute("status", "success");
                 ra.addFlashAttribute("message", "Successfully updated");
+                if (getUserData().equals(userDto.getId()))return "redirect:/user/profile";
                 return "redirect:/admin/user";
             }catch (Exception e){
             }
@@ -183,16 +194,82 @@ public class UserServiceImpl implements
 
         ra.addFlashAttribute("status", "error");
         ra.addFlashAttribute("message","Updating error");
+        if (getUserData().equals(userDto.getId()))return "redirect:/user/profile";
         return "redirect:/admin/user";
     }
 
     @Override
+    public List<UserDto> search(String search) {
+        return null;
+    }
+
+    @Override
+    public String registerUser(UserRegisterDto userDto, RedirectAttributes ra) {
+
+        String message="";
+        if (userRepository.findByEmail(userDto.getEmail())==null) {
+            try {
+
+                ValidationResult apply =
+                        UserRegistrationValidator.isEmailValid()
+                                .and(UserRegistrationValidator.isPasswordValid())
+                                .and(UserRegistrationValidator.isFirstNameLastName())
+                                .and(UserRegistrationValidator.isPasswordMatch())
+                                .apply(userDto);
+
+                if (apply.equals(ValidationResult.SUCCESS)) {
+                    User user = new User(
+                            userDto.getFirstName(),
+                            userDto.getLastName(),
+                            userDto.getEmail(),
+                            userDto.getEmail(),
+                            passwordEncoder.encode(userDto.getPassword()),
+                            Role.ROLE_USER,
+                            false
+                    );
+
+                    userRepository.save(user);
+
+                    ra.addFlashAttribute("status", "success");
+                    ra.addFlashAttribute("message", "Successfully Registered");
+                    return "redirect:/signing";
+                }
+
+                switch (apply) {
+                    case EMAIL_NOT_VALID:
+                        message="Email not valid";
+                        break;
+                    case PASSWORD_NOT_VALID:
+                        message="Password not valid";
+                        break;
+                    case FIRSTNAME_OR_LASTNAME_NOT_VALID:
+                        message="FirstName or LastName length at least 3";
+                        break;
+                    case PASSWORD_DID_NOT_MATCH:
+                        message="Password did not match";
+                        break;
+                }
+            }catch (Exception e){}
+        }else{
+            message="Email already exist!";
+        }
+
+        ra.addFlashAttribute("status", "error");
+        ra.addFlashAttribute("message",message);
+        return "redirect:/signup";
+    }
+
+    @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
-        String userName = ((UserDetails) event.getAuthentication().
-                getPrincipal()).getUsername();
-        User currentUser = userRepository.findByUsername(userName);
-        currentUser.setLastLoginTime(LocalDateTime.now());
-        userRepository.save(currentUser);
+        try {
+            String userName = ((UserDetails) event.getAuthentication().
+                    getPrincipal()).getUsername();
+            User currentUser = userRepository.findByUsername(userName);
+            currentUser.setLastLoginTime(LocalDateTime.now());
+            userRepository.save(currentUser);
+        }catch (Exception e){
+            log.info("Error "," error logi time");
+        }
     }
 
 }

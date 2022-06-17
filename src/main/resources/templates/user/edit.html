@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="/layouts/head.html :: head"> </head>
+
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+
+
+<div id="main-wrapper" class="front">
+
+  <div th:insert="layouts/navbar.html :: div"> </div>
+  <div class="page-title">
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-6">
+          <div class="page-title-content">
+            <h3>[[#{profile}]]</h3>
+            <p class="mb-2">[[#{profile}]]</p>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="breadcrumbs"><a th:href="@{/}">[[#{home}]] </a><span><i class="ri-arrow-right-s-line"></i></span><a
+                  th:href="@{/user/profile}">[[#{profile}]]</a></div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="profile-page">
+    <div class="container">
+      <div class="row">
+        <div class="col-xxl-12">
+          <div th:if="${status}=='success'">
+            <div  class="alert alert-primary" role="alert">
+              [[${message}]]
+            </div>
+          </div>
+
+          <div th:if="${status}=='error'">
+            <div class="alert alert-danger" role="alert">
+              [[${message}]]
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <form th:action="@{/user/edit}" th:object="${user}" method="post">
+                <div class="row">
+                  <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
+                    <label class="form-label">[[#{firstName}]]
+                    </label>
+                    <input type="hidden" th:field="*{id}" th:value="@{id}">
+                    <input th:field="*{firstName}" th:value="@{firstName}" type="text" class="form-control">
+                  </div>
+                  <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
+                    <label class="form-label">[[#{lastName}]]
+                    </label>
+                    <input th:field="*{lastName}" th:value="@{lastName}" type="text" class="form-control">
+                  </div>
+                  <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
+                    <label
+                            class="form-label">[[#{email}]]</label><input th:value="@{email}" th:field="*{email}" type="email"
+                                                                          class="form-control" >
+                  </div>
+                  <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
+                    <label
+                            class="form-label">[[#{password}]]</label><input th:value="@{password}" th:field="*{password}" type="password"
+                                                                             class="form-control" >
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <button type="submit" class="btn btn-primary mr-2">[[#{edit}]]</button>
+                  <a th:href="@{back}" class="btn btn-info mr-2">[[#{back}]]</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:insert="layouts/footer-top.html :: div"> </div>
+  <div th:insert="layouts/footer-bottom.html :: div"> </div>
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>

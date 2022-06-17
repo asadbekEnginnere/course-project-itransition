@@ -4,6 +4,5 @@ public enum CustomColumnDataType {
     textarea,
     text,
     number,
-    date,
-    Boolean
+    date
 }

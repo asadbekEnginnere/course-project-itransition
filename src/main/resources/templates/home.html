@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head th:insert="layouts/head.html :: head"> </head>
-
 <body class="@@dashboard">
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 <div id="main-wrapper" class="front">
@@ -10,14 +8,10 @@
     <div th:insert="layouts/footer-top.html :: div"> </div>
     <div th:insert="layouts/footer-bottom.html :: div"> </div>
 </div>
-
 <script th:src="@{vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/vendor/magnific-popup/magnific-popup.js}"></script>
 <script th:src="@{/js/plugins/magnific-popup-init.js}"></script>
 <script th:src="@{/js/scripts.js}"></script>
-
-
 </body>
-
 </html>

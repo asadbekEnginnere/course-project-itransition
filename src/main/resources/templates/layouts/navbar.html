@@ -26,12 +26,12 @@
                                 <li class="nav-item"><a class="nav-link" href="item.html" th:text="#{item}"></a></li>
 
                                 <p sec:authorize="!isAuthenticated()">
-                                <li class="nav-item"><a class="nav-link" th:href="@{/auth/signing}" th:text="#{signin}"></a></li>
-                                <li class="nav-item"><a class="nav-link" th:href="@{/auth/signup}" th:text="#{signup}"></a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/signing}" th:text="#{signin}"></a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/signup}" th:text="#{signup}"></a></li>
                                 </p>
 
                                 <p sec:authorize="hasRole('ROLE_USER')">
-                                    <li class="nav-item"><a class="nav-link" href="profile.html" th:text="#{profile}"></a></li>
+                                    <li class="nav-item"><a class="nav-link" th:href="@{/user/profile}" th:text="#{profile}"></a></li>
                                 </p>
                                 <p sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')">
                                     <li class="nav-item"><a class="nav-link" th:href="@{/admin/dashboard}">[[#{dashboard}]]</a></li>

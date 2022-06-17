@@ -39,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(
-                        "/auth/signing",
-                        "/auth/signup",
+                        "/signing",
+                        "/signup",
                         "/css/**",
                         "/icons/**",
                         "/images/**",
@@ -52,7 +52,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/auth/signing")
+                .loginPage("/signing")
+//                .oauth2Login()
+//                .loginPage("/signing")
+//                .defaultSuccessUrl("/success-login")
                 .permitAll()
                 .and()
                 .logout()

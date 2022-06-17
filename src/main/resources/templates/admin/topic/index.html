@@ -1,10 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<head th:insert="/layouts/head.html :: head"> </head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
+<div id="main-wrapper" class="admin">
+
+    <div th:insert="/admin/topheader.html :: div"> </div>
+    <div th:insert="/admin/sidebar.html :: div"> </div>
+
+    <div class="content-body">
+        <div class="container">
+            <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="page-title-content">
+                            <h3>[[#{topics}]]</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div th:if="${status}=='success'">
+                        <div  class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div th:if="${status}=='error'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+                    <h4 class="card-title mb-3">[[#{topic_list}]]
+                        <div style="float:right"><a th:href="@{/admin/topic/create}"  class="btn btn-primary btn-sm"><i class="ri-plus-bin-line"></i> [[#{add}]]</a></div>
+                    </h4>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive table-icon">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>[[#{name}]]</th>
+                                        <th>[[#{settings}]]</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <th:block th:each="topic,loop : ${topics}">
+                                        <tr>
+                                            <td th:text="${loop.index+1}"></td>
+                                            <td th:text="${topic.name}"></td>
+                                            <td>
+                                                <a th:href="@{'/admin/topic/edit/'+${topic.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{'/admin/topic/delete/'+${topic.id}}" class="inline-flex"
+                                                      method="POST">
+                                                    <button onclick="return confirm('Are you sure you want to delete?');"
+                                                            class="btn btn-danger btn-sm" type="submit">
+                                                        [[#{delete}]]
+                                                    </button>
+                                                </form>
+
+                                        </tr>
+                                    </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
 </body>
+
 </html>
