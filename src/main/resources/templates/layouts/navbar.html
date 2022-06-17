@@ -44,8 +44,8 @@
                                     <a th:text="#{language}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" th:href="@{''(lang=uz)}">UZB</a>
-                                        <a class="dropdown-item" th:href="@{''(lang=en)}">ENG</a>
+                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=uz'}">UZB</a>
+                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=en'}">ENG</a>
                                     </div>
                                 </li>
                             </ul>
