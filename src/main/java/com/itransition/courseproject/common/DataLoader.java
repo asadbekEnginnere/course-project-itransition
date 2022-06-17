@@ -31,24 +31,24 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (initMode.equals("always")) {
 
-            User user1 = new User("Asadbek",
-                    "Xalimjonov",
-                    "asadbek2000",
-                    "asatbekxalimjonov2000@gmail.com",
-                    passwordEncoder.encode("111"),
-                    Role.ROLE_SUPER_ADMIN,
-                    false);
-
-            User user2 = new User("Eldor",
-                    "Choriyev",
-                    "eldor1999",
-                    "ch.eldor@gmail.com",
-                    passwordEncoder.encode("111"),
-                    Role.ROLE_USER,
-                    false);
-
-            userRepo.save(user1);
-            userRepo.save(user2);
+//            User user1 = new User("Asadbek",
+//                    "Xalimjonov",
+//                    "asadbek2000",
+//                    "asatbekxalimjonov2000@gmail.com",
+//                    passwordEncoder.encode("111"),
+//                    Role.ROLE_SUPER_ADMIN,
+//                    false);
+//
+//            User user2 = new User("Eldor",
+//                    "Choriyev",
+//                    "eldor1999",
+//                    "ch.eldor@gmail.com",
+//                    passwordEncoder.encode("111"),
+//                    Role.ROLE_USER,
+//                    false);
+//
+//            userRepo.save(user1);
+//            userRepo.save(user2);
 
         }
     }
