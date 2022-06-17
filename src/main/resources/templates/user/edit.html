@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head th:insert="/layouts/head.html :: head"> </head>
-
+<head th:replace="layouts/head.html :: user-header"> </head>
 <body class="@@dashboard">
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
 
 <div id="main-wrapper" class="front">
 
-  <div th:insert="layouts/navbar.html :: div"> </div>
+  <div th:replace="layouts/navbar.html :: user-navbar"> </div>
   <div class="page-title">
     <div class="container">
       <div class="row align-items-center justify-content-between">
@@ -91,8 +89,8 @@
     </div>
   </div>
 
-  <div th:insert="layouts/footer-top.html :: div"> </div>
-  <div th:insert="layouts/footer-bottom.html :: div"> </div>
+  <div th:replace="layouts/footer-top.html :: user-footer-top"> </div>
+  <div th:replace="layouts/footer-bottom.html :: user-footer-bottom"> </div>
 
 </div>
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
