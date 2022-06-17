@@ -4,7 +4,7 @@ package com.itransition.courseproject.controller.user;
 // Asatbek Xalimjonov 6/17/22 6:29 PM
 
 import com.itransition.courseproject.dto.UserDto;
-import com.itransition.courseproject.service.UserServiceImpl;
+import com.itransition.courseproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

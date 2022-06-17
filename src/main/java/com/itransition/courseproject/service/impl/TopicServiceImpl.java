@@ -1,4 +1,4 @@
-package com.itransition.courseproject.service;
+package com.itransition.courseproject.service.impl;
 
 
 // Asatbek Xalimjonov 6/17/22 1:56 AM

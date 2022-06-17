@@ -3,7 +3,7 @@ package com.itransition.courseproject.config;
 
 // Asatbek Xalimjonov 6/14/22 7:56 PM
 
-import com.itransition.courseproject.service.UserServiceImpl;
+import com.itransition.courseproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

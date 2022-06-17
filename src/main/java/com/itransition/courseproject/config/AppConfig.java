@@ -3,6 +3,7 @@ package com.itransition.courseproject.config;
 
 // Asatbek Xalimjonov 6/14/22 7:56 PM
 
+import com.cloudinary.Cloudinary;
 import com.itransition.courseproject.entity.user.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +19,14 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.thymeleaf.dialect.IDialect;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
+
+
 
     @Bean
     public IDialect conditionalCommentDialect() {

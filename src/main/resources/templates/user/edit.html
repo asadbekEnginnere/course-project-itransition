@@ -16,12 +16,12 @@
         <div class="col-6">
           <div class="page-title-content">
             <h3>[[#{profile}]]</h3>
-            <p class="mb-2">[[#{profile}]]</p>
+            <p class="mb-2">[[#{edit}]]</p>
           </div>
         </div>
         <div class="col-auto">
           <div class="breadcrumbs"><a th:href="@{/}">[[#{home}]] </a><span><i class="ri-arrow-right-s-line"></i></span><a
-                  th:href="@{/user/profile}">[[#{profile}]]</a></div>
+                  th:href="@{'/user/edit/'+${user.id}}">[[#{edit}]]</a></div>
         </div>
       </div>
     </div>
@@ -31,6 +31,15 @@
 
   <div class="profile-page">
     <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <ul class="settings-menu">
+            <li><a th:href="@{/user/profile}">[[#{profile}]]</a></li>
+            <li class=""><a href="created.html">[[#{collection}]]</a></li>
+            <li class=""><a href="collected.html">[[#{item}]]</a></li>
+          </ul>
+        </div>
+      </div>
       <div class="row">
         <div class="col-xxl-12">
           <div th:if="${status}=='success'">

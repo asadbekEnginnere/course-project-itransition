@@ -4,7 +4,7 @@ package com.itransition.courseproject.controller.user;
 // Asatbek Xalimjonov 6/15/22 11:00 AM
 
 import com.itransition.courseproject.dto.UserDto;
-import com.itransition.courseproject.service.UserServiceImpl;
+import com.itransition.courseproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 

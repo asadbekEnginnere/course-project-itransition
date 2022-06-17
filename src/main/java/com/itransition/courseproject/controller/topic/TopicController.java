@@ -4,7 +4,7 @@ package com.itransition.courseproject.controller.topic;
 // Asatbek Xalimjonov 6/17/22 2:00 AM
 
 import com.itransition.courseproject.dto.TopicDto;
-import com.itransition.courseproject.service.TopicServiceImpl;
+import com.itransition.courseproject.service.impl.TopicServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

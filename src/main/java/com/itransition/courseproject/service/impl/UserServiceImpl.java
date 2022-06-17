@@ -1,4 +1,4 @@
-package com.itransition.courseproject.service;
+package com.itransition.courseproject.service.impl;
 
 
 // Asatbek Xalimjonov 6/15/22 9:44 AM
@@ -186,7 +186,7 @@ public class UserServiceImpl implements
                 userRepository.save(user);
                 ra.addFlashAttribute("status", "success");
                 ra.addFlashAttribute("message", "Successfully updated");
-                if (getUserData().equals(userDto.getId()))return "redirect:/user/profile";
+                if (getUserData().getId().equals(userDto.getId()))return "redirect:/user/profile";
                 return "redirect:/admin/user";
             }catch (Exception e){
             }
@@ -194,7 +194,7 @@ public class UserServiceImpl implements
 
         ra.addFlashAttribute("status", "error");
         ra.addFlashAttribute("message","Updating error");
-        if (getUserData().equals(userDto.getId()))return "redirect:/user/profile";
+        if (getUserData().getId().equals(userDto.getId()))return "redirect:/user/profile";
         return "redirect:/admin/user";
     }
 
