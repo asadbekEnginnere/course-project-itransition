@@ -24,7 +24,6 @@ public class Item {
     private Integer id;
 
     private String name;
-    private String imageUrl;
 
     @ManyToOne
     private Collection collection;

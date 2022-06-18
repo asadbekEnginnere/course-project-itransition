@@ -5,6 +5,63 @@
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 <div id="main-wrapper" class="front">
     <div th:replace="layouts/navbar :: user-navbar"> </div>
+
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+
+<!--    <div class="page-title">-->
+<!--        <div class="container">-->
+<!--            <div class="row align-items-center justify-content-between">-->
+<!--                <div class="col-12">-->
+<!--                    <button class="add_field_button btn btn-info btn-sm">Add More Fields</button>-->
+<!--                    <form th:action="@{/}" method="post">-->
+<!--                        <div class="input_fields_wrap">-->
+<!--                        </div>-->
+<!--                        <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+<!--    </div>-->
+
+
+<!--    <script>-->
+
+<!--        var inputName=1;-->
+<!--        var type=1;-->
+
+<!--        $(document).ready(function () {-->
+<!--            var max_fields = 10;-->
+<!--            var wrapper = $(".input_fields_wrap");-->
+<!--            var add_button = $(".add_field_button");-->
+
+<!--            var x = 1;-->
+<!--            $(add_button).click(function (e) {-->
+<!--                e.preventDefault();-->
+<!--                if (x < max_fields) {-->
+<!--                    x++;-->
+<!--                    $(wrapper).append(-->
+<!--                        '<div class="input-group mb-3">'-->
+<!--                        + ' <input type="text" class="form-control mb-3" name="name'+(inputName++)+'" placeholder="Enter Price">'-->
+<!--                        + ' <select name="type'+(type++)+'" class="form-control mb-3">'-->
+<!--                        + '   <option value="1">NUMBER</option>'-->
+<!--                        + '  <option value="2">TEXT</option>'-->
+<!--                        + ' <option value="3">IMAGE</option>'-->
+<!--                        + '</select>'-->
+<!--                        + '<div class="input-group-append">'-->
+<!--                        + '<button class="btn btn-outline-danger remove_field" type="button">Remove</button>'-->
+<!--                        + '</div></div>');-->
+<!--                }-->
+<!--            });-->
+
+<!--            $(wrapper).on("click", ".remove_field", function (e) {-->
+<!--                e.preventDefault(); $(this).parent('div').parent('div').remove(); x&#45;&#45;;-->
+<!--            })-->
+
+<!--        });-->
+<!--    </script>-->
+
     <div th:replace="layouts/footer-top :: user-footer-top"> </div>
     <div th:replace="layouts/footer-bottom :: user-footer-bottom"> </div>
 </div>

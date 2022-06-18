@@ -21,4 +21,9 @@ public class UserCollection {
 
     @OneToOne
     private User user;
+
+    public UserCollection(User user) {
+        this.user = user;
+    }
 }
+

@@ -28,6 +28,11 @@ public class CollectionItemColumn {
     @ManyToOne
     private CustomColumn customColumn;
 
+    public CollectionItemColumn(Collection collection, CustomColumn customColumn) {
+        this.collection = collection;
+        this.customColumn = customColumn;
+    }
+
     @OrderBy
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

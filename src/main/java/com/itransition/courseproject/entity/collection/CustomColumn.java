@@ -28,6 +28,11 @@ public class CustomColumn {
     @Enumerated(EnumType.STRING)
     private CustomColumnDataType type;
 
+    public CustomColumn(String name, CustomColumnDataType type) {
+        this.name = name;
+        this.type = type;
+    }
+
     @OrderBy
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

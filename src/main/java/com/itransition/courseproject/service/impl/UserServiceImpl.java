@@ -272,4 +272,12 @@ public class UserServiceImpl implements
         }
     }
 
+    @Override
+    public User currenUser(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        User currentUser = userRepository.findByUsername(username);
+        return currentUser;
+    }
+
 }

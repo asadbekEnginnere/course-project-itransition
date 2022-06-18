@@ -2,6 +2,7 @@ package com.itransition.courseproject.service.interfaces;
 
 import com.itransition.courseproject.dto.UserDto;
 import com.itransition.courseproject.dto.UserRegisterDto;
+import com.itransition.courseproject.entity.user.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,4 +29,6 @@ public interface UserService {
     List<UserDto> search(String search);
 
     String registerUser(UserRegisterDto userDto, RedirectAttributes ra);
+
+    User currenUser();
 }

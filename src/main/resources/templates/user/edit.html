@@ -4,7 +4,6 @@
 <body class="@@dashboard">
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
-
 <div id="main-wrapper" class="front">
 
   <div th:replace="layouts/navbar :: user-navbar"> </div>
@@ -33,8 +32,7 @@
         <div class="col-12">
           <ul class="settings-menu">
             <li><a th:href="@{/user/profile}">[[#{profile}]]</a></li>
-            <li class=""><a href="created">[[#{collection}]]</a></li>
-            <li class=""><a href="collected">[[#{item}]]</a></li>
+            <li class=""><a th:href="@{/user/collection}">[[#{collection}]]</a></li>
           </ul>
         </div>
       </div>
