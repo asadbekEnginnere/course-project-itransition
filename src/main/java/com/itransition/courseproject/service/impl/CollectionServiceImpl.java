@@ -69,11 +69,14 @@ public class CollectionServiceImpl implements CollectionService {
 
             if (topicRepository.findById(topicId).isPresent()) {
 
-                File fileForServer = convertMultiPartToFile(file);
-                Map uploadResult = cloudinary.uploader().upload(fileForServer, ObjectUtils.emptyMap());
+                String imageUrl=null;
+                if (file!=null) {
+                    File fileForServer = convertMultiPartToFile(file);
+                    Map uploadResult = cloudinary.uploader().upload(fileForServer, ObjectUtils.emptyMap());
+                    imageUrl = (String) uploadResult.get("url");
+                    System.out.println("Url : "+imageUrl);
+                }
 
-                String imageUrl = (String) uploadResult.get("url");
-                System.out.println("Url : "+imageUrl);
 
                 Topic topic = topicRepository.findById(topicId).get();
                 Collection collection = new Collection(
@@ -103,21 +106,25 @@ public class CollectionServiceImpl implements CollectionService {
                 for(Map.Entry<String[], String[]> entry:columnType.entrySet()) {
                     String column = "";
                     for (String s : entry.getKey()) {
-                        column+=s;
+                        column=s;
                     }
+                    column=column.trim();
 
                     String type = "";
                     for (String s : entry.getValue()) {
-                        type+=s;
+                        type=s;
                     }
 
-                    if (customColumnRepository.findByName(column)!=null && customColumnRepository.findByName(column).getType().equals(type)) {
-                        customColumns.add(customColumnRepository.findByName(name));
+                    CustomColumn byName = customColumnRepository.findByName(column);
+
+                    if (byName!=null && byName.getType().name().equals(type)) {
+                        log.error("Found column : " + byName.toString());
+                        customColumns.add(byName);
                     }else{
+                        log.error("Column not found : ");
                         CustomColumn savedColumn = customColumnRepository.save(new CustomColumn(column, CustomColumnDataType.valueOf(type)));
                         customColumns.add(savedColumn);
                     }
-                    log.info("key: "+entry.getValue()+" value: "+entry.getValue());
                 }
 
                 for (CustomColumn customColumn : customColumns) {
@@ -153,6 +160,11 @@ public class CollectionServiceImpl implements CollectionService {
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message",message);
         return "redirect:/user/collection";
+    }
+
+    @Override
+    public CollectionDto findById(Integer id) {
+        return collectionRepository.getCollection(id);
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

@@ -19,8 +19,9 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="breadcrumbs"><a th:href="@{/}">[[#{home}]] </a><span><i class="ri-arrow-right-s-line"></i></span><a
-                            th:href="@{/user/collection}">[[#{collection}]]</a></div>
+                    <div class="breadcrumbs">
+                        <a th:href="@{/user/collection/create}" class="btn btn-warning">Add</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,7 +29,7 @@
 
     </div>
 
-    <div style="padding-bottom: 2rem" class="profile-page">
+    <div class="profile-page">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -52,28 +53,27 @@
                                 [[${message}]]
                             </div>
                         </div>
-                        <div style="float:right">
-                            <a th:href="@{/user/collection/create}" class="btn btn-info">Add</a>
-                        </div>
-                        <h4 class="card-title mb-3">My Creation</h4>
-                        <div class="row" th:each="collection : ${collections}">
-                            <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
-                                <div class="card items">
-                                    <div class="card-body">
-                                        <div class="items-img position-relative"><img th:src="${collection.imageUrl}"
-                                                                                      class="img-fluid rounded mb-3" alt=""><img src="images/avatar/1.jpg"
-                                                                                                                                 class="creator" width="50" alt=""></div>
-                                        <a href="item.html">
-                                            <h4 class="card-title" th:text="${collection.name}"></h4>
-                                            <a th:href="@{'/user/collection/edit/'+${collection.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
-                                            <form th:action="@{'/user/collection/delete/'+${collection.id}}" class="inline-flex"
-                                                  method="POST">
-                                                <button onclick="return confirm('Are you sure you want to delete?');"
-                                                        class="btn btn-danger btn-sm" type="submit">
-                                                    [[#{delete}]]
-                                                </button>
-                                            </form>
-                                        </a>
+                        <div class="row">
+                            <div th:each="collection : ${collections}">
+                                <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                                    <div class="card items">
+                                        <div class="card-body">
+                                            <div class="items-img position-relative"><img th:src="${collection.imageUrl}" width="300" height="250"
+                                                                                          class="img-fluid rounded mb-3" alt=""><img src="images/avatar/1.jpg"
+                                                                                                                                     class="creator" width="50" alt=""></div>
+                                            <a href="item.html">
+                                                <h4 class="card-title" th:text="${collection.name}"></h4>
+                                                <a th:href="@{'/user/collection/view/'+${collection.id}}" class="btn btn-info btn-sm">[[#{view}]]</a>
+                                                <a th:href="@{'/user/collection/edit/'+${collection.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
+                                                <form th:action="@{'/user/collection/delete/'+${collection.id}}" class="inline-flex"
+                                                      method="POST">
+                                                    <button onclick="return confirm('Are you sure you want to delete?');"
+                                                            class="btn btn-danger btn-sm" type="submit">
+                                                        [[#{delete}]]
+                                                    </button>
+                                                </form>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

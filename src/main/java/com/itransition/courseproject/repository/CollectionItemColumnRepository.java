@@ -14,4 +14,12 @@ public interface CollectionItemColumnRepository extends JpaRepository<Collection
             "from collection_item_column \n" +
             "where collection_id= :id ")
     List<Integer> collectCollectionItemColumnId(int id);
+
+    @Query(nativeQuery = true,
+            value = "select custom_column_id \n" +
+                    "from collection_item_column \n" +
+                    "where collection_id= :id ")
+    List<Integer> collectCustomColumnId(int id);
+
+
 }

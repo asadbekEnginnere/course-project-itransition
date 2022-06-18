@@ -40,6 +40,14 @@ public class CollectionController {
         return "collection/index";
     }
 
+    @GetMapping("/view/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public String showCollectionPage(@PathVariable Integer id,Model model){
+        CollectionDto byId = collectionService.findById(id);
+        model.addAttribute("collection",byId);
+        return "collection/view";
+    }
+
     @GetMapping("/create")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String getCollectionCreatePage(Model model){

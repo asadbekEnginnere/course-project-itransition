@@ -25,6 +25,12 @@ public class CustomColumn {
 
     private String name;
 
+    public CustomColumn(Integer id, String name, CustomColumnDataType type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
     @Enumerated(EnumType.STRING)
     private CustomColumnDataType type;
 

@@ -14,4 +14,6 @@ public interface CollectionService {
     String saveCollectionWithItemField(MultipartFile file, HttpServletRequest request, RedirectAttributes ra);
 
     String deleteCollectionById(Integer id, RedirectAttributes ra);
+
+    CollectionDto findById(Integer id);
 }
