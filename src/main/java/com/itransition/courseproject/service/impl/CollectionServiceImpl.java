@@ -17,7 +17,6 @@ import com.itransition.courseproject.repository.*;
 import com.itransition.courseproject.service.interfaces.CollectionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -28,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -120,8 +120,6 @@ public class CollectionServiceImpl implements CollectionService {
                     log.info("key: "+entry.getValue()+" value: "+entry.getValue());
                 }
 
-
-
                 for (CustomColumn customColumn : customColumns) {
                     collectionItemColumn.save(new CollectionItemColumn(savedCollection,customColumn));
                 }
@@ -130,6 +128,27 @@ public class CollectionServiceImpl implements CollectionService {
             }
 
         }catch (Exception e){}
+
+        ra.addFlashAttribute("status", status);
+        ra.addFlashAttribute("message",message);
+        return "redirect:/user/collection";
+    }
+
+    @Override
+    public String deleteCollectionById(Integer id, RedirectAttributes ra) {
+
+        String status="error";
+        String message="Deleting error";
+
+        if (collectionRepository.existsById(id)) {
+            try {
+                List<Integer> ids = collectionItemColumn.collectCollectionItemColumnId(id);
+                collectionItemColumn.deleteAllById(ids);
+                collectionRepository.deleteById(id);
+                status="success";
+                message="Successfully Deleted";
+            }catch (Exception e){}
+        }
 
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message",message);

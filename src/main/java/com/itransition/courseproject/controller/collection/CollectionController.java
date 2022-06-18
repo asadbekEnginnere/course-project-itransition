@@ -54,10 +54,19 @@ public class CollectionController {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public String handleFileUploadError(RedirectAttributes redirectAttributes)
+    public String handleFileUploadError(RedirectAttributes ra)
     {
-        redirectAttributes.addFlashAttribute("LargeFile","Max Size " + max_size);
+        ra.addFlashAttribute("status", "error");
+        ra.addFlashAttribute("message","Too large file max siz " + max_size);
         return "redirect:/user/collection";
     }
+
+    @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public String deleteCollectionById(@PathVariable Integer id,RedirectAttributes ra){
+        return collectionService.deleteCollectionById(id,ra);
+    }
+
+
 
 }
