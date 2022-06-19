@@ -33,4 +33,13 @@ public class HomeController {
         return "home";
     }
 
+    @PostMapping
+    public void test(HttpServletRequest request){
+        String[] tagsIds = request.getParameterValues("tagsId");
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        for (String tagsId : tagsIds) {
+            System.out.println(tagsId);
+        }
+    }
+
 }

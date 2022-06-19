@@ -42,4 +42,10 @@ public class Item {
     @UpdateTimestamp
     @Column(nullable = false)
     private Timestamp updatedAt;
+
+    public Item(String name, Collection collection, List<Tag> tags) {
+        this.name = name;
+        this.collection = collection;
+        this.tags = tags;
+    }
 }

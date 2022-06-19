@@ -59,7 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .deleteCookies("JSESSIONID")
+                .and()
+                .rememberMe()
+                .rememberMeParameter("remember-me-new");
     }
 
 

@@ -2,6 +2,14 @@
 <html lang="en">
 <head th:replace="layouts/head :: user-header"> </head>
 <body class="@@dashboard">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script>
+    $('select').selectpicker();
+</script>
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
 
@@ -13,15 +21,14 @@
             <div class="row align-items-center justify-content-between">
                 <div class="col-6">
                     <div class="page-title-content">
-                        <h3>[[#{item}]] [[#{add}]]</h3>
-                        <p class="mb-2">[[#{item}]] [[#{add}]]</p>
+                        <h3>[[#{add}]] [[#{item}]]</h3>
                     </div>
                 </div>
                 <div class="col-auto">
                     <div class="breadcrumbs">
                         <a th:href="@{/}">[[#{home}]] </a><span><i class="ri-arrow-right-s-line"></i></span>
-                        <a th:href="@{/user/collection}">[[#{collection}]]</a><span><i class="ri-arrow-right-s-line"></i></span>
-                        <a th:href="@{/user/collection/create}">[[#{collection}]] [[#{add}]]</a>
+                        <a th:href="@{'/user/collection/view/'+${collection.id}}">[[${collection.name}]]</a><span><i class="ri-arrow-right-s-line"></i></span>
+                        <a href="">[[#{add}]] [[#{item}]]</a>
                     </div>
                 </div>
             </div>
@@ -36,37 +43,55 @@
                 <div class="col-xxl-6 col-xl-6 col-lg-6">
                     <div class="card">
                         <div class="card-body">
-                            <form  method="post">
+                            <form  method="post" th:action="@{'/user/collection/item/'+${collection.id}+'/create'}">
                                 <div class="row">
+                                    <div>
                                     <div class="col-12 mb-3">
                                         <label class="form-label">[[#{name}]]</label>
                                         <input name="name" type="text" class="form-control">
                                     </div>
+                                    </div>
+                                    <div>
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">[[#{tags}]]</label>
+                                    </div>
+                                    </div>
+                                    <div>
+                                    <div class="col-12 mb-3">
+                                        <select name="tagsId" class="selectpicker" multiple data-live-search="true">
+                                            <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    </div>
                                     <div th:each="column : ${columns}">
                                         <div th:if="${column.type=='textarea'}" class="col-12 mb-3">
                                             <label class="form-label" th:text="${column.name}"></label>
-                                            <textarea th:name="${column.name}" type="text" class="form-control"></textarea>
+                                            <textarea th:name="${column.id}" type="text" class="form-control"></textarea>
                                         </div>
                                         <div th:if="${column.type=='text'}" class="col-12 mb-3">
                                             <label class="form-label" th:text="${column.name}"></label>
-                                            <input th:name="${column.name}" type="text" class="form-control">
+                                            <input th:name="${column.id}" type="text" class="form-control">
                                         </div>
                                         <div th:if="${column.type=='number'}" class="col-12 mb-3">
                                             <label class="form-label" th:text="${column.name}"></label>
-                                            <input th:name="${column.name}" type="number" class="form-control">
+                                            <input th:name="${column.id}" type="number" class="form-control">
                                         </div>
                                         <div th:if="${column.type=='date'}" class="col-12 mb-3">
                                             <label class="form-label" th:text="${column.name}"></label>
-                                            <input th:name="${column.name}" type="datetime-local" class="form-control">
+                                            <input th:name="${column.id}" type="datetime-local" class="form-control">
                                         </div>
                                         <div th:if="${column.type=='image'}" class="col-12 mb-3">
                                             <label class="form-label" th:text="${column.name}"></label>
-                                            <input th:name="${column.name}" type="file" class="form-control">
+                                            <input th:name="${column.id}" type="file" class="form-control">
                                         </div>
                                     </div>
                                 </div>
+                                <div>
                                 <div class="mt-3">
-                                    <button type="submit" class="btn btn-primary mr-2 w-100">[[#{add}]] [[#{item}]]</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">[[#{add}]] [[#{item}]]</button>
+                                    <a class="btn btn-info btn-sm" th:href="@{'/user/collection/view/'+${collection.id}}">[[#{back}]]</a>
+                                </div>
                                 </div>
                             </form>
                         </div>

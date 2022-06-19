@@ -15,12 +15,14 @@
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
                         <div class="page-title-content">
-                            <h3>iPhone - Items</h3>
+                            <h3>[[${collection.name}]] - [[#{item}]]</h3>
                             <p class="mb-2"></p>
                         </div>
                     </div>
                     <div class="col-auto">
-                        <div class="breadcrumbs"><a class="btn btn-warning" th:href="@{'/user/'+${collection.id}+'/create'}">Add Item</a></div>
+                        <div class="breadcrumbs">
+                            <a class="btn btn-warning" th:href="@{'/user/collection/item/'+${collection.id}+'/create'}">Add Item</a>
+                        <a class="btn btn-info" th:href="@{/user/collection}">[[#{back}]]</a></div>
                     </div>
                 </div>
             </div>

@@ -38,4 +38,10 @@ public class CustomValue {
     @UpdateTimestamp
     @Column(nullable = false)
     private Timestamp updatedAt;
+
+    public CustomValue(String value, CustomColumn customColumn, Item item) {
+        this.value = value;
+        this.customColumn = customColumn;
+        this.item = item;
+    }
 }
