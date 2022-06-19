@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="layouts/head :: user-header"> </head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+<div id="main-wrapper" class="front">
+    <div th:replace="layouts/navbar :: user-navbar"> </div>
+
+    <div class="create-sell section-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <div class="section-title text-center">
+                        <h2>Access Denied</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="layouts/footer-top :: user-footer-top"> </div>
+    <div th:replace="layouts/footer-bottom :: user-footer-bottom"> </div>
+</div>
+<script th:src="@{vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/magnific-popup/magnific-popup.js}"></script>
+<script th:src="@{/js/plugins/magnific-popup-init.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>
