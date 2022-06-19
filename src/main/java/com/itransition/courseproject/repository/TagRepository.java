@@ -12,4 +12,6 @@ public interface TagRepository extends JpaRepository<Tag,Integer> {
     @Query("select new com.itransition.courseproject.dto.TagDto(t.id,t.name) from com.itransition.courseproject.entity.collection.Tag t")
     List<TagDto> getAllTags();
 
+    Tag findByName(String name);
+
 }

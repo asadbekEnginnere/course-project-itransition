@@ -1,10 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<head th:replace="layouts/head :: user-header"> </head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
+
+<div id="main-wrapper" class="front">
+
+    <div th:replace="layouts/navbar :: user-navbar"> </div>
+    <div class="page-title">
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-6">
+                    <div class="page-title-content">
+                        <h3>[[#{add}]] [[#{tag}]]</h3>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="breadcrumbs">
+                        <a th:href="@{/}">[[#{home}]] </a><span><i class="ri-arrow-right-s-line"></i></span>
+                        <a th:href="@{/user/profile}">[[#{profile}]]</a><span><i class="ri-arrow-right-s-line"></i></span>
+                        <a href="">[[#{add}]] [[#{tag}]]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="upload-item section-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-6 col-xl-6 col-lg-6">
+                    <div th:if="${status}=='success'">
+                        <div  class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div th:if="${status}=='error'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <form th:action="@{/user/tag/create}" th:object="${tag}" method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">[[#{name}]]</label>
+                                        <input th:field="*{name}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-primary btn-sm">[[#{add}]] [[#{tag}]]</button>
+                                    <a class="btn btn-info btn-sm" th:href="@{/user/profile}">[[#{back}]]</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div th:replace="layouts/footer-top :: user-footer-top"> </div>
+    <div th:replace="layouts/footer-bottom :: user-footer-bottom"> </div>
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
 </body>
+
 </html>

@@ -74,6 +74,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public String updateTopic(TopicDto topicDto, RedirectAttributes ra) {
+
         if (topicRepository.existsById(topicDto.getId())) {
             try {
                 if (topicDto.getName().length()>0) {

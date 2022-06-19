@@ -23,6 +23,15 @@ public class Tag {
 
     private String name;
 
+    public Tag(String name) {
+        this.name = name;
+    }
+
+    public Tag(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @OrderBy
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

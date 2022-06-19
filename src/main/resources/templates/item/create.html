@@ -28,7 +28,8 @@
                     <div class="breadcrumbs">
                         <a th:href="@{/}">[[#{home}]] </a><span><i class="ri-arrow-right-s-line"></i></span>
                         <a th:href="@{'/user/collection/view/'+${collection.id}}">[[${collection.name}]]</a><span><i class="ri-arrow-right-s-line"></i></span>
-                        <a href="">[[#{add}]] [[#{item}]]</a>
+                        <a href="">[[#{add}]] [[#{item}]]</a><span><i class="ri-arrow-right-s-line"></i></span>
+                        <a th:href="@{/user/tag/create}" class="btn btn-info btn-warning">[[#{add}]] [[#{tag}]]</a>
                     </div>
                 </div>
             </div>
