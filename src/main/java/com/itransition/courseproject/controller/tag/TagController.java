@@ -34,8 +34,8 @@ public class TagController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
-    public String saveTag(HttpServletRequest request,TagDto tagDto, RedirectAttributes ra){
-        return tagService.saveTag(request,tagDto,ra);
+    public String saveTag(TagDto tagDto, RedirectAttributes ra){
+        return tagService.saveData(tagDto,ra);
     }
 
 }

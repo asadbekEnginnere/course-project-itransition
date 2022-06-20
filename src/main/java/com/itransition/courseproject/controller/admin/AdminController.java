@@ -4,19 +4,20 @@ package com.itransition.courseproject.controller.admin;
 // Asatbek Xalimjonov 6/15/22 10:59 AM
 
 import com.itransition.courseproject.dto.TagDto;
+import com.itransition.courseproject.dto.TopicDto;
 import com.itransition.courseproject.dto.UserDto;
 import com.itransition.courseproject.entity.collection.Tag;
 import com.itransition.courseproject.service.impl.TagServiceImpl;
 import com.itransition.courseproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 
 @Controller
@@ -47,8 +48,17 @@ public class AdminController {
 
     @GetMapping("/tag")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
-    public String getTagPage(Model model){
-        model.addAttribute("tags",tagService.getAllTags());
+    public String getAllTags(Model model,
+                             @RequestParam(required = false)String search,
+                             @RequestParam(required = false,defaultValue = "1")Integer page,
+                             @RequestParam(required = false,defaultValue = "4")Integer size){
+
+        Page<TagDto> tagPage = tagService.getAllDataByPage(page,size);
+        List<TagDto> tags = tagPage.getContent();
+        model.addAttribute("tags",tags);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", tagPage.getTotalPages());
+        model.addAttribute("totalItems", tagPage.getTotalElements());
         return "admin/tag/index";
     }
 
@@ -68,7 +78,7 @@ public class AdminController {
     @PostMapping("/tag/create")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String getAdminTageCreatePage(RedirectAttributes ra,TagDto tagDto){
-        return tagService.saveTag(null,tagDto,ra);
+        return tagService.saveData(tagDto,ra);
     }
 
     @GetMapping("/tag/edit/{id}")
@@ -85,7 +95,7 @@ public class AdminController {
     @PostMapping("/tag/edit")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String updateTag(RedirectAttributes ra,TagDto tagDto){
-        return tagService.editTag(tagDto,ra);
+        return tagService.updateData(tagDto,ra);
     }
 
 }

@@ -71,6 +71,20 @@
                                     </th:block>
                                     </tbody>
                                 </table>
+                                <br>
+                                <div th:if="${totalPages > 1}" style="text-align: center;margin: auto">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <div th:if="${currentPage > 1}">
+                                            <a class="btn btn-dark btn-sm" th:href="@{'/admin/topic/?page=' + ${currentPage - 1}}">Previous</a>
+                                        </div>
+                                        <div  th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                            <a th:if="${currentPage != i}" class="btn btn-dark btn-sm" th:href="@{'/admin/topic/?page=' + ${i}}">[[${i}]]</a>
+                                            <a class="btn btn-info btn-sm" th:unless="${currentPage != i}">[[${i}]] (current)</a>
+                                        </div>
+                                        <a class="btn btn-dark btn-sm" th:if="${currentPage < totalPages}" th:href="@{'/admin/topic/?page=' + ${currentPage + 1}}">Next</a>
+                                    </div>
+                                </div>
+                                <br>
                             </div>
                         </div>
                     </div>

@@ -47,7 +47,7 @@
                                         <th>#</th>
                                         <th>[[#{username}]]</th>
                                         <th>[[#{email}]]</th>
-                                        <th>[[#{activity}]]</th>
+                                        <th>[[#{role}]]</th>
                                         <th>[[#{status}]]</th>
                                         <th>[[#{action}]]</th>
                                         <th colspan="2">[[#{settings}]]</th>
@@ -59,35 +59,51 @@
                                         <td th:text="${loop.index+1}"></td>
                                         <td th:text="${user.username}"></td>
                                         <td th:text="${user.email}"></td>
-                                        <td th:text="${#temporals.format(user.lastLoginTime, 'yyyy-MM-dd HH:mm')}"></td>
-                                        <div th:if="${user.isBlocked}==false">
+                                        <td th:text="${user.role}"></td>
+                                        <div th:if="${!user.isBlocked}">
                                             <td>[[#{active}]]</td>
                                         </div>
-                                        <div th:if="${user.isBlocked}==true">
+                                        <div th:if="${user.isBlocked}">
                                             <td>[[#{block}]]</td>
                                         </div>
-                                        <div th:if="${user.isBlocked}==false">
+                                        <div th:if="${!user.isBlocked and !#strings.equals(user.role,'ROLE_SUPER_ADMIN')}">
                                             <td><a th:href="@{'/admin/user/block/'+${user.id}}" class="btn btn-danger btn-rounded btn-sm" >[[#{block}]]</a></td>
                                         </div>
-                                        <div th:if="${user.isBlocked}==true">
+                                        <div th:if="${user.isBlocked and !#strings.equals(user.role,'ROLE_SUPER_ADMIN')}">
                                             <td><a th:href="@{'/admin/user/unblock/'+${user.id}}" class="btn btn-success btn-rounded btn-sm" >[[#{unblock}]]</a></td>
                                         </div>
                                         <td>
                                             <a th:href="@{'/admin/user/edit/'+${user.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
                                         </td>
-                                        <td>
-                                            <form th:action="@{'/admin/user/'+${user.id}}" class="inline-flex"
-                                                  method="POST">
-                                                <button onclick="return confirm('Are you sure you want to delete?');"
-                                                        class="btn btn-danger btn-sm" type="submit">
-                                                    [[#{delete}]]
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <div th:if="${!#strings.equals(user.role,'ROLE_SUPER_ADMIN')}">
+                                            <td>
+                                                <form th:action="@{'/admin/user/'+${user.id}}" class="inline-flex"
+                                                      method="POST">
+                                                    <button onclick="return confirm('Are you sure you want to delete?');"
+                                                            class="btn btn-danger btn-sm" type="submit">
+                                                        [[#{delete}]]
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </div>
                                     </tr>
                                     </th:block>
                                     </tbody>
                                 </table>
+                                <br>
+                                <div th:if="${totalPages > 1}" style="text-align: center;margin: auto">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <div th:if="${currentPage > 1}">
+                                            <a class="btn btn-dark btn-sm" th:href="@{'/admin/user/?page=' + ${currentPage - 1}}">Previous</a>
+                                        </div>
+                                        <div  th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                            <a th:if="${currentPage != i}" class="btn btn-dark btn-sm" th:href="@{'/admin/user/?page=' + ${i}}">[[${i}]]</a>
+                                            <a class="btn btn-info btn-sm" th:unless="${currentPage != i}">[[${i}]] (current)</a>
+                                        </div>
+                                        <a class="btn btn-dark btn-sm" th:if="${currentPage < totalPages}" th:href="@{'/admin/user/?page=' + ${currentPage + 1}}">Next</a>
+                                    </div>
+                                </div>
+                                <br>
                             </div>
                         </div>
                     </div>

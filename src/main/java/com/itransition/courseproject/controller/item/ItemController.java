@@ -36,7 +36,7 @@ public class ItemController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public String itemCreatePage(Model model, @PathVariable Integer id){
         List<CustomColumnDto> customColumnDos = itemService.getCustomColumn(id);
-        List<TagDto> tags = tagService.getAllTags();
+        List<TagDto> tags = tagService.getAllData();
         model.addAttribute("collection",collectionService.findById(id));
         model.addAttribute("tags",tags);
         model.addAttribute("columns",customColumnDos);

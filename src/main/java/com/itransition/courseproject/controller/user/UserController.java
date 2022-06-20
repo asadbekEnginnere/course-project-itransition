@@ -4,8 +4,10 @@ package com.itransition.courseproject.controller.user;
 // Asatbek Xalimjonov 6/15/22 11:00 AM
 
 import com.itransition.courseproject.dto.UserDto;
+import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,10 +29,15 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String getUserManagementPage(Model model,
                                         @RequestParam(required = false) String search,
-                                        @RequestParam(required = false) Integer page,
-                                        @RequestParam(required = false) Integer size){
-        List<UserDto> allUser = userService.getAllUsers();
-        model.addAttribute("users",allUser);
+                                        @RequestParam(required = false,defaultValue = "1") Integer page,
+                                        @RequestParam(required = false,defaultValue = "4") Integer size){
+
+        Page<UserDto> usersPage = userService.getAllUserByPage(page,size);
+        List<UserDto> users = usersPage.getContent();
+        model.addAttribute("users",users);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usersPage.getTotalPages());
+        model.addAttribute("totalItems", usersPage.getTotalElements());
         return "admin/user/user";
     }
 

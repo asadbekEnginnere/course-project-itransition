@@ -48,13 +48,13 @@
                         </div>
 
                         <div th:if="${status}=='error'">
-                            <div class="alert alert-primary" role="alert">
+                            <div class="alert alert-danger" role="alert">
                                 [[${message}]]
                             </div>
                         </div>
                         <div class="row">
                             <div th:each="collection : ${collections}">
-                                <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                                <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-4 col-sm-4"  style="display:inline-block">
                                     <div class="card items">
                                         <div class="card-body">
                                             <div class="items-img position-relative"><img th:src="${collection.imageUrl}" width="300" height="250"

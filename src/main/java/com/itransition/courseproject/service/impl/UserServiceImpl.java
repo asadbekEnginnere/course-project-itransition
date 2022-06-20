@@ -15,6 +15,7 @@ import com.itransition.courseproject.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.data.domain.*;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,14 +23,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +64,32 @@ public class UserServiceImpl implements
     @Override
     public List<UserDto> getAllUsers() {
         return userRepository.getAllUsers();
+    }
+
+
+
+    public Page<UserDto> getAllUserByPage(int page, int size) {
+        Pageable pageable = PageRequest.of(
+                page-1,
+                size,
+                Sort.by("id")
+        );
+        Page<User> userPage = userRepository.findAll(pageable);
+        int totalElements = (int) userPage.getTotalElements();
+        return new PageImpl<UserDto>(userPage.getContent()
+                .stream()
+                .map(user -> new UserDto(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getRole(),
+                        user.isBlocked(),
+                        user.getLastLoginTime()
+                        )
+                )
+                .collect(Collectors.toList()), pageable, totalElements);
     }
 
     @Override

@@ -51,7 +51,7 @@ public class CollectionController {
     @GetMapping("/create")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String getCollectionCreatePage(Model model){
-        model.addAttribute("topics",topicService.getAllTopic());
+        model.addAttribute("topics",topicService.getAllData());
         return "collection/create";
     }
 

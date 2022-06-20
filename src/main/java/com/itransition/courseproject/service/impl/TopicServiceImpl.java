@@ -7,28 +7,59 @@ package com.itransition.courseproject.service.impl;
 import com.itransition.courseproject.dto.TopicDto;
 import com.itransition.courseproject.entity.collection.Topic;
 import com.itransition.courseproject.repository.TopicRepository;
-import com.itransition.courseproject.service.interfaces.TopicService;
+import com.itransition.courseproject.service.interfaces.GenericInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TopicServiceImpl implements TopicService {
+public class TopicServiceImpl implements  GenericInterface<TopicDto,Integer,String> {
 
     private final TopicRepository topicRepository;
 
     @Override
-    public List<TopicDto> getAllTopic() {
+    public List<TopicDto> getAllData() {
         return topicRepository.getAllTopic();
     }
 
     @Override
-    public String saveTopic(TopicDto topicDto, RedirectAttributes ra) {
+    public Page<TopicDto> getAllDataByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(
+                page-1,
+                size,
+                Sort.by("id")
+        );
+
+        Page<Topic> topicPage = topicRepository.findAll(pageable);
+        int totalElements = (int) topicPage.getTotalElements();
+        return new PageImpl<TopicDto>(topicPage.getContent()
+                .stream()
+                .map(topic -> new TopicDto(
+                                topic.getId(),
+                                topic.getName()
+                        )
+                )
+                .collect(Collectors.toList()), pageable, totalElements);
+    }
+
+    @Override
+    public TopicDto findById(Integer id) {
+        if (topicRepository.existsById(id)) {
+            Topic topic = topicRepository.findById(id).get();
+            return new TopicDto(topic.getId(),topic.getName());
+        }
+        return null;
+    }
+
+    @Override
+    public String saveData(TopicDto topicDto, RedirectAttributes ra) {
 
         if (topicRepository.findByName(topicDto.getName())==null) {
             try {
@@ -48,32 +79,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public String deleteTopicByUserId(Integer id, RedirectAttributes ra) {
-        if (topicRepository.existsById(id)) {
-            try {
-                topicRepository.deleteById(id);
-                ra.addFlashAttribute("status", "success");
-                ra.addFlashAttribute("message", "Successfully deleted");
-                return "redirect:/admin/topic";
-            }catch (Exception e){
-            }
-        }
-        ra.addFlashAttribute("status", "error");
-        ra.addFlashAttribute("message","Deleting Error");
-        return "redirect:/admin/topic";
-    }
-
-    @Override
-    public TopicDto findById(Integer id) {
-        if (topicRepository.existsById(id)) {
-            Topic topic = topicRepository.findById(id).get();
-            return new TopicDto(topic.getId(),topic.getName());
-        }
-        return null;
-    }
-
-    @Override
-    public String updateTopic(TopicDto topicDto, RedirectAttributes ra) {
+    public String updateData(TopicDto topicDto, RedirectAttributes ra) {
 
         if (topicRepository.existsById(topicDto.getId())) {
             try {
@@ -91,4 +97,22 @@ public class TopicServiceImpl implements TopicService {
         ra.addFlashAttribute("message","Updating Error");
         return "redirect:/admin/topic/edit/"+topicDto.getId();
     }
+
+    @Override
+    public String deleteById(Integer id, RedirectAttributes ra) {
+        if (topicRepository.existsById(id)) {
+            try {
+                topicRepository.deleteById(id);
+                ra.addFlashAttribute("status", "success");
+                ra.addFlashAttribute("message", "Successfully deleted");
+                return "redirect:/admin/topic";
+            }catch (Exception e){
+            }
+        }
+        ra.addFlashAttribute("status", "error");
+        ra.addFlashAttribute("message","Deleting Error");
+        return "redirect:/admin/topic";
+    }
+
+
 }
