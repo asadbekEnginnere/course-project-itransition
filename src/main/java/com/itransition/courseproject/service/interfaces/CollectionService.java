@@ -9,11 +9,5 @@ import java.util.List;
 
 public interface CollectionService {
 
-    List<CollectionDto> getAllCollection();
-
     String saveCollectionWithItemField(MultipartFile file, HttpServletRequest request, RedirectAttributes ra);
-
-    String deleteCollectionById(Integer id, RedirectAttributes ra);
-
-    CollectionDto findById(Integer id);
 }

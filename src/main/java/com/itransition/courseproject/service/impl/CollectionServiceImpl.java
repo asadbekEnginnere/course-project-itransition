@@ -15,8 +15,10 @@ import com.itransition.courseproject.entity.enums.CustomColumnDataType;
 import com.itransition.courseproject.entity.user.UserCollection;
 import com.itransition.courseproject.repository.*;
 import com.itransition.courseproject.service.interfaces.CollectionService;
+import com.itransition.courseproject.service.interfaces.GenericInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,7 +35,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class CollectionServiceImpl implements CollectionService {
+public class CollectionServiceImpl implements CollectionService, GenericInterface<CollectionDto,Integer,String> {
 
     private final CollectionRepository collectionRepository;
     private final CollectionItemColumnRepository collectionItemColumn;
@@ -42,11 +44,6 @@ public class CollectionServiceImpl implements CollectionService {
     private final TopicRepository topicRepository;
     private final UserCollectionRepository userCollectionRepository;
     private final UserServiceImpl userService;
-
-    @Override
-    public List<CollectionDto> getAllCollection() {
-        return collectionRepository.getAllCollection();
-    }
 
     @Override
     public String saveCollectionWithItemField(MultipartFile file, HttpServletRequest request, RedirectAttributes ra) {
@@ -142,8 +139,34 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public String deleteCollectionById(Integer id, RedirectAttributes ra) {
+    public List<CollectionDto> getAllData() {
+        return collectionRepository.getAllCollection();
+    }
 
+    @Override
+    public Page<CollectionDto> getAllDataByPage(Integer page, Integer size) {
+        // TODO: 6/21/22
+        return null;
+    }
+
+    @Override
+    public CollectionDto findById(Integer id) {
+        return collectionRepository.getCollection(id);
+    }
+
+    @Override
+    public String saveData(CollectionDto collectionDto, RedirectAttributes ra) {
+        // TODO: 6/21/22 Done
+        return null;
+    }
+
+    @Override
+    public String updateData(CollectionDto collectionDto, RedirectAttributes ra) {
+        return null;
+    }
+
+    @Override
+    public String deleteById(Integer id, RedirectAttributes ra) {
         String status="error";
         String message="Deleting error";
 
@@ -160,11 +183,6 @@ public class CollectionServiceImpl implements CollectionService {
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message",message);
         return "redirect:/user/collection";
-    }
-
-    @Override
-    public CollectionDto findById(Integer id) {
-        return collectionRepository.getCollection(id);
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

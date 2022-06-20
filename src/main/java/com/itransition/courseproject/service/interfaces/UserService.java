@@ -11,20 +11,10 @@ import java.util.Map;
 
 public interface UserService {
 
-    List<UserDto> getAllUsers();
-    List<UserDto> getAllUsers(int pageId,int total);
-
-    Map<String, String> deleteUserById(Integer id);
-
-    String saveUser(UserDto userDto, RedirectAttributes ra);
 
     String blockOrUnBlockUserById(Integer id, RedirectAttributes ra,boolean shouldBlockUser);
 
     UserDto getUserData();
-
-    UserDto findById(Integer id);
-
-    String editUser(UserDto userDto, RedirectAttributes ra);
 
     List<UserDto> search(String search);
 

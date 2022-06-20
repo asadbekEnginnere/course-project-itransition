@@ -36,7 +36,7 @@ public class CollectionController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     public String getCollectionPage(Model model){
-        model.addAttribute("collections",collectionService.getAllCollection());
+        model.addAttribute("collections",collectionService.getAllData());
         return "collection/index";
     }
 
@@ -72,7 +72,7 @@ public class CollectionController {
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String deleteCollectionById(@PathVariable Integer id,RedirectAttributes ra){
-        return collectionService.deleteCollectionById(id,ra);
+        return collectionService.deleteById(id,ra);
     }
 
 

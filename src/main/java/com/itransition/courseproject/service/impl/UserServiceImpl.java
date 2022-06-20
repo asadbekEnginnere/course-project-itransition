@@ -10,6 +10,7 @@ import com.itransition.courseproject.entity.enums.Role;
 import com.itransition.courseproject.entity.enums.ValidationResult;
 import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.repository.UserRepository;
+import com.itransition.courseproject.service.interfaces.GenericInterface;
 import com.itransition.courseproject.service.interfaces.UserRegistrationValidator;
 import com.itransition.courseproject.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements
         UserService,
         UserDetailsService,
+        GenericInterface<UserDto,Integer,String>,
         ApplicationListener<AuthenticationSuccessEvent> {
 
     private final UserRepository userRepository;
@@ -60,90 +62,6 @@ public class UserServiceImpl implements
         return user;
     }
 
-
-    @Override
-    public List<UserDto> getAllUsers() {
-        return userRepository.getAllUsers();
-    }
-
-
-
-    public Page<UserDto> getAllUserByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(
-                page-1,
-                size,
-                Sort.by("id")
-        );
-        Page<User> userPage = userRepository.findAll(pageable);
-        int totalElements = (int) userPage.getTotalElements();
-        return new PageImpl<UserDto>(userPage.getContent()
-                .stream()
-                .map(user -> new UserDto(
-                        user.getId(),
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getRole(),
-                        user.isBlocked(),
-                        user.getLastLoginTime()
-                        )
-                )
-                .collect(Collectors.toList()), pageable, totalElements);
-    }
-
-    @Override
-    public List<UserDto> getAllUsers(int pageId,int total) {
-        return null;
-    }
-
-    @Override
-    public Map<String, String> deleteUserById(Integer id) {
-
-        Map<String,String> messages = new HashMap<>();
-
-        if (userRepository.existsById(id)) {
-            try {
-                userRepository.deleteById(id);
-                messages.put("success","Successfully deleted");
-            }catch (Exception e){
-                messages.put("error","Deleting error");
-            }
-        }else{
-            messages.put("notFound","Not Found");
-        }
-        return messages;
-    }
-
-    @Override
-    public String saveUser(UserDto userDto, RedirectAttributes ra) {
-
-        if (userRepository.findByUsername(userDto.getUsername())==null && userRepository.findByEmail(userDto.getEmail())==null) {
-
-            try {
-                User user = new User(
-                        userDto.getFirstName(),
-                        userDto.getLastName(),
-                        userDto.getEmail(),
-                        userDto.getEmail(),
-                        passwordEncoder.encode(userDto.getPassword()),
-                        userDto.getRole(),
-                        false
-                );
-
-                userRepository.save(user);
-                ra.addFlashAttribute("status", "success");
-                ra.addFlashAttribute("message", "Successfully created");
-                return "redirect:/admin/user";
-            }catch (Exception e){
-
-            }
-        }
-
-        ra.addFlashAttribute("status", "error");
-        ra.addFlashAttribute("message","User Already exist with this data");
-        return "redirect:/admin/user/create";
-    }
 
     @Override
     public String blockOrUnBlockUserById(Integer id, RedirectAttributes ra,boolean shouldBlockUser) {
@@ -184,6 +102,36 @@ public class UserServiceImpl implements
     }
 
     @Override
+    public List<UserDto> getAllData() {
+        return userRepository.getAllUsers();
+    }
+
+    @Override
+    public Page<UserDto> getAllDataByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(
+                page-1,
+                size,
+                Sort.by("id")
+        );
+        Page<User> userPage = userRepository.findAll(pageable);
+        int totalElements = (int) userPage.getTotalElements();
+        return new PageImpl<UserDto>(userPage.getContent()
+                .stream()
+                .map(user -> new UserDto(
+                                user.getId(),
+                                user.getFirstName(),
+                                user.getLastName(),
+                                user.getUsername(),
+                                user.getEmail(),
+                                user.getRole(),
+                                user.isBlocked(),
+                                user.getLastLoginTime()
+                        )
+                )
+                .collect(Collectors.toList()), pageable, totalElements);
+    }
+
+    @Override
     public UserDto findById(Integer id) {
         User user = userRepository.findById(id).get();
         return new UserDto(
@@ -199,7 +147,36 @@ public class UserServiceImpl implements
     }
 
     @Override
-    public String editUser(UserDto userDto, RedirectAttributes ra) {
+    public String saveData(UserDto userDto, RedirectAttributes ra) {
+        if (userRepository.findByUsername(userDto.getUsername())==null && userRepository.findByEmail(userDto.getEmail())==null) {
+
+            try {
+                User user = new User(
+                        userDto.getFirstName(),
+                        userDto.getLastName(),
+                        userDto.getEmail(),
+                        userDto.getEmail(),
+                        passwordEncoder.encode(userDto.getPassword()),
+                        userDto.getRole(),
+                        false
+                );
+
+                userRepository.save(user);
+                ra.addFlashAttribute("status", "success");
+                ra.addFlashAttribute("message", "Successfully created");
+                return "redirect:/admin/user";
+            }catch (Exception e){
+
+            }
+        }
+
+        ra.addFlashAttribute("status", "error");
+        ra.addFlashAttribute("message","User Already exist with this data");
+        return "redirect:/admin/user/create";
+    }
+
+    @Override
+    public String updateData(UserDto userDto, RedirectAttributes ra) {
         if (userRepository.existsById(userDto.getId())) {
 
             try {
@@ -223,6 +200,23 @@ public class UserServiceImpl implements
         if (getUserData().getId().equals(userDto.getId()))return "redirect:/user/profile";
         return "redirect:/admin/user";
     }
+
+    @Override
+    public String deleteById(Integer id, RedirectAttributes ra) {
+        if (userRepository.existsById(id)) {
+            try {
+                userRepository.deleteById(id);
+                ra.addFlashAttribute("status", "success");
+                ra.addFlashAttribute("message", "Successfully deleted");
+                return "redirect:/admin/topic";
+            }catch (Exception e){
+            }
+        }
+        ra.addFlashAttribute("status", "error");
+        ra.addFlashAttribute("message","Deleting Error");
+        return "redirect:/admin/user";
+    }
+
 
     @Override
     public List<UserDto> search(String search) {

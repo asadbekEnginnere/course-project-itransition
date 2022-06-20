@@ -32,7 +32,7 @@ public class UserController {
                                         @RequestParam(required = false,defaultValue = "1") Integer page,
                                         @RequestParam(required = false,defaultValue = "4") Integer size){
 
-        Page<UserDto> usersPage = userService.getAllUserByPage(page,size);
+        Page<UserDto> usersPage = userService.getAllDataByPage(page,size);
         List<UserDto> users = usersPage.getContent();
         model.addAttribute("users",users);
         model.addAttribute("currentPage", page);
@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public String saveUser(UserDto userDto,RedirectAttributes ra) {
-        return userService.saveUser(userDto,ra);
+        return userService.saveData(userDto,ra);
     }
 
     @GetMapping("/edit/{id}")
@@ -66,21 +66,13 @@ public class UserController {
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public String updateUser(UserDto userDto, RedirectAttributes ra) {
-        return userService.editUser(userDto,ra);
+        return userService.updateData(userDto,ra);
     }
 
     @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String deleteUserById(@PathVariable Integer id, RedirectAttributes ra){
-
-        Map<String,String> messages = userService.deleteUserById(id);
-        Map.Entry<String,String> entry = messages.entrySet().iterator().next();
-        String key = entry.getKey();
-        String value = entry.getValue();
-
-        ra.addFlashAttribute("status", key);
-        ra.addFlashAttribute("message", value);
-        return "redirect:/admin/user";
+        return userService.deleteById(id,ra);
     }
 
     @GetMapping("/block/{id}")

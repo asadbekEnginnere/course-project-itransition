@@ -44,7 +44,7 @@ public class ProfileController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public String updateUser(UserDto userDto, RedirectAttributes ra) {
         if (userService.getUserData().getId().equals(userDto.getId())) {
-            return userService.editUser(userDto, ra);
+            return userService.updateData(userDto, ra);
         }
         return "redirect:/";
     }
