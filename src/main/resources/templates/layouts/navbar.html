@@ -22,8 +22,8 @@
                             </form>
                             <ul class="navbar-nav me-auto">
                                 <li class="nav-item dropdown"><a class="nav-link" href="" th:text="#{home}"></a></li>
-                                <li class="nav-item"><a class="nav-link" href="collection.html" th:text="#{collection}"></a></li>
-                                <li class="nav-item"><a class="nav-link" href="item.html" th:text="#{item}"></a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/collection}" th:text="#{collection}"></a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/item}" th:text="#{item}"></a></li>
 
                                 <p sec:authorize="!isAuthenticated()">
                                 <li class="nav-item"><a class="nav-link" th:href="@{/signing}" th:text="#{signin}"></a></li>

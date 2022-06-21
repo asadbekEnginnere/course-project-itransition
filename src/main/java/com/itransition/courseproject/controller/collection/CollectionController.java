@@ -4,7 +4,9 @@ package com.itransition.courseproject.controller.collection;
 // Asatbek Xalimjonov 6/18/22 12:52 AM
 
 import com.itransition.courseproject.dto.CollectionDto;
+import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.service.impl.CollectionServiceImpl;
+import com.itransition.courseproject.service.impl.ItemServiceImpl;
 import com.itransition.courseproject.service.impl.TopicServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class CollectionController {
 
     private final CollectionServiceImpl collectionService;
     private final TopicServiceImpl topicService;
+    private final ItemServiceImpl itemService;
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -44,6 +47,8 @@ public class CollectionController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public String showCollectionPage(@PathVariable Integer id,Model model){
         CollectionDto byId = collectionService.findById(id);
+        List<ItemProjection> allItemsByCollectionId = itemService.getAllItemsByCollectionId(id);
+        model.addAttribute("items",allItemsByCollectionId);
         model.addAttribute("collection",byId);
         return "collection/view";
     }

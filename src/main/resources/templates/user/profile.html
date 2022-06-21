@@ -38,6 +38,17 @@
                 </div>
             </div>
             <div class="row">
+                <div th:if="${status}=='success'">
+                    <div  class="alert alert-primary" role="alert">
+                        [[${message}]]
+                    </div>
+                </div>
+
+                <div th:if="${status}=='error'">
+                    <div class="alert alert-danger" role="alert">
+                        [[${message}]]
+                    </div>
+                </div>
                 <div class="col-xl-3 col-sm-6">
                     <div class="stat-widget d-flex align-items-center">
                         <div class="widget-icon me-3 bg-primary"><span><i class="ri-file-copy-2-line"></i></span></div>

@@ -6,6 +6,7 @@ package com.itransition.courseproject.controller;
 import com.itransition.courseproject.cloudinary.CloudForImage;
 import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.repository.CustomColumnRepository;
+import com.itransition.courseproject.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,19 +28,23 @@ public class HomeController {
 
 
     private final CustomColumnRepository customColumnRepository;
+    private final TagRepository tagRepository;
+
 
     @GetMapping
     public String getHomePage(Model model){
+        model.addAttribute("tags",tagRepository.getAllTags());
         return "home";
     }
 
-    @PostMapping
-    public void test(HttpServletRequest request){
-        String[] tagsIds = request.getParameterValues("tagsId");
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        for (String tagsId : tagsIds) {
-            System.out.println(tagsId);
-        }
+    @GetMapping("/collection")
+    public String getCollectionPage(Model model){
+        return "collection";
+    }
+
+    @GetMapping("/item")
+    public String getItemPage(Model model){
+        return "item";
     }
 
 }

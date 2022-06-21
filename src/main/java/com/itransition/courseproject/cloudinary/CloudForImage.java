@@ -20,9 +20,8 @@ public class CloudForImage {
     private final Cloudinary cloudinary;
 
     public void uploadImage(){
-
         try {
-            File file = new File("src/main/resources/static/images/pcm.png");
+            File file = new File("");
             Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
             System.out.println("Url : "+uploadResult.get("url"));
         }catch (IOException exception){}

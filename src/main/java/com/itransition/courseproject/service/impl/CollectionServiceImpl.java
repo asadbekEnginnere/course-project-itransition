@@ -67,7 +67,7 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
             if (topicRepository.findById(topicId).isPresent()) {
 
                 String imageUrl=null;
-                if (file!=null) {
+                if (!file.isEmpty()) {
                     File fileForServer = convertMultiPartToFile(file);
                     Map uploadResult = cloudinary.uploader().upload(fileForServer, ObjectUtils.emptyMap());
                     imageUrl = (String) uploadResult.get("url");
