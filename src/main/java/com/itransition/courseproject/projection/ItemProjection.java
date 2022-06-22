@@ -9,6 +9,7 @@ public interface ItemProjection {
     Integer getId();
     String getName();
     String getAuthorFullName();
+    String getCollection();
     String getImageUrl();
 
 }

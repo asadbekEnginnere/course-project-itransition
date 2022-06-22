@@ -7,6 +7,8 @@ import com.itransition.courseproject.cloudinary.CloudForImage;
 import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.repository.CustomColumnRepository;
 import com.itransition.courseproject.repository.TagRepository;
+import com.itransition.courseproject.service.impl.CollectionServiceImpl;
+import com.itransition.courseproject.service.impl.ItemServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +31,14 @@ public class HomeController {
 
     private final CustomColumnRepository customColumnRepository;
     private final TagRepository tagRepository;
+    private final CollectionServiceImpl collectionService;
+    private final ItemServiceImpl itemService;
 
 
     @GetMapping
     public String getHomePage(Model model){
+        model.addAttribute("items",itemService.getLatestItems());
+        model.addAttribute("collections",collectionService.getTopFiveLargestCollection());
         model.addAttribute("tags",tagRepository.getAllTags());
         return "home";
     }

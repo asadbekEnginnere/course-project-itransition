@@ -171,6 +171,11 @@ public class ItemServiceImpl implements ItemService {
         return "redirect:/user/collection/view/"+id;
     }
 
+    @Override
+    public List<ItemProjection> getLatestItems() {
+        return itemRepository.getLatestItems();
+    }
+
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File("src/main/resources/file/"+file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);

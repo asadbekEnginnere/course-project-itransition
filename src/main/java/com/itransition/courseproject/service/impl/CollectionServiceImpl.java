@@ -13,6 +13,7 @@ import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.entity.collection.Topic;
 import com.itransition.courseproject.entity.enums.CustomColumnDataType;
 import com.itransition.courseproject.entity.user.UserCollection;
+import com.itransition.courseproject.projection.CollectionProjection;
 import com.itransition.courseproject.repository.*;
 import com.itransition.courseproject.service.interfaces.CollectionService;
 import com.itransition.courseproject.service.interfaces.GenericInterface;
@@ -136,6 +137,11 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message",message);
         return "redirect:/user/collection";
+    }
+
+    @Override
+    public List<CollectionProjection> getTopFiveLargestCollection() {
+        return collectionRepository.getTopFiveLargestCollection();
     }
 
     @Override
