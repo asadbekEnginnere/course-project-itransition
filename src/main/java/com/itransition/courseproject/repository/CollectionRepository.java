@@ -36,5 +36,23 @@ public interface CollectionRepository extends JpaRepository<Collection,Integer> 
             "desc limit 5 ")
     List<CollectionProjection> getTopFiveLargestCollection();
 
+    @Query(nativeQuery = true,
+            value = "select c.id as id,\n" +
+                    "       c.name as title,\n" +
+                    "       c.description as description,\n" +
+                    "       coalesce(c.image_url,'null') as imageUrl,\n" +
+                    "       concat(u.first_name,' ',u.last_name) as author,\n" +
+                    "       coalesce(cte.total,0) as totalItems\n" +
+                    "from collections c\n" +
+                    "join user_collection uc on uc.id = c.user_collection_id\n" +
+                    "join users u on u.id = uc.user_id\n" +
+                    "left join(\n" +
+                    "    select items.collection_id,\n" +
+                    "           count(items.collection_id) as total\n" +
+                    "    from items\n" +
+                    "    group by items.collection_id)cte on c.id=cte.collection_id\n" +
+                    "order by totalItems desc ")
+    List<CollectionProjection> getCollectionList();
+
 
 }

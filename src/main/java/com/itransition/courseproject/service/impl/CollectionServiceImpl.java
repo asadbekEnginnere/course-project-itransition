@@ -145,6 +145,11 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
     }
 
     @Override
+    public List<CollectionProjection> getCollectionList() {
+        return collectionRepository.getCollectionList();
+    }
+
+    @Override
     public List<CollectionDto> getAllData() {
         return collectionRepository.getAllCollection();
     }

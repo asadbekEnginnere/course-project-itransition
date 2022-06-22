@@ -45,6 +45,7 @@ public class HomeController {
 
     @GetMapping("/collection")
     public String getCollectionPage(Model model){
+        model.addAttribute("collections",collectionService.getCollectionList());
         return "collection";
     }
 

@@ -12,4 +12,6 @@ public interface CollectionService {
     String saveCollectionWithItemField(MultipartFile file, HttpServletRequest request, RedirectAttributes ra);
 
     List<CollectionProjection> getTopFiveLargestCollection();
+
+    List<CollectionProjection> getCollectionList();
 }
