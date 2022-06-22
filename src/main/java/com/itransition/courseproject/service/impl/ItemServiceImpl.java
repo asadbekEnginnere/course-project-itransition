@@ -10,6 +10,7 @@ import com.itransition.courseproject.dto.CustomColumnDto;
 import com.itransition.courseproject.entity.collection.*;
 import com.itransition.courseproject.entity.collection.Collection;
 import com.itransition.courseproject.entity.enums.CustomColumnDataType;
+import com.itransition.courseproject.projection.ItemDetailProjection;
 import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.repository.*;
 import com.itransition.courseproject.service.interfaces.ItemService;
@@ -174,6 +175,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemProjection> getLatestItems() {
         return itemRepository.getLatestItems();
+    }
+
+    @Override
+    public List<ItemDetailProjection> getItemById(Integer id) {
+        return itemRepository.getItemById(id);
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -52,6 +53,12 @@ public class HomeController {
     @GetMapping("/item")
     public String getItemPage(Model model){
         return "item";
+    }
+
+    @GetMapping("/item/detail/{id}")
+    public String itemDetailPage(Model model, @PathVariable Integer id){
+        model.addAttribute("item",itemService.getItemById(id));
+        return "item/detail";
     }
 
 }

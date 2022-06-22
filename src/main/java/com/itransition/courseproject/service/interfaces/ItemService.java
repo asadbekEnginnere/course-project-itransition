@@ -1,6 +1,7 @@
 package com.itransition.courseproject.service.interfaces;
 
 import com.itransition.courseproject.dto.CustomColumnDto;
+import com.itransition.courseproject.projection.ItemDetailProjection;
 import com.itransition.courseproject.projection.ItemProjection;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -16,4 +17,6 @@ public interface ItemService {
     String saveItem(MultipartHttpServletRequest file, HttpServletRequest request, Integer id, RedirectAttributes ra);
 
     List<ItemProjection> getLatestItems();
+
+    List<ItemDetailProjection> getItemById(Integer id);
 }
