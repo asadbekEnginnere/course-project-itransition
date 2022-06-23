@@ -31,11 +31,28 @@
                     <div class="top-bid">
                         <div class="card-body">
                             <div class="row">
-                                <div th:if="${!#strings.equals(item.itemImageUrl,'null')}" class="col-md-6">
-                                    <img th:src="${item.itemImageUrl}" class="img-fluid rounded">
-                                </div>
-                                <div th:if="${#strings.equals(item.itemImageUrl,'null')}" class="col-md-6">
-                                    <img  th:src="@{/images/placeholder-image.png}" class="img-fluid rounded">
+                                <div class="col-md-6">
+                                    <img th:src="${!#strings.equals(item.itemImageUrl,'null') ? item.itemImageUrl : '/images/placeholder-image.png'}" class="img-fluid rounded">
+                                    <h4 class="card-title mb-3">[[#{comments}]]</h4>
+                                    <div class="bid mb-3 card">
+                                        <div class="activity-content card-body py-0">
+                                            <ul>
+                                                <li class="d-flex justify-content-between align-items-center">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="activity-user-img me-3"><img
+                                                                th:src="@{/images/profile/3.png}" alt="" width="50"></div>
+                                                        <div class="activity-info">
+                                                            <h5 class="mb-0">Papaya</h5>
+                                                            <p>0.05 ETH</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-end"><span class=" text-muted">12 min
+                                                                ago</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6">
@@ -63,12 +80,13 @@
                                             <p th:if="${!#strings.equals(itemColumn.type,'image')}" class="mb-3">[[${itemColumn.name}]] : [[${itemColumn.value}]]</p>
                                         </th:block>
                                     </div>
-                                    <div class="card">
+                                    <br>
+                                    <div class="card" sec:authorize="isAuthenticated()">
                                         <div class="card-body">
                                             <form th:action="@{/user/edit}" th:object="${user}" method="post">
                                                 <div class="row">
                                                     <div class="col-xxl-12 col-xl-12 col-lg-12 mb-3">
-                                                        <label class="form-label">[[#{comment}]]
+                                                        <label class="form-label">[[#{add}]] [[#{comment}]]
                                                         </label>
                                                         <textarea class="form-control" name="text"></textarea>
                                                     </div>
@@ -78,6 +96,10 @@
                                                 </div>
                                             </form>
                                         </div>
+                                    </div>
+                                    <div class="" sec:authorize="!isAuthenticated()">
+                                        <h4>[[#{plase_login_comment}]]</h4><br>
+                                        <a th:href="@{/signing}" class="btn btn-primary">[[#{signin}]]</a>
                                     </div>
                                 </div>
                             </div>
