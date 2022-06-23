@@ -182,10 +182,10 @@ public class ItemServiceImpl implements ItemService {
         String result = itemRepository.getItemById(id);
 
         ObjectMapper mapper = new ObjectMapper();
-
         try {
             ItemDetailDto itemDetailMapper = mapper.readValue(result, ItemDetailDto.class);
             log.error("item : ",itemDetailMapper);
+            System.out.println(itemDetailMapper);
             return itemDetailMapper;
         }catch (Exception e){}
         return itemDetail;

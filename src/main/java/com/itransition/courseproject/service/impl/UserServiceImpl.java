@@ -294,10 +294,13 @@ public class UserServiceImpl implements
 
     @Override
     public User currenUser(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        User currentUser = userRepository.findByUsername(username);
-        return currentUser;
+        try {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails) principal).getUsername();
+            User currentUser = userRepository.findByUsername(username);
+            return currentUser;
+        }catch (Exception e){}
+        return null;
     }
 
 }

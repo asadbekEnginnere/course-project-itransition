@@ -28,6 +28,12 @@ public class Comment {
     @ManyToOne
     private User user;
 
+    public Comment(String content, User user, Item item) {
+        this.content = content;
+        this.user = user;
+        this.item = item;
+    }
+
     @ManyToOne
     private Item item;
 

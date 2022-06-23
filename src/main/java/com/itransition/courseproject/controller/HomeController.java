@@ -4,11 +4,15 @@ package com.itransition.courseproject.controller;
 // Asatbek Xalimjonov 6/14/22 10:06 AM
 
 import com.itransition.courseproject.cloudinary.CloudForImage;
+import com.itransition.courseproject.dto.CommentDto;
 import com.itransition.courseproject.dto.ItemDetailDto;
+import com.itransition.courseproject.entity.collection.Comment;
 import com.itransition.courseproject.entity.collection.CustomColumn;
+import com.itransition.courseproject.projection.CommentProjection;
 import com.itransition.courseproject.repository.CustomColumnRepository;
 import com.itransition.courseproject.repository.TagRepository;
 import com.itransition.courseproject.service.impl.CollectionServiceImpl;
+import com.itransition.courseproject.service.impl.CommentServiceImpl;
 import com.itransition.courseproject.service.impl.ItemServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,6 +40,7 @@ public class HomeController {
     private final TagRepository tagRepository;
     private final CollectionServiceImpl collectionService;
     private final ItemServiceImpl itemService;
+    private final CommentServiceImpl commentService;
 
 
     @GetMapping
@@ -59,6 +65,9 @@ public class HomeController {
     @GetMapping("/item/detail/{id}")
     public String itemDetailPage(Model model, @PathVariable Integer id){
         ItemDetailDto itemById = itemService.getItemById(id);
+        List<CommentProjection> commentsByItemId = commentService.getCommentsByItemId(id);
+        model.addAttribute("comment",new Comment());
+        model.addAttribute("comments",commentsByItemId);
         model.addAttribute("item",itemById);
         return "item/detail";
     }

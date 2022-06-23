@@ -17,7 +17,8 @@ public class ItemDetailDto {
     private String itemCollection;
     private String authorFullName;
     private String itemImageUrl;
-    private List<TagProjection> itemTag;
-    private List<ItemCustomColumnProjection> itemCustomColumn;
+    private List<TagDto> itemTag;
+    private List<ItemCustomColumnDto> itemCustomColumn;
+    private List<CommentDto> comments;
     private String dateTime;
 }

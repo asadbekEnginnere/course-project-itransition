@@ -13,4 +13,10 @@ import lombok.NoArgsConstructor;
 public class TagDto {
     private Integer id;
     private String name;
+    private String itemid;
+
+    public TagDto(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
