@@ -26,6 +26,11 @@ public class DisLike {
     @ManyToOne
     private User user;
 
+    public DisLike(User user, Item item) {
+        this.user = user;
+        this.item = item;
+    }
+
     @ManyToOne
     private Item item;
 

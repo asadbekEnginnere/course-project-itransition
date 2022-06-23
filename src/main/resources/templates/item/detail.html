@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="layouts/head :: user-header"> </head>
+<head th:replace="layouts/head :: user-header"></head>
 <body class="@@dashboard">
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 <div id="main-wrapper" class="front">
-    <div th:replace="layouts/navbar :: user-navbar"> </div>
+    <div th:replace="layouts/navbar :: user-navbar"></div>
 
     <div class="page-title">
         <div class="container">
@@ -28,7 +28,7 @@
         <div class="container">
             <div class="row">
                 <div th:if="${status}=='success'">
-                    <div  class="alert alert-primary" role="alert">
+                    <div class="alert alert-primary" role="alert">
                         [[${message}]]
                     </div>
                 </div>
@@ -43,37 +43,48 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <img th:src="${!#strings.equals(item.itemImageUrl,'null') ? item.itemImageUrl : '/images/placeholder-image.png'}" class="img-fluid rounded">
+                                    <img th:src="${!#strings.equals(item.itemImageUrl,'null') ? item.itemImageUrl : '/images/placeholder-image.png'}"
+                                         class="img-fluid rounded">
                                     <br>
-                                    <h4 style="padding-top: 2rem" class="card-title">[[#{comments}]] [[${comments.size()}]]</h4>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a th:href="@{'/likeDislike/like/add/'+${item.id}}" class="btn btn-success btn-sm"><i class="fa fa-thumbs-up"> [[${likes}]]</i></a>
+                                        <a th:href="@{'/likeDislike/like/view/'+${item.id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                        <a th:href="@{'/likeDislike/dislike/add/'+${item.id}}" class="btn btn-danger btn-sm"><i class="fa fa-thumbs-down"></i> [[${dislikes}]]</a>
+                                        <a th:href="@{'/likeDislike/dislike/view/'+${item.id}}" class="btn btn-danger btn-sm"><i class="fa fa-eye"></i></a>
+                                    </div>
+                                    <h4 style="padding-top: 2rem" class="card-title">[[#{comments}]]
+                                        [[${comments.size()}]]</h4>
                                     <div class="bid mb-3 card">
                                         <div class="activity-content card-body py-0">
                                             <ul>
                                                 <th:block th:each="comment : ${comments}">
-                                                <li class="d-flex justify-content-between align-items-center">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="activity-user-img me-3"><img
-                                                                th:src="@{/images/profile/3.png}" alt="" width="50"></div>
-                                                        <div class="activity-info">
-                                                            <h5 class="mb-0">[[${comment.getCommentorFullName()}]]</h5>
-                                                            <p th:text="${comment.getContent()}"></p>
+                                                    <li class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="activity-user-img me-3"><img
+                                                                    th:src="@{/images/profile/3.png}" alt="" width="50">
+                                                            </div>
+                                                            <div class="activity-info">
+                                                                <h5 class="mb-0">
+                                                                    [[${comment.getCommentorFullName()}]]</h5>
+                                                                <p th:text="${comment.getContent()}"></p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="text-end"><span class=" text-muted" th:text="${comment.getCommentedAt()}"></span>
-                                                    </div>
-                                                </li>
+                                                        <div class="text-end"><span class=" text-muted"
+                                                                                    th:text="${comment.getCommentedAt()}"></span>
+                                                        </div>
+                                                    </li>
                                                 </th:block>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
                                     <h3 class="mb-3" th:text="${item.itemName}"></h3>
                                     <div class="d-flex align-items-center mb-3">
                                         <img th:src="@{/images/profile/3.png}" alt="" class="me-3 avatar-img">
                                         <div class="flex-grow-1">
-                                            <h5 class="mb-0">[[${item.authorFullName}]]<span class="circle bg-success"></span>
+                                            <h5 class="mb-0">[[${item.authorFullName}]]<span
+                                                    class="circle bg-success"></span>
                                             </h5>
                                         </div>
                                     </div>
@@ -81,31 +92,38 @@
                                         <div class="text-start">
                                             <h4 class="mb-2">[[#{tags}]]</h4>
                                             <th:block th:each="tag : ${item.itemTag}">
-                                                <a th:href="@{'/item/'+${tag.id}}"><h5 class="text-muted">#[[${tag.name}]]</h5></a>
+                                                <a th:href="@{'/item/'+${tag.id}}"><h5 class="text-muted">
+                                                    #[[${tag.name}]]</h5></a>
                                             </th:block>
                                         </div>
                                         <div class="text-end">
-                                            <h4 class="mb-2">[[#{created}]] : <strong class="text-primary">[[${item.dateTime}]]</strong></h4>
+                                            <h4 class="mb-2">[[#{created}]] : <strong class="text-primary">[[${item.dateTime}]]</strong>
+                                            </h4>
                                         </div>
                                     </div>
                                     <div th:if="${item.itemCustomColumn!=null && item.itemCustomColumn.size()>0}">
                                         <th:block th:each="itemColumn : ${item.itemCustomColumn}">
-                                            <p th:if="${!#strings.equals(itemColumn.type,'image')}" class="mb-3">[[${itemColumn.name}]] : [[${itemColumn.value}]]</p>
+                                            <p th:if="${!#strings.equals(itemColumn.type,'image')}" class="mb-3">
+                                                [[${itemColumn.name}]] : [[${itemColumn.value}]]</p>
                                         </th:block>
                                     </div>
                                     <br>
                                     <div class="card" sec:authorize="isAuthenticated()">
                                         <div class="card-body">
-                                            <form th:action="@{'/comment/add/'+${item.id}}" th:object="${comment}" method="post">
+                                            <form th:action="@{'/comment/add/'+${item.id}}" th:object="${comment}"
+                                                  method="post">
                                                 <div class="row">
                                                     <div class="col-xxl-12 col-xl-12 col-lg-12 mb-3">
                                                         <label class="form-label">[[#{add}]] [[#{comment}]]
                                                         </label>
-                                                        <textarea class="form-control" th:field="*{content}" name="text"></textarea>
+                                                        <textarea class="form-control" th:field="*{content}"
+                                                                  name="text"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
-                                                    <button type="submit" class="btn btn-primary mr-2">[[#{add}]] [[#{comment}]]</button>
+                                                    <button type="submit" class="btn btn-primary mr-2">[[#{add}]]
+                                                        [[#{comment}]]
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
@@ -123,8 +141,8 @@
         </div>
     </div>
 
-    <div th:replace="layouts/footer-top :: user-footer-top"> </div>
-    <div th:replace="layouts/footer-bottom :: user-footer-bottom"> </div>
+    <div th:replace="layouts/footer-top :: user-footer-top"></div>
+    <div th:replace="layouts/footer-bottom :: user-footer-bottom"></div>
 </div>
 <script th:src="@{vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>

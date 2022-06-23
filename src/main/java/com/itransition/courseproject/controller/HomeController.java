@@ -14,6 +14,7 @@ import com.itransition.courseproject.repository.TagRepository;
 import com.itransition.courseproject.service.impl.CollectionServiceImpl;
 import com.itransition.courseproject.service.impl.CommentServiceImpl;
 import com.itransition.courseproject.service.impl.ItemServiceImpl;
+import com.itransition.courseproject.service.impl.LikeDislikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +42,7 @@ public class HomeController {
     private final CollectionServiceImpl collectionService;
     private final ItemServiceImpl itemService;
     private final CommentServiceImpl commentService;
+    private final LikeDislikeServiceImpl likeDislikeService;
 
 
     @GetMapping
@@ -66,7 +68,11 @@ public class HomeController {
     public String itemDetailPage(Model model, @PathVariable Integer id){
         ItemDetailDto itemById = itemService.getItemById(id);
         List<CommentProjection> commentsByItemId = commentService.getCommentsByItemId(id);
+        int likes = likeDislikeService.likesCount(id);
+        int dislikes = likeDislikeService.disLikesCount(id);
         model.addAttribute("comment",new Comment());
+        model.addAttribute("likes",likes);
+        model.addAttribute("dislikes",dislikes);
         model.addAttribute("comments",commentsByItemId);
         model.addAttribute("item",itemById);
         return "item/detail";
