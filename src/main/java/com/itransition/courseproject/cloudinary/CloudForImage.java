@@ -19,13 +19,12 @@ public class CloudForImage {
 
     private final Cloudinary cloudinary;
 
-    public void uploadImage(){
+    public String uploadImageToCloud(File file){
         try {
-            File file = new File("");
             Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-            System.out.println("Url : "+uploadResult.get("url"));
-        }catch (IOException exception){}
-
+            return (String) uploadResult.get("url");
+        }catch (IOException ignored){}
+        return null;
     }
 
 }

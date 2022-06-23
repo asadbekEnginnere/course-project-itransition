@@ -1,7 +1,6 @@
 package com.itransition.courseproject.repository;
 
 import com.itransition.courseproject.entity.collection.Item;
-import com.itransition.courseproject.projection.ItemDetailProjection;
 import com.itransition.courseproject.projection.ItemProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -52,13 +51,23 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
 
 
     @Query(nativeQuery = true,
-    value = "select i.id,\n" +
+    value = "select cast(json_build_object('id', result.id,\n" +
+            "                             'itemName',result.itemName,\n" +
+            "                             'itemCollection',result.itemCollection,\n" +
+            "                             'authorFullName',result.authorFullName,\n" +
+            "                             'itemImageUrl',result.itemImageUrl,\n" +
+            "                             'itemTag',result.itemTag,\n" +
+            "                             'itemCustomColumn',result.itemCustomColumn," +
+            "                             'dateTime',result.dateTime \n" +
+            "    ) as text)\n" +
+            "from(select i.id,\n" +
             "       i.name as itemName,\n" +
             "       c.name as itemCollection,\n" +
             "       concat(u.first_name,' ',u.last_name) as authorFullName,\n" +
             "       coalesce(cte.value,'null') as itemImageUrl,\n" +
-            "       json_agg(itemTags.*) as itemTag,\n" +
-            "       json_agg(distinct customColumn.*) as itemCustomColumn\n" +
+            "       json_agg(distinct itemTags.*) as itemTag,\n" +
+            "       json_agg(distinct customColumn.*) as itemCustomColumn," +
+            "       i.created_at as dateTime \n" +
             "from items i\n" +
             "join collections c on c.id = i.collection_id\n" +
             "join user_collection uc on uc.id = c.user_collection_id\n" +
@@ -75,13 +84,12 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
             "    join item_tags it on tags.id = it.tag_id\n" +
             ")itemTags on itemTags.itemId=i.id\n" +
             "left join(\n" +
-            "    select cv.id,cc2.name,cv.value,cv.item_id as itemId\n" +
+            "    select cv.id,cc2.name,cc2.type,cv.value,cv.item_id as itemId\n" +
             "    from custom_value cv\n" +
-            "    join custom_column cc2 on cv.custom_column_id = cc2.id\n" +
-            "    where cc2.type<>'image'\n" +
+            "    join custom_column cc2 on cv.custom_column_id = cc2.id \n" +
             ")customColumn on customColumn.itemId=i.id\n" +
             "where i.id= :id \n" +
-            "group by i.id, i.name, c.name, concat(u.first_name,' ',u.last_name), coalesce(cte.value,'null');")
-    List<ItemDetailProjection> getItemById(int id);
+            "group by i.id, i.name, c.name, concat(u.first_name,' ',u.last_name), coalesce(cte.value,'null'))result;")
+    String getItemById(int id);
 
 }

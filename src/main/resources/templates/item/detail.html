@@ -11,13 +11,13 @@
             <div class="row align-items-center justify-content-between">
                 <div class="col-6">
                     <div class="page-title-content">
-                        <h3>Explore</h3>
-                        <p class="mb-2">Neftify Explore page</p>
+                        <h3>[[${item.itemName}]]</h3>
+                        <p class="mb-2">[[#{collection}]] - [[${item.itemCollection}]]</p>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="breadcrumbs"><a href="item.html#">Home </a><span><i
-                            class="ri-arrow-right-s-line"></i></span><a href="item.html#">Payments</a></div>
+                    <div class="breadcrumbs"><a th:href="@{/}">[[#{home}]] </a><span><i
+                            class="ri-arrow-right-s-line"></i></span><a href="">[[${item.itemCollection}]]</a></div>
                 </div>
             </div>
         </div>
@@ -31,80 +31,53 @@
                     <div class="top-bid">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6"><img src="images/items/11.jpg" class="img-fluid rounded"
-                                                           alt="..."></div>
+                                <div th:if="${!#strings.equals(item.itemImageUrl,'null')}" class="col-md-6">
+                                    <img th:src="${item.itemImageUrl}" class="img-fluid rounded">
+                                </div>
+                                <div th:if="${#strings.equals(item.itemImageUrl,'null')}" class="col-md-6">
+                                    <img  th:src="@{/images/placeholder-image.png}" class="img-fluid rounded">
+                                </div>
+
                                 <div class="col-md-6">
-                                    <h3 class="mb-3" th:text="${item.getItemName()}"></h3>
-                                    <div class="d-flex align-items-center mb-3"><img src="images/avatar/1.jpg"
-                                                                                     alt="" class="me-3 avatar-img">
+                                    <h3 class="mb-3" th:text="${item.itemName}"></h3>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img th:src="@{/images/profile/3.png}" alt="" class="me-3 avatar-img">
                                         <div class="flex-grow-1">
-                                            <h5 class="mb-0">John Abraham<span class="circle bg-success"></span>
+                                            <h5 class="mb-0">[[${item.authorFullName}]]<span class="circle bg-success"></span>
                                             </h5>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between mt-4 mb-4">
                                         <div class="text-start">
-                                            <h4 class="mb-2">Auction Time</h4>
-                                            <h5 class="text-muted">3h : 1m : 50s</h5>
+                                            <h4 class="mb-2">[[#{tags}]]</h4>
+                                            <th:block th:each="tag : ${item.itemTag}">
+                                                <a th:href="@{'/item/'+${tag.id}}"><h5 class="text-muted">#[[${tag.name}]]</h5></a>
+                                            </th:block>
                                         </div>
                                         <div class="text-end">
-                                            <h4 class="mb-2">Current Bid : <strong class="text-primary">0.05
-                                                ETH</strong></h4>
-                                            <h5 class="text-muted">0.15 ETH</h5>
+                                            <h4 class="mb-2">[[#{created}]] : <strong class="text-primary">[[${item.dateTime}]]</strong></h4>
                                         </div>
                                     </div>
-                                    <p class="mb-3">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos,
-                                        unde.
-                                        Unde, doloremque ipsam? Nesciunt dolorem nisi quae nostrum veniam quasi
-                                        illum,
-                                        iusto tempore nihil, natus perspiciatis? Sed</p>
-                                    <h4 class="card-title mb-3">Latest Bids</h4>
-                                    <div class="bid mb-3 card">
-                                        <div class="activity-content card-body py-0">
-                                            <ul>
-                                                <li class="d-flex justify-content-between align-items-center">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="activity-user-img me-3"><img
-                                                                src="images/avatar/1.jpg" alt="" width="50"></div>
-                                                        <div class="activity-info">
-                                                            <h5 class="mb-0">Papaya</h5>
-                                                            <p>0.05 ETH</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="text-end"><span class=" text-muted">12 min
-                                                                ago</span>
-                                                    </div>
-                                                </li>
-                                                <li class="d-flex justify-content-between align-items-center">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="activity-user-img me-3"><img
-                                                                src="images/avatar/2.jpg" alt="" width="50"></div>
-                                                        <div class="activity-info">
-                                                            <h5 class="mb-0">Alex Maris</h5>
-                                                            <p>0.06 ETH</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="text-end"><span class=" text-muted">12 min
-                                                                ago</span>
-                                                    </div>
-                                                </li>
-                                                <li class="d-flex justify-content-between align-items-center">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="activity-user-img me-3"><img
-                                                                src="images/avatar/3.jpg" alt="" width="50"></div>
-                                                        <div class="activity-info">
-                                                            <h5 class="mb-0">John Adams</h5>
-                                                            <p>0.06 ETH</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="text-end"><span class=" text-muted">12 min
-                                                                ago</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    <div th:if="${item.itemCustomColumn!=null && item.itemCustomColumn.size()>0}">
+                                        <th:block th:each="itemColumn : ${item.itemCustomColumn}">
+                                            <p th:if="${!#strings.equals(itemColumn.type,'image')}" class="mb-3">[[${itemColumn.name}]] : [[${itemColumn.value}]]</p>
+                                        </th:block>
                                     </div>
-                                    <div class="d-flex"><a href="item.html" class="btn btn-primary">Place a Bid</a>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <form th:action="@{/user/edit}" th:object="${user}" method="post">
+                                                <div class="row">
+                                                    <div class="col-xxl-12 col-xl-12 col-lg-12 mb-3">
+                                                        <label class="form-label">[[#{comment}]]
+                                                        </label>
+                                                        <textarea class="form-control" name="text"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <button type="submit" class="btn btn-primary mr-2">[[#{add}]] [[#{comment}]]</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

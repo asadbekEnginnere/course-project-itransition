@@ -17,5 +17,12 @@ public class CollectionDto {
     private String name;
     private String description;
     private String imageUrl;
+    private String creationTime;
 
+    public CollectionDto(Integer id, String name, String description, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
 }

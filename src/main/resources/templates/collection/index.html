@@ -14,7 +14,7 @@
             <div class="row align-items-center justify-content-between">
                 <div class="col-6">
                     <div class="page-title-content">
-                        <h3>[[#{collection}]]</h3>
+                        <h3>[[#{collection}]] - [[${#authentication.getPrincipal().getUsername()}]]</h3>
                     </div>
                 </div>
                 <div class="col-auto">
@@ -24,60 +24,52 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 
-    <div class="profile-page">
+    <div class="explore section-padding">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <ul class="settings-menu">
-                        <li><a th:href="@{/user/profile}">[[#{profile}]]</a></li>
-                        <li class=""><a th:href="@{/user/collection}">[[#{collection}]]</a></li>
-                    </ul>
+            <div th:if="${status}=='success'">
+                <div  class="alert alert-primary" role="alert">
+                    [[${message}]]
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="col-xxl-12">
-                        <div th:if="${status}=='success'">
-                            <div  class="alert alert-primary" role="alert">
-                                [[${message}]]
-                            </div>
-                        </div>
 
-                        <div th:if="${status}=='error'">
-                            <div class="alert alert-danger" role="alert">
-                                [[${message}]]
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div th:each="collection : ${collections}">
-                                <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-4 col-sm-4"  style="display:inline-block">
-                                    <div class="card items">
-                                        <div class="card-body">
-                                            <div class="items-img position-relative"><img th:src="${collection.imageUrl}" width="300" height="250"
-                                                                                          class="img-fluid rounded mb-3" alt=""><img src="images/avatar/1.jpg"
-                                                                                                                                     class="creator" width="50" alt=""></div>
-                                            <a href="item.html">
-                                                <h4 class="card-title" th:text="${collection.name}"></h4>
-                                                <a th:href="@{'/user/collection/view/'+${collection.id}}" class="btn btn-info btn-sm">[[#{view}]]</a>
-                                                <a th:href="@{'/user/collection/edit/'+${collection.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
-                                                <form th:action="@{'/user/collection/delete/'+${collection.id}}" class="inline-flex"
-                                                      method="POST">
-                                                    <button onclick="return confirm('Are you sure you want to delete?');"
-                                                            class="btn btn-danger btn-sm" type="submit">
-                                                        [[#{delete}]]
-                                                    </button>
-                                                </form>
-                                            </a>
-                                        </div>
-                                    </div>
+            <div th:if="${status}=='error'">
+                <div class="alert alert-primary" role="alert">
+                    [[${message}]]
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <th:block th:each="collection : ${collections}">
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <div class="card items">
+                            <div class="card-body">
+                                <div th:if="${!#strings.equals(collection.imageUrl,'none')}"  class="items-img position-relative">
+                                    <img th:src="${collection.imageUrl}" width="300" height="250"
+                                         class="img-fluid rounded mb-3" alt="">
+                                    <img th:src="@{/images/profile/3.png}" class="creator" width="50" alt="">
                                 </div>
+                                <div th:if="${#strings.equals(collection.imageUrl,'none')}"  class="items-img position-relative">
+                                    <img th:src="@{/images/placeholder-image.png}" width="300" height="250"
+                                         class="img-fluid rounded mb-3" alt="">
+                                    <img th:src="@{/images/profile/3.png}" class="creator" width="50" alt="">
+                                </div>
+                                <a href="">
+                                    <h4 class="card-title" th:text="${collection.name}"></h4>
+                                    <a th:href="@{'/user/collection/view/'+${collection.id}}" class="btn btn-info btn-sm">[[#{view}]]</a>
+                                    <a th:href="@{'/user/collection/edit/'+${collection.id}}" class="btn btn-success btn-sm">[[#{edit}]]</a>
+                                    <form th:action="@{'/user/collection/delete/'+${collection.id}}" class="inline-flex"
+                                          method="POST">
+                                        <button onclick="return confirm('Are you sure you want to delete?');"
+                                                class="btn btn-danger btn-sm" type="submit">
+                                            [[#{delete}]]
+                                        </button>
+                                    </form>
+                                </a>
                             </div>
                         </div>
                     </div>
+                </th:block>
             </div>
         </div>
     </div>

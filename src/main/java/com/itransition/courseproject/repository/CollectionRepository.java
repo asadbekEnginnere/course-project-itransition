@@ -10,8 +10,24 @@ import java.util.List;
 
 public interface CollectionRepository extends JpaRepository<Collection,Integer> {
 
-    @Query("select new com.itransition.courseproject.dto.CollectionDto(col.id,col.name,col.description,col.imageUrl) from com.itransition.courseproject.entity.collection.Collection col")
-    List<CollectionDto> getAllCollection();
+    @Query(nativeQuery = true,
+    value = "select cast(json_build_object('id', result.id,\n" +
+            "                                        'id',result.id,\n" +
+            "                                        'name',result.name,\n" +
+            "                                        'description',result.description,\n" +
+            "                                        'imageUrl',result.imageUrl,\n" +
+            "                                        'creationTime',result.creationTime\n" +
+            "               ) as text)\n" +
+            "from (select collections.id,\n" +
+            "             collections.name,\n" +
+            "             collections.description,\n" +
+            "             coalesce(collections.image_url,'none') as imageUrl,\n" +
+            "             collections.created_at as creationTime\n" +
+            "      from collections\n" +
+            "               join user_collection uc on uc.id = collections.user_collection_id\n" +
+            "               join users u on u.id = uc.user_id\n" +
+            "      where u.id= :id )result ")
+    List<String> getAllCollection(int id);
 
     @Query("select new com.itransition.courseproject.dto.CollectionDto(col.id,col.name,col.description,col.imageUrl) from com.itransition.courseproject.entity.collection.Collection col where col.id= :id")
     CollectionDto getCollection(Integer id);

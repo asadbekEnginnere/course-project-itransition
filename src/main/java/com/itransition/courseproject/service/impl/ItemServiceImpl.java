@@ -6,11 +6,11 @@ package com.itransition.courseproject.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itransition.courseproject.dto.CustomColumnDto;
-import com.itransition.courseproject.entity.collection.*;
+import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Collection;
-import com.itransition.courseproject.entity.enums.CustomColumnDataType;
-import com.itransition.courseproject.projection.ItemDetailProjection;
+import com.itransition.courseproject.entity.collection.*;
 import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.repository.*;
 import com.itransition.courseproject.service.interfaces.ItemService;
@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -178,8 +177,18 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDetailProjection> getItemById(Integer id) {
-        return itemRepository.getItemById(id);
+    public ItemDetailDto getItemById(Integer id) {
+        ItemDetailDto itemDetail = new ItemDetailDto();
+        String result = itemRepository.getItemById(id);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            ItemDetailDto itemDetailMapper = mapper.readValue(result, ItemDetailDto.class);
+            log.error("item : ",itemDetailMapper);
+            return itemDetailMapper;
+        }catch (Exception e){}
+        return itemDetail;
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

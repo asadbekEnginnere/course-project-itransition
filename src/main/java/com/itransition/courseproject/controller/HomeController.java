@@ -4,6 +4,7 @@ package com.itransition.courseproject.controller;
 // Asatbek Xalimjonov 6/14/22 10:06 AM
 
 import com.itransition.courseproject.cloudinary.CloudForImage;
+import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.repository.CustomColumnRepository;
 import com.itransition.courseproject.repository.TagRepository;
@@ -57,7 +58,8 @@ public class HomeController {
 
     @GetMapping("/item/detail/{id}")
     public String itemDetailPage(Model model, @PathVariable Integer id){
-        model.addAttribute("item",itemService.getItemById(id));
+        ItemDetailDto itemById = itemService.getItemById(id);
+        model.addAttribute("item",itemById);
         return "item/detail";
     }
 

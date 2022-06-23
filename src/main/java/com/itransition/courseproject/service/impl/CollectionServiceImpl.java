@@ -6,7 +6,9 @@ package com.itransition.courseproject.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itransition.courseproject.dto.CollectionDto;
+import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Collection;
 import com.itransition.courseproject.entity.collection.CollectionItemColumn;
 import com.itransition.courseproject.entity.collection.CustomColumn;
@@ -151,7 +153,19 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
 
     @Override
     public List<CollectionDto> getAllData() {
-        return collectionRepository.getAllCollection();
+        Integer id = userService.currenUser().getId();
+        List<String> allCollection = collectionRepository.getAllCollection(id);
+        List<CollectionDto> collectionDtoList = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            for (String s : allCollection) {
+                CollectionDto collectionDto = mapper.readValue(s, CollectionDto.class);
+                System.out.println(collectionDto);
+                collectionDtoList.add(collectionDto);
+            }
+        }catch (Exception e){}
+        return collectionDtoList;
     }
 
     @Override
