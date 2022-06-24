@@ -37,14 +37,14 @@ public class CollectionController {
     private final ItemServiceImpl itemService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String getCollectionPage(Model model){
         model.addAttribute("collections",collectionService.getAllData());
         return "collection/index";
     }
 
     @GetMapping("/view/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String showCollectionPage(@PathVariable Integer id,Model model){
         CollectionDto byId = collectionService.findById(id);
         List<ItemProjection> allItemsByCollectionId = itemService.getAllItemsByCollectionId(id);
@@ -54,14 +54,14 @@ public class CollectionController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String getCollectionCreatePage(Model model){
         model.addAttribute("topics",topicService.getAllData());
         return "collection/create";
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String saveCollection(MultipartFile image,HttpServletRequest request, RedirectAttributes ra){
         return collectionService.saveCollectionWithItemField(image,request,ra);
     }
@@ -75,7 +75,7 @@ public class CollectionController {
     }
 
     @PostMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String deleteCollectionById(@PathVariable Integer id,RedirectAttributes ra){
         return collectionService.deleteById(id,ra);
     }

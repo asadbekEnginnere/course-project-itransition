@@ -15,8 +15,8 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
             value = "select coalesce(count(likes.user_id),0)\n" +
                     "from likes\n" +
                     "join users u on u.id = likes.user_id\n" +
-                    "where u.id= :userId ")
-    int isLikedByUser(int userId);
+                    "where u.id= :userId and likes.item_id= :itemId ")
+    int isLikedByUser(int userId,int itemId);
 
     Like findByUserAndItem(User user, Item item);
 

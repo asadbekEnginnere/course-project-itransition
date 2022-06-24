@@ -38,7 +38,7 @@ public class ItemController {
     private final CollectionServiceImpl collectionService;
 
     @GetMapping("/{id}/create")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String itemCreatePage(Model model, @PathVariable Integer id){
         List<CustomColumnDto> customColumnDos = itemService.getCustomColumn(id);
         List<TagDto> tags = tagService.getAllData();
@@ -49,14 +49,14 @@ public class ItemController {
     }
 
     @PostMapping("/{id}/create")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String itemSave(MultipartHttpServletRequest file, @PathVariable Integer id, HttpServletRequest request, RedirectAttributes ra){
         return itemService.saveItem(file,request,id,ra);
     }
 
 
     @PostMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String deleteItemById(@PathVariable Integer id){
         return null;
     }

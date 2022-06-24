@@ -39,11 +39,11 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
             User user = userService.currenUser();
             if (user != null && isLike && itemRepository.findById(itemId).isPresent()) {
 
-                int disliked = disLikeRepository.isDisliked(user.getId());
+                int disliked = disLikeRepository.isDisliked(user.getId(), itemId);
                 Item item = itemRepository.findById(itemId).get();
-                if (disliked>0){
+                if (disliked > 0) {
                     DisLike disLikeData = disLikeRepository.findByUserAndItem(user, item);
-                    disLikeRepository.delete(disLikeData);
+                    disLikeRepository.deleteById(disLikeData.getId());
                 }
 
                 Like like = new Like(
@@ -53,12 +53,12 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
                 likeRepository.save(like);
             } else if (user != null) {
 
-                int likedByUser = likeRepository.isLikedByUser(user.getId());
+                int likedByUser = likeRepository.isLikedByUser(user.getId(), itemId);
                 Item item = itemRepository.findById(itemId).get();
 
-                if (likedByUser>0){
+                if (likedByUser > 0) {
                     Like likeData = likeRepository.findByUserAndItem(user, item);
-                    likeRepository.delete(likeData);
+                    likeRepository.deleteById(likeData.getId());
                 }
 
                 DisLike disLike = new DisLike(
@@ -86,18 +86,18 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
     @Override
     public String viewLikeDislike(boolean isLike, Integer itemId, Model model) {
         List<LikeDisLikeProjection> likeDislikeDetail = new ArrayList<>();
-        String likeDislike="";
-        if (isLike){
+        String likeDislike = "";
+        if (isLike) {
             likeDislikeDetail = likeRepository.getLikeDislikeDetail(itemId);
-            likeDislike="Likes";
-        }else {
+            likeDislike = "Likes";
+        } else {
             likeDislikeDetail = disLikeRepository.getLikeDislikeDetail(itemId);
-            likeDislike="Dislikes";
+            likeDislike = "Dislikes";
         }
 
-        model.addAttribute("likesDislikesUser",likeDislikeDetail);
-        model.addAttribute("likeDislike",likeDislike);
-        model.addAttribute("itemId",itemId);
+        model.addAttribute("likesDislikesUser", likeDislikeDetail);
+        model.addAttribute("likeDislike", likeDislike);
+        model.addAttribute("itemId", itemId);
         return "item/like-dislike-view";
     }
 

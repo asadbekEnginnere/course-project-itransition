@@ -15,8 +15,8 @@ public interface DisLikeRepository extends JpaRepository<DisLike, Integer> {
             value = "select coalesce(count(dislikes.user_id),0)\n" +
                     "from dislikes\n" +
                     "join users u on u.id = dislikes.user_id\n" +
-                    "where u.id= :userId ")
-    int isDisliked(int userId);
+                    "where u.id= :userId and dislikes.item_id= :itemId ")
+    int isDisliked(int userId,int itemId);
 
     DisLike findByUserAndItem(User user, Item item);
 
