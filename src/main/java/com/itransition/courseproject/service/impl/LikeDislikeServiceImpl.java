@@ -97,6 +97,7 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
 
         model.addAttribute("likesDislikesUser",likeDislikeDetail);
         model.addAttribute("likeDislike",likeDislike);
+        model.addAttribute("itemId",itemId);
         return "item/like-dislike-view";
     }
 

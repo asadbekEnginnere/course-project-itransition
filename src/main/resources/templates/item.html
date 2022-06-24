@@ -10,12 +10,16 @@
         <div class="container">
             <div class="row align-items-center justify-content-between">
                 <div class="col-6">
-                    <div class="page-title-content">
+                    <div class="page-title-content" th:if="${!#strings.equals(collectionName,'none')}">
+                        <h3>[[${collectionName}]] - [[#{item}]]</h3>
+                    </div>
+                    <div class="page-title-content" th:if="${#strings.equals(collectionName,'none')}">
                         <h3>[[#{item}]]</h3>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="breadcrumbs"><a th:href="@{/}">[[#{home}]] </a><span><i
+                    <div class="breadcrumbs">
+                        <a th:href="@{/}">[[#{home}]] </a><span><i
                             class="ri-arrow-right-s-line"></i></span><a href="">[[#{item}]]</a></div>
                 </div>
             </div>
@@ -46,78 +50,6 @@
                                                            id="flexCheckDefault4" value=""><label
                                     class="form-check-label"
                                     for="flexCheckDefault4">Has Offers</label></div>
-                        </div>
-                        <div class="filter-sidebar-content">
-                            <h5>Explore</h5>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault5" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault5">Gambling Apes</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault6" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault6">The Sandbox</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault7" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault7">The Sandbox</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault8" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault8">CryptoPunks</label></div>
-                        </div>
-                        <div class="filter-sidebar-content">
-                            <h5>Chains</h5>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault9" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault9">Ethereum</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault10" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault10">Polygon</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault11" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault11">Klaytn</label></div>
-                        </div>
-                        <div class="filter-sidebar-content">
-                            <h5>Categories</h5>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault12" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault12">Art</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault13" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault13">Music</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault14" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault14">Domain Names</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault15" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault15">Virtual Worlds</label></div>
-                        </div>
-                        <div class="filter-sidebar-content">
-                            <h5>On Sale In</h5>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault16" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault16">ETH</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault17" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault17">BTC</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault18" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault18">DG</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault19" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault19">ALXO</label></div>
                         </div>
                     </div>
                 </div>

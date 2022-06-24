@@ -9,6 +9,7 @@ import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Comment;
 import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.projection.CommentProjection;
+import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.repository.CustomColumnRepository;
 import com.itransition.courseproject.repository.TagRepository;
 import com.itransition.courseproject.service.impl.CollectionServiceImpl;
@@ -18,10 +19,7 @@ import com.itransition.courseproject.service.impl.LikeDislikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -60,8 +58,22 @@ public class HomeController {
     }
 
     @GetMapping("/item")
-    public String getItemPage(Model model) {
-        model.addAttribute("items", itemService.getAllItems());
+    public String getItemPage(Model model,
+                              @RequestParam(required = false)Integer collectionId,
+                              @RequestParam(required = false)String collectionName) {
+
+        List<ItemProjection> allItems = null;
+        String collection="none";
+
+        if (collectionId!=null){
+            allItems=itemService.getAllItemsByCollectionId(collectionId);
+            collection=collectionName;
+        }else{
+            allItems=itemService.getAllItems();
+        }
+
+        model.addAttribute("collectionName",collection);
+        model.addAttribute("items", allItems);
         return "item";
     }
 
