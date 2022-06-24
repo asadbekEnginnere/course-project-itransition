@@ -34,7 +34,10 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
             "       i.name,\n" +
             "       concat(u.first_name,' ',u.last_name) as authorFullName,\n" +
             "       c.name as collection,\n" +
-            "       coalesce(cte.value,'null') as imageUrl\n" +
+            "       coalesce(cte.value,'null') as imageUrl,\n" +
+            "       coalesce(count(l.*),0) as likesCount,\n" +
+            "       coalesce(count(d.*),0) as disLikesCount,\n" +
+            "       coalesce(count(c2.*),0) as commentCount\n" +
             "from  items i\n" +
             "          join collections c on c.id = i.collection_id\n" +
             "          join user_collection uc on uc.id = c.user_collection_id\n" +
@@ -45,6 +48,10 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
             "             join custom_value cv on cc.id = cv.custom_column_id\n" +
             "    where cc.type='image'\n" +
             ")cte on cte.item_id=i.id\n" +
+            "left join likes l on i.id = l.item_id\n" +
+            "left join dislikes d on i.id = d.item_id\n" +
+            "left join comments c2 on i.id = c2.item_id\n" +
+            "group by i.id, i.name, concat(u.first_name,' ',u.last_name), c.name, coalesce(cte.value,'null')\n" +
             "order by i.created_at desc\n" +
             "limit 4 ")
     List<ItemProjection> getLatestItems();
@@ -91,5 +98,30 @@ public interface ItemRepository extends JpaRepository<Item,Integer> {
             "where i.id= :id \n" +
             "group by i.id, i.name, c.name, concat(u.first_name,' ',u.last_name), coalesce(cte.value,'null'))result;")
     String getItemById(int id);
+
+    @Query(nativeQuery = true,value = "select i.id,\n" +
+            "       i.name,\n" +
+            "       concat(u.first_name,' ',u.last_name) as authorFullName,\n" +
+            "       c.name as collection,\n" +
+            "       coalesce(cte.value,'null') as imageUrl,\n" +
+            "       coalesce(count(l.*),0) as likesCount,\n" +
+            "       coalesce(count(d.*),0) as disLikesCount,\n" +
+            "       coalesce(count(c2.*),0) as commentCount\n" +
+            "from  items i\n" +
+            "          join collections c on c.id = i.collection_id\n" +
+            "          join user_collection uc on uc.id = c.user_collection_id\n" +
+            "          join users u on uc.user_id = u.id\n" +
+            "          left join  (\n" +
+            "    select cc.id,cv.item_id,cv.value,cc.type\n" +
+            "    from custom_column cc\n" +
+            "             join custom_value cv on cc.id = cv.custom_column_id\n" +
+            "    where cc.type='image'\n" +
+            ")cte on cte.item_id=i.id\n" +
+            "left join likes l on i.id = l.item_id\n" +
+            "left join dislikes d on i.id = d.item_id\n" +
+            "left join comments c2 on i.id = c2.item_id\n" +
+            "group by i.id, i.name, concat(u.first_name,' ',u.last_name), c.name, coalesce(cte.value,'null')\n" +
+            "order by i.created_at desc ")
+    List<ItemProjection> getAllItems();
 
 }

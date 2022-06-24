@@ -63,20 +63,20 @@ public class ItemServiceImpl implements ItemService {
         return columnDtoList;
     }
 
-    public List<ItemProjection> getAllItemsByCollectionId(Integer collectionId){
+    public List<ItemProjection> getAllItemsByCollectionId(Integer collectionId) {
         return itemRepository.getAllItemsByCollectionId(collectionId);
     }
 
     @Override
     public String saveItem(MultipartHttpServletRequest file, HttpServletRequest request, Integer id, RedirectAttributes ra) {
 
-        String status="error";
-        String message="Creating error";
+        String status = "error";
+        String message = "Creating error";
         String name = request.getParameter("name");
         String[] tagsIds = request.getParameterValues("tagsId");
         List<Integer> tagsID = new ArrayList<>();
 
-        for(String s : tagsIds) tagsID.add(Integer.valueOf(s));
+        for (String s : tagsIds) tagsID.add(Integer.valueOf(s));
 
         if (collectionRepository.findById(id).isPresent()) {
             try {
@@ -93,7 +93,7 @@ public class ItemServiceImpl implements ItemService {
                 Item savedItem = itemRepository.save(item);
 
 
-                String imageUrl=null;
+                String imageUrl = null;
                 Iterator<String> iterator = file.getFileNames();
                 MultiValueMap<String, MultipartFile> multiFileMap = file.getMultiFileMap();
                 MultipartFile multipartFile = null;
@@ -101,21 +101,21 @@ public class ItemServiceImpl implements ItemService {
                     multipartFile = file.getFile(iterator.next());
                 }
 
-                if (multipartFile!=null){
+                if (multipartFile != null) {
                     File fileForServer = convertMultiPartToFile(multipartFile);
                     Map uploadResult = cloudinary.uploader().upload(fileForServer, ObjectUtils.emptyMap());
                     imageUrl = (String) uploadResult.get("url");
-                    System.out.println("Url : "+imageUrl);
+                    System.out.println("Url : " + imageUrl);
 
                     Iterator<String> mapIterator = multiFileMap.keySet().iterator();
-                    String columnId="";
+                    String columnId = "";
                     while (mapIterator.hasNext()) {
                         columnId = mapIterator.next();
                     }
 
                     CustomColumn customColumn = customColumnRepository.findById(Integer.valueOf(columnId)).get();
 
-                    if (customColumn!=null) {
+                    if (customColumn != null) {
 
                         CustomValue customValue = new CustomValue(
                                 imageUrl,
@@ -127,7 +127,7 @@ public class ItemServiceImpl implements ItemService {
 
                 }
 
-                Map<CustomColumn,String> customColumnStringMap = new HashMap<>();
+                Map<CustomColumn, String> customColumnStringMap = new HashMap<>();
 
                 Map<String, String[]> parameterMap = request.getParameterMap();
 
@@ -138,7 +138,7 @@ public class ItemServiceImpl implements ItemService {
                         if (!entry.getKey().equals("name") && !entry.getKey().equals("tagsId")) {
                             Integer columnId = Integer.valueOf(entry.getKey());
                             CustomColumn customColumn = customColumnRepository.findById(columnId).get();
-                            if (customColumn!=null) {
+                            if (customColumn != null) {
                                 String value = "";
                                 for (String s : entry.getValue()) {
                                     value = s;
@@ -146,7 +146,8 @@ public class ItemServiceImpl implements ItemService {
                                 customColumnStringMap.put(customColumn, value);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
 
 
@@ -159,16 +160,17 @@ public class ItemServiceImpl implements ItemService {
                     customValueRepository.save(customValue);
                 }
 
-                status="success";
-                message="Successfully Created";
+                status = "success";
+                message = "Successfully Created";
 
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
         }
 
 
         ra.addFlashAttribute("status", status);
-        ra.addFlashAttribute("message",message);
-        return "redirect:/user/collection/view/"+id;
+        ra.addFlashAttribute("message", message);
+        return "redirect:/user/collection/view/" + id;
     }
 
     @Override
@@ -184,15 +186,21 @@ public class ItemServiceImpl implements ItemService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             ItemDetailDto itemDetailMapper = mapper.readValue(result, ItemDetailDto.class);
-            log.error("item : ",itemDetailMapper);
+            log.error("item : ", itemDetailMapper);
             System.out.println(itemDetailMapper);
             return itemDetailMapper;
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return itemDetail;
     }
 
+    @Override
+    public List<ItemProjection> getAllItems() {
+        return itemRepository.getAllItems();
+    }
+
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File("src/main/resources/file/"+file.getOriginalFilename());
+        File convFile = new File("src/main/resources/file/" + file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();

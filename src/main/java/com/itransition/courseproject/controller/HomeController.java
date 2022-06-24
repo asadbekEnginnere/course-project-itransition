@@ -46,35 +46,36 @@ public class HomeController {
 
 
     @GetMapping
-    public String getHomePage(Model model){
-        model.addAttribute("items",itemService.getLatestItems());
-        model.addAttribute("collections",collectionService.getTopFiveLargestCollection());
-        model.addAttribute("tags",tagRepository.getAllTags());
+    public String getHomePage(Model model) {
+        model.addAttribute("items", itemService.getLatestItems());
+        model.addAttribute("collections", collectionService.getTopFiveLargestCollection());
+        model.addAttribute("tags", tagRepository.getAllTags());
         return "home";
     }
 
     @GetMapping("/collection")
-    public String getCollectionPage(Model model){
-        model.addAttribute("collections",collectionService.getCollectionList());
+    public String getCollectionPage(Model model) {
+        model.addAttribute("collections", collectionService.getCollectionList());
         return "collection";
     }
 
     @GetMapping("/item")
-    public String getItemPage(Model model){
+    public String getItemPage(Model model) {
+        model.addAttribute("items", itemService.getAllItems());
         return "item";
     }
 
     @GetMapping("/item/detail/{id}")
-    public String itemDetailPage(Model model, @PathVariable Integer id){
+    public String itemDetailPage(Model model, @PathVariable Integer id) {
         ItemDetailDto itemById = itemService.getItemById(id);
         List<CommentProjection> commentsByItemId = commentService.getCommentsByItemId(id);
         int likes = likeDislikeService.likesCount(id);
         int dislikes = likeDislikeService.disLikesCount(id);
-        model.addAttribute("comment",new Comment());
-        model.addAttribute("likes",likes);
-        model.addAttribute("dislikes",dislikes);
-        model.addAttribute("comments",commentsByItemId);
-        model.addAttribute("item",itemById);
+        model.addAttribute("comment", new Comment());
+        model.addAttribute("likes", likes);
+        model.addAttribute("dislikes", dislikes);
+        model.addAttribute("comments", commentsByItemId);
+        model.addAttribute("item", itemById);
         return "item/detail";
     }
 

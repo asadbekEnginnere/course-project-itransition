@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="layouts/head :: user-header"></head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+<div id="main-wrapper" class="front">
+    <div th:replace="layouts/navbar :: user-navbar"></div>
+
+    <div class="profile-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="settings-menu">
+                        <li><a href="">[[${likeDislike}]]</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xxl-4">
+                    <div class="card card-fluid">
+                        <div class="card-body">
+                            <th:block th:each="likeDislike : ${likesDislikesUser}">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6 class="text-sm mb-0"><img th:src="@{/images/profile/3.png}" alt=""
+                                                                      width="50"> [[${likeDislike.getUserFullName()}]]</h6>
+                                    </div>
+                                    <div class="col-auto"><a href="" class="text-sm">[[${likeDislike.getLikedDislikedAt()}]]</a></div>
+                                </div>
+                                <hr class="my-3">
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="layouts/footer-top :: user-footer-top"></div>
+    <div th:replace="layouts/footer-bottom :: user-footer-bottom"></div>
+</div>
+<script th:src="@{vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/magnific-popup/magnific-popup.js}"></script>
+<script th:src="@{/js/plugins/magnific-popup-init.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

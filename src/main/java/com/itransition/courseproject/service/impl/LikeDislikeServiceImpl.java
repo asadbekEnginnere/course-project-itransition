@@ -8,6 +8,7 @@ import com.itransition.courseproject.entity.collection.DisLike;
 import com.itransition.courseproject.entity.collection.Item;
 import com.itransition.courseproject.entity.collection.Like;
 import com.itransition.courseproject.entity.user.User;
+import com.itransition.courseproject.projection.LikeDisLikeProjection;
 import com.itransition.courseproject.repository.DisLikeRepository;
 import com.itransition.courseproject.repository.ItemRepository;
 import com.itransition.courseproject.repository.LikeRepository;
@@ -15,7 +16,11 @@ import com.itransition.courseproject.service.interfaces.LikeDislikeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -76,6 +81,23 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
     @Override
     public int disLikesCount(Integer id) {
         return disLikeRepository.disLikeCountByItemId(id);
+    }
+
+    @Override
+    public String viewLikeDislike(boolean isLike, Integer itemId, Model model) {
+        List<LikeDisLikeProjection> likeDislikeDetail = new ArrayList<>();
+        String likeDislike="";
+        if (isLike){
+            likeDislikeDetail = likeRepository.getLikeDislikeDetail(itemId);
+            likeDislike="Likes";
+        }else {
+            likeDislikeDetail = disLikeRepository.getLikeDislikeDetail(itemId);
+            likeDislike="Dislikes";
+        }
+
+        model.addAttribute("likesDislikesUser",likeDislikeDetail);
+        model.addAttribute("likeDislike",likeDislike);
+        return "item/like-dislike-view";
     }
 
 }

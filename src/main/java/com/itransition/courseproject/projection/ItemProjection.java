@@ -11,5 +11,8 @@ public interface ItemProjection {
     String getAuthorFullName();
     String getCollection();
     String getImageUrl();
+    Integer getLikesCount();
+    Integer getDisLikesCount();
+    Integer getCommentCount();
 
 }

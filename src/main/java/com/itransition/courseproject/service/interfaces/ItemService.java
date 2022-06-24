@@ -18,4 +18,6 @@ public interface ItemService {
     List<ItemProjection> getLatestItems();
 
     ItemDetailDto getItemById(Integer id);
+
+    List<ItemProjection> getAllItems();
 }

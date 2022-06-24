@@ -8,6 +8,7 @@ import com.itransition.courseproject.service.impl.LikeDislikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +27,22 @@ public class LikeDislikeController {
         return likeDislikeService.addLikeDislike(true,itemId,ra);
     }
 
+    @GetMapping("/like/view/{itemId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
+    public String viewLikeToItem(@PathVariable Integer itemId, Model model){
+        return likeDislikeService.viewLikeDislike(true,itemId,model);
+    }
+
     @GetMapping("/dislike/add/{itemId}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String addDisLikeToItem(@PathVariable Integer itemId, RedirectAttributes ra){
         return likeDislikeService.addLikeDislike(false,itemId,ra);
+    }
+
+    @GetMapping("/dislike/view/{itemId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
+    public String viewDisLikeToItem(@PathVariable Integer itemId, Model model){
+        return likeDislikeService.viewLikeDislike(false,itemId,model);
     }
 
 }
