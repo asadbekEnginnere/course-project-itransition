@@ -57,10 +57,11 @@ public class HomeController {
         return "collection";
     }
 
-    @GetMapping("/item")
+    @GetMapping(value = {"/item", "/item/tag/{tagId}"})
     public String getItemPage(Model model,
                               @RequestParam(required = false)Integer collectionId,
-                              @RequestParam(required = false)String collectionName) {
+                              @RequestParam(required = false)String collectionName,
+                              @PathVariable(required = false) Integer tagId) {
 
         List<ItemProjection> allItems = null;
         String collection="none";
@@ -68,6 +69,8 @@ public class HomeController {
         if (collectionId!=null){
             allItems=itemService.getAllItemsByCollectionId(collectionId);
             collection=collectionName;
+        }else if (tagId!=null){
+            allItems=itemService.getItemByTagId(tagId);
         }else{
             allItems=itemService.getAllItems();
         }

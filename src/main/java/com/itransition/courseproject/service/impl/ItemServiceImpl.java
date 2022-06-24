@@ -199,6 +199,11 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.getAllItems();
     }
 
+    @Override
+    public List<ItemProjection> getItemByTagId(Integer tagId) {
+        return itemRepository.getAllItemByTagId(tagId);
+    }
+
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File("src/main/resources/file/" + file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);

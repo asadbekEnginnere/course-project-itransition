@@ -92,7 +92,7 @@
                                         <div class="text-start">
                                             <h4 class="mb-2">[[#{tags}]]</h4>
                                             <th:block th:each="tag : ${item.itemTag}">
-                                                <a th:href="@{'/item/'+${tag.id}}"><h5 class="text-muted">
+                                                <a th:href="@{'/item/tag/'+${tag.id}}"><h5 class="text-muted">
                                                     #[[${tag.name}]]</h5></a>
                                             </th:block>
                                         </div>

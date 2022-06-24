@@ -133,7 +133,7 @@
             <div class="row align-items-center">
                 <th:block th:each="tag : ${tags}">
                     <div class="col-xl-4 col-lg-6 col-md-6">
-                        <a class="top-collection-content d-block" th:href="${tag.id}">
+                        <a class="top-collection-content d-block" th:href="@{'/item/tag/'+${tag.id}}">
                             <div class="d-flex align-items-center">
                                 <span class="serial"></span>
                                 <div class="flex-grow-1 ms-3">

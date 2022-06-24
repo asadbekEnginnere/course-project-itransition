@@ -20,4 +20,7 @@ public interface ItemService {
     ItemDetailDto getItemById(Integer id);
 
     List<ItemProjection> getAllItems();
+
+    List<ItemProjection> getItemByTagId(Integer tagId);
+
 }
