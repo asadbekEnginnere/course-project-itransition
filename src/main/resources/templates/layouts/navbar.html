@@ -46,13 +46,18 @@
                                     <li class="nav-item"><a class="nav-link" th:href="@{/logout}" th:text="#{signout}"></a></li>
                                 </p>
 
-                                <li class="nav-item dropdown">
-                                    <a th:text="#{language}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=uz'}">UZB</a>
-                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=en'}">ENG</a>
-                                    </div>
+                                <li class="nav-item">
+                                    <select id="locales" class="form-control">
+                                        <option value="">[[#{language}]]</option>
+                                        <option value="en">ENG</option>
+                                        <option value="uz">UZB</option>
+                                    </select>
+<!--                                    <a th:text="#{language}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                                    </a>-->
+<!--                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=uz'}">UZB</a>-->
+<!--                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=en'}">ENG</a>-->
+<!--                                    </div>-->
                                 </li>
                             </ul>
                         </div>

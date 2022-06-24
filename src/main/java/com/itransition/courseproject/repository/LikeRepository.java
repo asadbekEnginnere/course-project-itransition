@@ -34,4 +34,15 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
                     "join users u on u.id = likes.user_id\n" +
                     "where item_id= :id")
     List<LikeDisLikeProjection> getLikeDislikeDetail(int id);
+
+    @Query(nativeQuery = true,
+    value = "select count(likes.*) as likes\n" +
+            "from likes\n" +
+            "join items i on i.id = likes.item_id\n" +
+            "join collections c on c.id = i.collection_id\n" +
+            "join user_collection uc on uc.id = c.user_collection_id\n" +
+            "join users u on u.id = uc.user_id\n" +
+            "where u.id= :id ;")
+    int getTotalLikesByUserId(Integer id);
+
 }

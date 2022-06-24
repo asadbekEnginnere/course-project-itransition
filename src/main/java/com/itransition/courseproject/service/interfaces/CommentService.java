@@ -13,4 +13,6 @@ public interface CommentService {
     String saveData(Comment comment, RedirectAttributes ra, Integer itemId);
 
     List<CommentProjection> getCommentsByItemId(Integer id);
+
+    int getTotalCommentsByUserId();
 }

@@ -12,4 +12,8 @@ public interface LikeDislikeService {
     int disLikesCount(Integer id);
 
     String viewLikeDislike(boolean b, Integer itemId, Model model);
+
+    int getTotalLikesByUserId();
+
+    int getTotalDisLikesByUserId();
 }

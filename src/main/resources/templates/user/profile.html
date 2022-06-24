@@ -53,7 +53,7 @@
                     <div class="stat-widget d-flex align-items-center">
                         <div class="widget-icon me-3 bg-primary"><span><i class="ri-star-line"></i></span></div>
                         <div class="widget-content">
-                            <h3>24K</h3>
+                            <h3>[[${totalCollections}]]</h3>
                             <p>[[#{collections}]]</p>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                     <div class="stat-widget d-flex align-items-center">
                         <div class="widget-icon me-3 bg-info"><span><i class="fa fa-list-alt"></i></span></div>
                         <div class="widget-content">
-                            <h3>82K</h3>
+                            <h3>[[${totalItems}]]</h3>
                             <p>[[#{items}]]</p>
                         </div>
                     </div>
@@ -71,8 +71,17 @@
                     <div class="stat-widget d-flex align-items-center">
                         <div class="widget-icon me-3 bg-danger"><span><i class="fa fa-heart"></i></span></div>
                         <div class="widget-content">
-                            <h3>200</h3>
+                            <h3>[[${totalLikes}]]</h3>
                             <p>[[#{likes}]]</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6">
+                    <div class="stat-widget d-flex align-items-center">
+                        <div class="widget-icon me-3 bg-warning"><span><i class="fa fa-eye"></i></span></div>
+                        <div class="widget-content">
+                            <h3>[[${totalDisLikes}]]</h3>
+                            <p>[[#{dislikes}]]</p>
                         </div>
                     </div>
                 </div>

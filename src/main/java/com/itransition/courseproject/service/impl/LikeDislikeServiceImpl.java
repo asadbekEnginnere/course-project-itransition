@@ -101,4 +101,22 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
         return "item/like-dislike-view";
     }
 
+    @Override
+    public int getTotalLikesByUserId() {
+        User user = userService.currenUser();
+        if (user!=null){
+            return likeRepository.getTotalLikesByUserId(user.getId());
+        }
+        return 0;
+    }
+
+    @Override
+    public int getTotalDisLikesByUserId() {
+        User user = userService.currenUser();
+        if (user!=null){
+            return disLikeRepository.getTotalLikesByUserId(user.getId());
+        }
+        return 0;
+    }
+
 }

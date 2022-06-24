@@ -11,6 +11,7 @@ import com.itransition.courseproject.dto.CustomColumnDto;
 import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Collection;
 import com.itransition.courseproject.entity.collection.*;
+import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.repository.*;
 import com.itransition.courseproject.service.interfaces.ItemService;
@@ -42,6 +43,7 @@ public class ItemServiceImpl implements ItemService {
     private final Cloudinary cloudinary;
     private final ItemRepository itemRepository;
     private final CustomValueRepository customValueRepository;
+    private final UserServiceImpl userService;
 
     @Override
     public List<CustomColumnDto> getCustomColumn(Integer id) {
@@ -202,6 +204,15 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemProjection> getItemByTagId(Integer tagId) {
         return itemRepository.getAllItemByTagId(tagId);
+    }
+
+    @Override
+    public int getTotalItemsByUserId() {
+        User user = userService.currenUser();
+        if (user!=null){
+            return itemRepository.getTotalItemsByUserId(user.getId());
+        }
+        return 0;
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

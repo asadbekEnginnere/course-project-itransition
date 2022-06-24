@@ -61,4 +61,13 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentProjection> getCommentsByItemId(Integer id) {
         return commentRepository.getAllCommentsByItemId(id);
     }
+
+    @Override
+    public int getTotalCommentsByUserId() {
+        User user = userService.currenUser();
+        if (user!=null){
+            return commentRepository.getTotalCommentsByUserId(user.getId());
+        }
+        return 0;
+    }
 }

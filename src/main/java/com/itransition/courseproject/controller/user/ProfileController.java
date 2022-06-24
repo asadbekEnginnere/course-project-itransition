@@ -4,7 +4,7 @@ package com.itransition.courseproject.controller.user;
 // Asatbek Xalimjonov 6/17/22 6:29 PM
 
 import com.itransition.courseproject.dto.UserDto;
-import com.itransition.courseproject.service.impl.UserServiceImpl;
+import com.itransition.courseproject.service.impl.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -21,11 +21,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProfileController {
 
     private final UserServiceImpl userService;
+    private final CollectionServiceImpl collectionService;
+    private final ItemServiceImpl itemService;
+    private final CommentServiceImpl commentService;
+    private final LikeDislikeServiceImpl likeDislikeService;
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String getProfilePage(Model model){
         model.addAttribute("user",userService.getUserData());
+        model.addAttribute("totalCollections",collectionService.getTotalCollectionsByUserId());
+        model.addAttribute("totalItems",itemService.getTotalItemsByUserId());
+        model.addAttribute("totalComments",commentService.getTotalCommentsByUserId());
+        model.addAttribute("totalLikes",likeDislikeService.getTotalLikesByUserId());
+        model.addAttribute("totalDisLikes",likeDislikeService.getTotalDisLikesByUserId());
         return "user/profile";
     }
 

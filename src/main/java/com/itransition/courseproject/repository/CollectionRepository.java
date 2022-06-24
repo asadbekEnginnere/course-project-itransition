@@ -71,4 +71,11 @@ public interface CollectionRepository extends JpaRepository<Collection,Integer> 
     List<CollectionProjection> getCollectionList();
 
 
+    @Query(nativeQuery = true,
+    value = "select count(collections.*)\n" +
+            "from collections\n" +
+            "join user_collection uc on uc.id = collections.user_collection_id\n" +
+            "join users u on u.id = uc.user_id\n" +
+            "where u.id= :id ;")
+    int getTotalCollectionsByUserId(int id);
 }

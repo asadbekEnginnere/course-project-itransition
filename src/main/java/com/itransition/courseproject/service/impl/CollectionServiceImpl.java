@@ -14,6 +14,7 @@ import com.itransition.courseproject.entity.collection.CollectionItemColumn;
 import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.entity.collection.Topic;
 import com.itransition.courseproject.entity.enums.CustomColumnDataType;
+import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.entity.user.UserCollection;
 import com.itransition.courseproject.projection.CollectionProjection;
 import com.itransition.courseproject.repository.*;
@@ -216,5 +217,13 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
         fos.write(file.getBytes());
         fos.close();
         return convFile;
+    }
+
+    public int getTotalCollectionsByUserId() {
+        User user = userService.currenUser();
+        if (user!=null){
+            return collectionRepository.getTotalCollectionsByUserId(user.getId());
+        }
+        return 0;
     }
 }

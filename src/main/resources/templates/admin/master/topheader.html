@@ -17,16 +17,6 @@
                         </div>
                         <div class="dropdown profile_log dropdown">
                             <div data-bs-toggle="dropdown">
-                                <div class="user icon-menu active"><span th:text="#{language}"></span>
-                                </div>
-                            </div>
-                            <div tabindex="-1" class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=uz'}">UZB</a>
-                                <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=en'}">ENG</a>
-                            </div>
-                        </div>
-                        <div class="dropdown profile_log dropdown">
-                            <div data-bs-toggle="dropdown">
                                 <div class="user icon-menu active"><span><img th:src="@{/images/profile/3.png}" alt=""></span>
                                 </div>
                             </div>
@@ -48,6 +38,17 @@
                                 <a class="dropdown-item logout" href="/logout">
                                     <i class="ri-logout-circle-line"></i>[[#{signout}]]
                                 </a>
+                            </div>
+                        </div>
+                        <div class="dropdown profile_log dropdown">
+                            <div data-bs-toggle="dropdown">
+                                <div class="user icon-menu active">
+                                    <select id="locales" class="form-control">
+                                        <option value="">[[#{language}]]</option>
+                                        <option value="en">ENG</option>
+                                        <option value="uz">UZB</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

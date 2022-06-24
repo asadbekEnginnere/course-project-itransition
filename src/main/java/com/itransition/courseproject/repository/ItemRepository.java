@@ -161,4 +161,12 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
                     "order by i.created_at desc ")
     List<ItemProjection> getAllItemByTagId(int id);
 
+    @Query(nativeQuery = true,
+    value = "select count(items.*)\n" +
+            "from items\n" +
+            "join collections c on c.id = items.collection_id\n" +
+            "join user_collection uc on uc.id = c.user_collection_id\n" +
+            "join users u on u.id = uc.user_id\n" +
+            "where u.id= :id ;")
+    int getTotalItemsByUserId(int id);
 }

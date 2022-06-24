@@ -23,4 +23,5 @@ public interface ItemService {
 
     List<ItemProjection> getItemByTagId(Integer tagId);
 
+    int getTotalItemsByUserId();
 }

@@ -8,4 +8,17 @@
   <base href="/">
   <link rel="icon" href="/images/pcm.png" type="image/png">
   <link rel="stylesheet" th:href="@{/css/style.css}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#locales").change(function () {
+        var selectedOption = $('#locales').val();
+        var currentLocation = window.location.href.split('?')[0];
+        if (selectedOption != ''){
+          window.location.replace(currentLocation+'?lang=' + selectedOption);
+        }
+      });
+    });
+  </script>
 </head>
