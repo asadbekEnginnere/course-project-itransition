@@ -49,4 +49,21 @@ public class Item {
         this.collection = collection;
         this.tags = tags;
     }
+
+
+    //cascade type
+
+    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
+    private List<Comment> comment;
+
+    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
+    private List<DisLike> dislikes;
+
+    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
+    private List<CustomValue> customValueList;
+
+
 }

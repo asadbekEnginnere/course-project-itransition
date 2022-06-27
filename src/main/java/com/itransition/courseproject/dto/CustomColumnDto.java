@@ -15,4 +15,11 @@ public class CustomColumnDto {
     private Integer id;
     private String name;
     private String type;
+    private String value;
+
+    public CustomColumnDto(Integer id, String name, String type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
 }

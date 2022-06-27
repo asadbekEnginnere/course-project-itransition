@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="layouts/head :: user-header"> </head>
+<head th:replace="layouts/head :: user-header"></head>
 <body class="@@dashboard">
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
 
 
 <div id="main-wrapper" class="front">
 
-    <div th:replace="layouts/navbar :: user-navbar"> </div>
+    <div th:replace="layouts/navbar :: user-navbar"></div>
 
 
     <div class="page-title">
-            <div class="container">
-                <div class="row align-items-center justify-content-between">
-                    <div class="col-6">
-                        <div class="page-title-content">
-                            <h3>[[${collection.name}]] - [[#{item}]]</h3>
-                            <p class="mb-2"></p>
-                        </div>
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-6">
+                    <div class="page-title-content">
+                        <h3>[[${collection.name}]] - [[#{item}]]</h3>
+                        <p class="mb-2"></p>
                     </div>
-                    <div class="col-auto">
-                        <div class="breadcrumbs">
-                            <a class="btn btn-warning" th:href="@{'/user/collection/item/'+${collection.id}+'/create'}">[[#{add}]] [[#{item}]]</a>
+                </div>
+                <div class="col-auto">
+                    <div class="breadcrumbs">
+                        <a class="btn btn-warning" th:href="@{'/user/collection/item/'+${collection.id}+'/create'}">[[#{add}]]
+                            [[#{item}]]</a>
                         <a class="btn btn-info" th:href="@{/user/collection}">[[#{back}]]</a></div>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
     <div class="explore section-padding">
         <div class="container">
             <div th:if="${status}=='success'">
-                <div  class="alert alert-primary" role="alert">
+                <div class="alert alert-primary" role="alert">
                     [[${message}]]
                 </div>
             </div>
@@ -46,14 +47,18 @@
                     <div class="col-xl-3 col-lg-6 col-md-6">
                         <div class="card items">
                             <div class="card-body">
-                                <div th:if="${!#strings.equals(item.getImageUrl(),'null')}" class="items-img position-relative">
-                                    <img th:src="${item.getImageUrl()}" height="150px" width="200px" class="img-fluid rounded mb-3" alt="">
+                                <div th:if="${!#strings.equals(item.getImageUrl(),'null')}"
+                                     class="items-img position-relative">
+                                    <img th:src="${item.getImageUrl()}" height="150px" width="200px"
+                                         class="img-fluid rounded mb-3" alt="">
                                     <a href="profile.html">
                                         <img th:src="@{/images/profile/3.png}" class="creator" width="50"
                                              alt=""></a>
                                 </div>
-                                <div th:if="${#strings.equals(item.getImageUrl(),'null')}" class="items-img position-relative">
-                                    <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3" alt="" height="150px" width="200px">
+                                <div th:if="${#strings.equals(item.getImageUrl(),'null')}"
+                                     class="items-img position-relative">
+                                    <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3" alt=""
+                                         height="150px" width="200px">
                                     <a href="profile.html">
                                         <img th:src="@{/images/profile/3.png}" class="creator" width="50"
                                              alt=""></a>
@@ -68,26 +73,34 @@
                                     </div>
                                 </div>
                                 <div class="justify-content-center mt-3">
-                                    <a class="btn btn-success" th:href="${item.getId()}">[[#{edit}]]</a>
-                                    <a class="btn btn-danger" th:href="${item.getId()}">[[#{delete}]]</a>
-                                    <a class="btn btn-primary" th:href="@{'/item/detail/'+${item.getId()}}">[[#{view}]]</a>
+                                    <a class="btn btn-success btn-sm"
+                                       th:href="@{'/user/collection/item/'+${collection.id}+'/edit/'+${item.getId()}}">[[#{edit}]]</a>
+                                    <form th:action="@{'/user/collection/item/'+${collection.id}+'/delete/'+${item.getId()}}"
+                                          class="inline-flex"
+                                          method="POST">
+                                        <button onclick="return confirm('Are you sure you want to delete?');"
+                                                class="btn btn-danger btn-sm" type="submit">
+                                            [[#{delete}]]
+                                        </button>
+                                    </form>
+                                    <a class="btn btn-primary btn-sm" th:href="@{'/item/detail/'+${item.getId()}}">[[#{view}]]</a>
                                 </div>
                             </div>
                         </div>
-                     </div>
+                    </div>
                 </th:block>
             </div>
         </div>
     </div>
 
 
-    <div th:replace="layouts/footer-top :: user-footer-top"> </div>
-        <div th:replace="layouts/footer-bottom :: user-footer-bottom"> </div>
+    <div th:replace="layouts/footer-top :: user-footer-top"></div>
+    <div th:replace="layouts/footer-bottom :: user-footer-bottom"></div>
 
 </div>
-    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
-    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/js/scripts.js}"></script>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
 </body>
 
 </html>

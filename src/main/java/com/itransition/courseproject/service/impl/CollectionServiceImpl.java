@@ -7,6 +7,7 @@ package com.itransition.courseproject.service.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itransition.courseproject.cloudinary.CloudForImage;
 import com.itransition.courseproject.dto.CollectionDto;
 import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Collection;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class CollectionServiceImpl implements CollectionService, GenericInterface<CollectionDto,Integer,String> {
+public class CollectionServiceImpl implements CollectionService, GenericInterface<CollectionDto, Integer, String> {
 
     private final CollectionRepository collectionRepository;
     private final CollectionItemColumnRepository collectionItemColumn;
@@ -48,98 +49,113 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
     private final TopicRepository topicRepository;
     private final UserCollectionRepository userCollectionRepository;
     private final UserServiceImpl userService;
+    private final CloudForImage cloudForImage;
 
+    @Transactional
     @Override
     public String saveCollectionWithItemField(MultipartFile file, HttpServletRequest request, RedirectAttributes ra) {
 
-        String message="Collection creating error";
-        String status="error";
+        String message = "Collection creating error";
+        String status = "error";
 
         try {
-
             String name = request.getParameter("name");
             String description = request.getParameter("description");
             Integer topicId = Integer.valueOf(request.getParameter("topic"));
 
-            UserCollection userCollection=null;
-            if (userCollectionRepository.findByUser(userService.currenUser())!=null) {
-                userCollection=userCollectionRepository.findByUser(userService.currenUser());
-            }else{
-                userCollection=userCollectionRepository.save(new UserCollection(userService.currenUser()));
+            UserCollection userCollection = null;
+            if (userCollectionRepository.findByUser(userService.currenUser()) != null) {
+                userCollection = userCollectionRepository.findByUser(userService.currenUser());
+            } else {
+                userCollection = userCollectionRepository.save(new UserCollection(userService.currenUser()));
             }
 
             if (topicRepository.findById(topicId).isPresent()) {
 
-                String imageUrl=null;
+                String imageUrl = null;
                 if (!file.isEmpty()) {
-                    File fileForServer = convertMultiPartToFile(file);
-                    Map uploadResult = cloudinary.uploader().upload(fileForServer, ObjectUtils.emptyMap());
-                    imageUrl = (String) uploadResult.get("url");
-                    System.out.println("Url : "+imageUrl);
+                    imageUrl = cloudForImage.uploadImageToCloud(file);
                 }
-
 
                 Topic topic = topicRepository.findById(topicId).get();
-                Collection collection = new Collection(
-                        name,
-                        description,
-                        imageUrl,
-                        userCollection,
-                        topic
-                );
-
-                Collection savedCollection = collectionRepository.save(collection);
+                Collection savedCollection = saveCollection(name, description, userCollection, imageUrl, topic);
 
                 Map<String, String[]> columnAndType = request.getParameterMap();
-                List<String> col = new ArrayList<>(Arrays.asList("name","description","topic"));
+                List<String> col = new ArrayList<>(Arrays.asList("name", "description", "topic"));
 
-                Map<String[],String[]> columnType = new HashMap<>();
-
-                List<String> keys = new ArrayList<>(columnAndType.keySet());
-                keys.removeAll(col);
-                for (int i = 0; i < keys.size()-1; i++) {
-                    columnType.put(columnAndType.get(keys.get(i)),columnAndType.get(keys.get(i+1)));
-                    i++;
-                }
-
+                Map<String[], String[]> columnType = addColumnKeyValue(columnAndType, col);
                 List<CustomColumn> customColumns = new ArrayList<>();
 
-                for(Map.Entry<String[], String[]> entry:columnType.entrySet()) {
-                    String column = "";
-                    for (String s : entry.getKey()) {
-                        column=s;
-                    }
-                    column=column.trim();
+                customColumn(columnType, customColumns);
+                saveCustomColumn(savedCollection, customColumns);
 
-                    String type = "";
-                    for (String s : entry.getValue()) {
-                        type=s;
-                    }
-
-                    CustomColumn byName = customColumnRepository.findByName(column);
-
-                    if (byName!=null && byName.getType().name().equals(type)) {
-                        log.error("Found column : " + byName.toString());
-                        customColumns.add(byName);
-                    }else{
-                        log.error("Column not found : ");
-                        CustomColumn savedColumn = customColumnRepository.save(new CustomColumn(column, CustomColumnDataType.valueOf(type)));
-                        customColumns.add(savedColumn);
-                    }
-                }
-
-                for (CustomColumn customColumn : customColumns) {
-                    collectionItemColumn.save(new CollectionItemColumn(savedCollection,customColumn));
-                }
-                message="Successfully created";
-                status="success";
+                message = "Successfully created";
+                status = "success";
             }
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         ra.addFlashAttribute("status", status);
-        ra.addFlashAttribute("message",message);
+        ra.addFlashAttribute("message", message);
         return "redirect:/user/collection";
+    }
+
+    private Map<String[], String[]> addColumnKeyValue(Map<String, String[]> columnAndType, List<String> col) {
+        Map<String[], String[]> columnType = new HashMap<>();
+
+        List<String> keys = new ArrayList<>(columnAndType.keySet());
+        keys.removeAll(col);
+        for (int i = 0; i < keys.size() - 1; i++) {
+            columnType.put(columnAndType.get(keys.get(i)), columnAndType.get(keys.get(i + 1)));
+            i++;
+        }
+        return columnType;
+    }
+
+    private void saveCustomColumn(Collection savedCollection, List<CustomColumn> customColumns) {
+        for (CustomColumn customColumn : customColumns) {
+            collectionItemColumn.save(new CollectionItemColumn(savedCollection, customColumn));
+        }
+    }
+
+    private Collection saveCollection(String name, String description, UserCollection userCollection, String imageUrl, Topic topic) {
+        Collection collection = new Collection(
+                name,
+                description,
+                imageUrl,
+                userCollection,
+                topic
+        );
+
+        Collection savedCollection = collectionRepository.save(collection);
+        return savedCollection;
+    }
+
+    private void customColumn(Map<String[], String[]> columnType, List<CustomColumn> customColumns) {
+        for (Map.Entry<String[], String[]> entry : columnType.entrySet()) {
+            String column = "";
+            for (String s : entry.getKey()) {
+                column = s;
+            }
+            column = column.trim();
+
+            String type = "";
+            for (String s : entry.getValue()) {
+                type = s;
+            }
+
+            CustomColumn byName = customColumnRepository.findByName(column);
+
+            if (byName != null && byName.getType().name().equals(type)) {
+                log.error("Found column : " + byName.toString());
+                customColumns.add(byName);
+            } else {
+                log.error("Column not found : ");
+                CustomColumn savedColumn = customColumnRepository.save(new CustomColumn(column, CustomColumnDataType.valueOf(type)));
+                customColumns.add(savedColumn);
+            }
+        }
     }
 
     @Override
@@ -165,7 +181,8 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
                 System.out.println(collectionDto);
                 collectionDtoList.add(collectionDto);
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return collectionDtoList;
     }
 
@@ -193,35 +210,26 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
 
     @Override
     public String deleteById(Integer id, RedirectAttributes ra) {
-        String status="error";
-        String message="Deleting error";
+        String status = "error";
+        String message = "Deleting error";
 
         if (collectionRepository.existsById(id)) {
             try {
-                List<Integer> ids = collectionItemColumn.collectCollectionItemColumnId(id);
-                collectionItemColumn.deleteAllById(ids);
                 collectionRepository.deleteById(id);
-                status="success";
-                message="Successfully Deleted";
-            }catch (Exception e){}
+                status = "success";
+                message = "Successfully Deleted";
+            } catch (Exception e) {
+            }
         }
 
         ra.addFlashAttribute("status", status);
-        ra.addFlashAttribute("message",message);
+        ra.addFlashAttribute("message", message);
         return "redirect:/user/collection";
-    }
-
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File("src/main/resources/file/"+file.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convFile;
     }
 
     public int getTotalCollectionsByUserId() {
         User user = userService.currenUser();
-        if (user!=null){
+        if (user != null) {
             return collectionRepository.getTotalCollectionsByUserId(user.getId());
         }
         return 0;

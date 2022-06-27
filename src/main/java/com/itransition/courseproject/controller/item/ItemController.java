@@ -5,6 +5,7 @@ package com.itransition.courseproject.controller.item;
 
 import com.itransition.courseproject.dto.CustomColumnDto;
 import com.itransition.courseproject.dto.TagDto;
+import com.itransition.courseproject.entity.collection.Item;
 import com.itransition.courseproject.service.impl.CollectionServiceImpl;
 import com.itransition.courseproject.service.impl.ItemServiceImpl;
 import com.itransition.courseproject.service.impl.TagServiceImpl;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -50,15 +50,40 @@ public class ItemController {
 
     @PostMapping("/{id}/create")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
-    public String itemSave(MultipartHttpServletRequest file, @PathVariable Integer id, HttpServletRequest request, RedirectAttributes ra){
+    public String itemSave(MultipartHttpServletRequest file,
+                           @PathVariable Integer id,
+                           HttpServletRequest request,
+                           RedirectAttributes ra){
         return itemService.saveItem(file,request,id,ra);
     }
 
 
-    @PostMapping("/delete/{id}")
+    @GetMapping("/{id}/edit/{itemId}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
-    public String deleteItemById(@PathVariable Integer id){
-        return null;
+    public String itemEditPage(Model model, @PathVariable Integer id, @PathVariable Integer itemId){
+        List<CustomColumnDto> customColumnDos = itemService.getCustomColumnWithValue(id,itemId);
+        Item item = itemService.findById(itemId);
+        if (item!=null) {
+            List<TagDto> tags = tagService.getAllData();
+            model.addAttribute("item", item);
+            model.addAttribute("collection", collectionService.findById(id));
+            model.addAttribute("tags", tags);
+            model.addAttribute("columns", customColumnDos);
+            return "item/edit";
+        }
+        return "redirect:/user/collection/view/"+id;
+    }
+
+    @PostMapping("/{id}/edit/{itemId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
+    public String itemEdit(MultipartHttpServletRequest file, @PathVariable Integer id, HttpServletRequest request, RedirectAttributes ra, @PathVariable Integer itemId){
+        return itemService.editItem(file,request,id,ra,itemId);
+    }
+
+    @PostMapping("/{collectionId}/delete/{itemId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
+    public String deleteItemById(@PathVariable Integer collectionId,@PathVariable Integer itemId, RedirectAttributes redirectAttributes){
+        return itemService.deleteItemById(collectionId,itemId,redirectAttributes);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)

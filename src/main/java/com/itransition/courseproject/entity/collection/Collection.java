@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,6 +32,15 @@ public class Collection {
 
     @ManyToOne
     private Topic topic;
+
+
+    //cascade type
+
+    @OneToMany(mappedBy = "collection",cascade = CascadeType.ALL)
+    private List<Item> items;
+
+    @OneToMany(mappedBy = "collection",cascade = CascadeType.ALL)
+    private List<CollectionItemColumn> collectionItemColumns;
 
     @OrderBy
     @CreationTimestamp
