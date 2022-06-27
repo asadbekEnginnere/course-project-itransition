@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
 @Entity(name = "items")
 public class Item {
 
@@ -34,6 +33,7 @@ public class Item {
             joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags;
+
 
     @OrderBy
     @CreationTimestamp
@@ -53,17 +53,17 @@ public class Item {
 
     //cascade type
 
-    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Comment> comment;
 
-    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<CustomValue> customValueList;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Like> likes;
 
-    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<DisLike> dislikes;
-
-    @OneToMany(mappedBy = "item",cascade = CascadeType.ALL)
-    private List<CustomValue> customValueList;
 
 
 }

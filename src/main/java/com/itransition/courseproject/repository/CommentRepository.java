@@ -17,7 +17,7 @@ public interface CommentRepository extends JpaRepository<Comment,Integer> {
             "from comments\n" +
             "join items i on i.id = comments.item_id\n" +
             "join users u on u.id = comments.user_id\n" +
-            "where i.id= :id ")
+            "where i.id= :id order by comments.commented_at desc ")
     List<CommentProjection> getAllCommentsByItemId(int id);
 
     @Query(nativeQuery = true,

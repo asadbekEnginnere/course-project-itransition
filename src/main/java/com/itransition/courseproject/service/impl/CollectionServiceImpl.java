@@ -5,11 +5,9 @@ package com.itransition.courseproject.service.impl;
 
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itransition.courseproject.cloudinary.CloudForImage;
 import com.itransition.courseproject.dto.CollectionDto;
-import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Collection;
 import com.itransition.courseproject.entity.collection.CollectionItemColumn;
 import com.itransition.courseproject.entity.collection.CustomColumn;
@@ -30,11 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +67,7 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
             if (topicRepository.findById(topicId).isPresent()) {
 
                 String imageUrl = null;
-                if (!file.isEmpty()) {
+                if (file!=null && !file.isEmpty()) {
                     imageUrl = cloudForImage.uploadImageToCloud(file);
                 }
 
@@ -169,6 +163,52 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
     }
 
     @Override
+    public CollectionDto getCollectionById(int id) {
+        String result = collectionRepository.collectionWithCustomColumns(id);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            CollectionDto collectionDto = mapper.readValue(result, CollectionDto.class);
+            System.out.println("collection : " + collectionDto);
+            return collectionDto;
+        } catch (Exception e) {
+        }
+
+        return new CollectionDto();
+    }
+
+    @Transactional
+    @Override
+    public String updateCollection(CollectionDto collectionDto, RedirectAttributes ra, MultipartFile file) {
+
+        String status = "error";
+        String message = "Updating error";
+
+
+        if (collectionRepository.findById(collectionDto.getId()).isPresent() && topicRepository.findById(collectionDto.getTopicId()).isPresent()) {
+            try{
+                Topic topic = topicRepository.findById(collectionDto.getTopicId()).get();
+                String imageUrl = null;
+                if (file!=null && !file.isEmpty()) {
+                    imageUrl = cloudForImage.uploadImageToCloud(file);
+                }
+                Collection collection = collectionRepository.findById(collectionDto.getId()).get();
+                if (imageUrl!=null) collection.setImageUrl(imageUrl);
+                collection.setName(collectionDto.getName());
+                collection.setDescription(collection.getDescription());
+                collection.setTopic(topic);
+                collectionRepository.save(collection);
+                status="success";
+                message="Successfully Updated";
+            }catch (Exception e){}
+        }
+
+        ra.addFlashAttribute("status", status);
+        ra.addFlashAttribute("message", message);
+        return "redirect:/user/collection";
+    }
+
+    @Override
     public List<CollectionDto> getAllData() {
         Integer id = userService.currenUser().getId();
         List<String> allCollection = collectionRepository.getAllCollection(id);
@@ -197,6 +237,10 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
         return collectionRepository.getCollection(id);
     }
 
+    public CollectionProjection collectionGetById(Integer id) {
+        return collectionRepository.collectionById(id);
+    }
+
     @Override
     public String saveData(CollectionDto collectionDto, RedirectAttributes ra) {
         // TODO: 6/21/22 Done
@@ -208,6 +252,7 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
         return null;
     }
 
+    @Transactional
     @Override
     public String deleteById(Integer id, RedirectAttributes ra) {
         String status = "error";

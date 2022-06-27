@@ -25,6 +25,7 @@ public class Collection {
 
     private String name;
     private String description;
+
     private String imageUrl;
 
     @ManyToOne
@@ -46,6 +47,11 @@ public class Collection {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Timestamp createdAt;
+
+    @OrderBy
+    @CreationTimestamp
+    @Column(nullable = false, updatable = true)
+    private Timestamp updatedAt;
 
     public Collection(String name, String description, String imageUrl, UserCollection userCollection, Topic topic) {
         this.name = name;

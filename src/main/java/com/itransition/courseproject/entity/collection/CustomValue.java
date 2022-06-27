@@ -6,6 +6,7 @@ package com.itransition.courseproject.entity.collection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -27,7 +28,8 @@ public class CustomValue {
     @ManyToOne
     private CustomColumn customColumn;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Item.class, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Item item;
 
     @OrderBy

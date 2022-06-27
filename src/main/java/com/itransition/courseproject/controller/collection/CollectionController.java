@@ -4,6 +4,7 @@ package com.itransition.courseproject.controller.collection;
 // Asatbek Xalimjonov 6/18/22 12:52 AM
 
 import com.itransition.courseproject.dto.CollectionDto;
+import com.itransition.courseproject.projection.CollectionProjection;
 import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.service.impl.CollectionServiceImpl;
 import com.itransition.courseproject.service.impl.ItemServiceImpl;
@@ -46,7 +47,7 @@ public class CollectionController {
     @GetMapping("/view/{id}")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String showCollectionPage(@PathVariable Integer id,Model model){
-        CollectionDto byId = collectionService.findById(id);
+        CollectionProjection byId = collectionService.collectionGetById(id);
         List<ItemProjection> allItemsByCollectionId = itemService.getAllItemsByCollectionId(id);
         model.addAttribute("items",allItemsByCollectionId);
         model.addAttribute("collection",byId);
@@ -64,6 +65,20 @@ public class CollectionController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String saveCollection(MultipartFile image,HttpServletRequest request, RedirectAttributes ra){
         return collectionService.saveCollectionWithItemField(image,request,ra);
+    }
+
+    @GetMapping("/edit/{collectionId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
+    public String getCollectionEditPage(Model model, @PathVariable Integer collectionId){
+        model.addAttribute("collection",collectionService.getCollectionById(collectionId));
+        model.addAttribute("topics",topicService.getAllData());
+        return "collection/edit";
+    }
+
+    @PostMapping("/edit")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
+    public String editCollection(MultipartFile file,CollectionDto collectionDto,RedirectAttributes ra){
+        return collectionService.updateCollection(collectionDto,ra,file);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)

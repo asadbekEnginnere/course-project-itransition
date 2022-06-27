@@ -4,6 +4,7 @@ package com.itransition.courseproject.entity.collection;
 // Asatbek Xalimjonov 6/14/22 1:08 AM
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.itransition.courseproject.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,11 +35,10 @@ public class Comment {
         this.item = item;
     }
 
-    @ManyToOne
-    private Item item;
 
-    @ManyToOne
-    private Comment comment;
+    @ManyToOne(targetEntity = Item.class, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Item item;
 
     @OrderBy
     @CreationTimestamp
