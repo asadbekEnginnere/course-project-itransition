@@ -75,7 +75,7 @@
                                                             <div class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"
                                                                  th:if="${comment.getUserId()==#authentication.getPrincipal().getId()}">
                                                                 <button type="button"
-                                                                        class="btn p-0 dropdown-toggle hide-arrow"
+                                                                        class="btn p-0 dropdown-toggle hide-arrow bg-success"
                                                                         data-bs-toggle="dropdown">
                                                                     <i class="bx bx-dots-vertical-rounded"></i>
                                                                 </button>
@@ -98,7 +98,7 @@
                                                             </div>
                                                             <div class="dropdown" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')">
                                                                 <button type="button"
-                                                                        class="btn p-0 dropdown-toggle hide-arrow"
+                                                                        class="btn p-0 dropdown-toggle hide-arrow bg-success"
                                                                         data-bs-toggle="dropdown">
                                                                     <i class="bx bx-dots-vertical-rounded"></i>
                                                                 </button>
