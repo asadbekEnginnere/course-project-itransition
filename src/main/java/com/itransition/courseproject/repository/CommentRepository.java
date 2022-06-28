@@ -13,7 +13,8 @@ public interface CommentRepository extends JpaRepository<Comment,Integer> {
     value = "select comments.id,\n" +
             "       comments.content,\n" +
             "       concat(u.first_name,' ',u.last_name) as commentorFullName,\n" +
-            "       comments.commented_at as commentedAt\n" +
+            "       comments.commented_at as commentedAt," +
+            "       u.id as userId \n" +
             "from comments\n" +
             "join items i on i.id = comments.item_id\n" +
             "join users u on u.id = comments.user_id\n" +

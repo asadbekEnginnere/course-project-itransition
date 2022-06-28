@@ -65,9 +65,46 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public int getTotalCommentsByUserId() {
         User user = userService.currenUser();
-        if (user!=null){
+        if (user != null) {
             return commentRepository.getTotalCommentsByUserId(user.getId());
         }
         return 0;
+    }
+
+    @Override
+    public String deleteCommentById(Integer deleteId) {
+
+        Integer itemId = null;
+        try {
+
+            if (commentRepository.existsById(deleteId)) {
+                Comment comment = commentRepository.findById(deleteId).get();
+                itemId = comment.getItem().getId();
+                commentRepository.deleteById(deleteId);
+            }
+        } catch (Exception exception) {
+        }
+
+        if (itemId != null) return "redirect:/item/detail/" + itemId;
+        return "redirect:/";
+    }
+
+    @Override
+    public String updateComment(String commentContent, Integer commentId, RedirectAttributes ra, Integer itemId) {
+
+        User user = userService.currenUser();
+
+        if (user != null && itemRepository.findById(itemId).isPresent()) {
+            try {
+                if (commentRepository.findById(commentId).isPresent()) {
+                    Comment comment = commentRepository.findById(commentId).get();
+                    comment.setContent(commentContent);
+                    commentRepository.save(comment);
+                }
+            } catch (Exception exception) {
+            }
+        }
+
+        return "redirect:/item/detail/" + itemId;
     }
 }

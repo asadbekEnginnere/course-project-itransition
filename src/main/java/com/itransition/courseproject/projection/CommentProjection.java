@@ -11,4 +11,5 @@ public interface CommentProjection {
     String getContent();
     String getCommentorFullName();
     Timestamp getCommentedAt();
+    Integer getUserId();
 }

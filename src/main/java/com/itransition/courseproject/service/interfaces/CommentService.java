@@ -15,4 +15,8 @@ public interface CommentService {
     List<CommentProjection> getCommentsByItemId(Integer id);
 
     int getTotalCommentsByUserId();
+
+    String deleteCommentById(Integer deleteId);
+
+    String updateComment(String commentContent, Integer commentId, RedirectAttributes ra, Integer itemId);
 }

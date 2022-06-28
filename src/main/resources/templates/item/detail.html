@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
 <head th:replace="layouts/head :: user-header"></head>
 <body class="@@dashboard">
 <div id="preloader"><i>.</i><i>.</i><i>.</i></div>
@@ -61,29 +61,40 @@
                                                                 <h5 class="mb-0">
                                                                     [[${comment.getCommentorFullName()}]]</h5>
                                                                 <p th:text="${comment.getContent()}"></p>
+                                                                <input type="hidden"
+                                                                       th:id="${'content'+comment.getId()}"
+                                                                       th:value="${comment.getContent()}">
                                                             </div>
                                                         </div>
                                                         <div class="text-end"><span class=" text-muted"
                                                                                     th:text="${comment.getCommentedAt()}"></span>
                                                         </div>
-                                                        <div class="dropdown">
-                                                            <button type="button"
-                                                                    class="btn p-0 dropdown-toggle hide-arrow"
-                                                                    data-bs-toggle="dropdown">
-                                                                <i class="bx bx-dots-vertical-rounded"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" data-bs-toggle="modal"
-                                                                   data-bs-target="#commentEdit"
-                                                                   href="javascript:void(0)">
-                                                                    <i class="bx bx-edit-alt me-1"></i>
-                                                                    <span><i class="fa fa-edit"></i> [[#{edit}]]</span>
-                                                                </a>
-                                                                <a class="dropdown-item"
-                                                                   onclick="return confirm('Are you sure delete this comment?');">
-                                                                    <i class="bx bx-trash me-1"></i>
-                                                                    <span><i class="fa fa-trash"></i> [[#{delete}]]</span>
-                                                                </a>
+                                                        <div sec:authorize="isAuthenticated()">
+                                                            <input type="hidden" th:value="${comment.getId()}"
+                                                                   th:id="${'commentId'+comment.getId()}">
+                                                            <div class="dropdown"
+                                                                 th:if="${comment.getUserId()==#authentication.getPrincipal().getId()}">
+                                                                <button type="button"
+                                                                        class="btn p-0 dropdown-toggle hide-arrow"
+                                                                        data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <button class="dropdown-item"
+                                                                            th:onclick="'editFunction(\'' + ${comment.getId()} + '\');'"
+                                                                    >
+                                                                        <i class="bx bx-edit-alt me-1"></i>
+                                                                        <span><i
+                                                                                class="fa fa-edit"></i> [[#{edit}]]</span>
+                                                                    </button>
+                                                                    <a class="dropdown-item"
+                                                                       th:href="@{'/comment/delete/'+${comment.getId()}}"
+                                                                       onclick="return confirm('Are you sure delete this comment?');">
+                                                                        <i class="bx bx-trash me-1"></i>
+                                                                        <span><i
+                                                                                class="fa fa-trash"></i> [[#{delete}]]</span>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -128,14 +139,19 @@
                                                   method="post">
                                                 <div class="row">
                                                     <div class="col-xxl-12 col-xl-12 col-lg-12 mb-3">
-                                                        <label class="form-label">[[#{add}]] [[#{comment}]]
+                                                        <label class="form-label" id="addCommentText">[[#{add}]]
+                                                            [[#{comment}]]
                                                         </label>
-                                                        <textarea class="form-control" th:field="*{content}"
-                                                                  name="text"></textarea>
+                                                        <input type="hidden" name="commentId"
+                                                               id="itemCommentId">
+                                                        <textarea class="form-control"
+                                                                  th:field="*{content}"
+                                                                  id="commentContent"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
-                                                    <button type="submit" class="btn btn-primary mr-2">[[#{add}]]
+                                                    <button type="submit" id="addComment" class="btn btn-primary mr-2">
+                                                        [[#{add}]]
                                                         [[#{comment}]]
                                                     </button>
                                                 </div>
@@ -158,6 +174,29 @@
     <div th:replace="layouts/footer-top :: user-footer-top"></div>
     <div th:replace="layouts/footer-bottom :: user-footer-bottom"></div>
 </div>
+<script>
+
+    function editFunction(id) {
+
+        console.log("Coming id : " + id);
+
+        document.getElementById("itemCommentId").innerHTML = "";
+        document.getElementById("commentContent").innerHTML = "";
+
+        var id = document.getElementById("commentId" + id).value;
+        var content = document.getElementById("content" + id).value;
+
+        console.log("id : "+id);
+        console.log("Content : " +content);
+
+        document.getElementById("addComment").innerHTML = "Edit Comment";
+        document.getElementById("addCommentText").innerHTML = "Update Comment";
+
+        document.getElementById("itemCommentId").value = id;
+        document.getElementById("commentContent").value = content;
+    }
+
+</script>
 <script th:src="@{vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/vendor/magnific-popup/magnific-popup.js}"></script>
