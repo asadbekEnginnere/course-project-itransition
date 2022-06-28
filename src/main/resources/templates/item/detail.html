@@ -72,7 +72,7 @@
                                                         <div sec:authorize="isAuthenticated()">
                                                             <input type="hidden" th:value="${comment.getId()}"
                                                                    th:id="${'commentId'+comment.getId()}">
-                                                            <div class="dropdown"
+                                                            <div class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"
                                                                  th:if="${comment.getUserId()==#authentication.getPrincipal().getId()}">
                                                                 <button type="button"
                                                                         class="btn p-0 dropdown-toggle hide-arrow"
@@ -81,6 +81,29 @@
                                                                 </button>
                                                                 <div class="dropdown-menu">
                                                                     <button class="dropdown-item"
+                                                                            th:onclick="'editFunction(\'' + ${comment.getId()} + '\');'"
+                                                                    >
+                                                                        <i class="bx bx-edit-alt me-1"></i>
+                                                                        <span><i
+                                                                                class="fa fa-edit"></i> [[#{edit}]]</span>
+                                                                    </button>
+                                                                    <a class="dropdown-item"
+                                                                       th:href="@{'/comment/delete/'+${comment.getId()}}"
+                                                                       onclick="return confirm('Are you sure delete this comment?');">
+                                                                        <i class="bx bx-trash me-1"></i>
+                                                                        <span><i
+                                                                                class="fa fa-trash"></i> [[#{delete}]]</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="dropdown" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')">
+                                                                <button type="button"
+                                                                        class="btn p-0 dropdown-toggle hide-arrow"
+                                                                        data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <button class="dropdown-item" th:if="${comment.getUserId()==#authentication.getPrincipal().getId()}"
                                                                             th:onclick="'editFunction(\'' + ${comment.getId()} + '\');'"
                                                                     >
                                                                         <i class="bx bx-edit-alt me-1"></i>
@@ -186,8 +209,8 @@
         var id = document.getElementById("commentId" + id).value;
         var content = document.getElementById("content" + id).value;
 
-        console.log("id : "+id);
-        console.log("Content : " +content);
+        console.log("id : " + id);
+        console.log("Content : " + content);
 
         document.getElementById("addComment").innerHTML = "Edit Comment";
         document.getElementById("addCommentText").innerHTML = "Update Comment";
