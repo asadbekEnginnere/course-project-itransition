@@ -43,7 +43,7 @@
                   <p>[[#{author}]] : [[${collection.getAuthor()}]]</p>
                 </div>
                 <p>[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
-                <a class="btn btn-info" th:href="@{'/item/?collectionId='+${collection.getId()}+'&collectionName='+${collection.getTitle()}}">[[#{detail}]]<i
+                <a class="btn btn-info" th:href="@{'/item/collection/'+${collection.getId()}}">[[#{detail}]]<i
                         class="bi bi-arrow-right-short"></i></a>
               </div>
             </div>

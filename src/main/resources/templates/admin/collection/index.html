@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="admin/master/head :: admin-header"></head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+
+<div id="main-wrapper" class="admin">
+
+    <div th:replace="admin/master/topheader :: admin-topheader"></div>
+    <div th:replace="admin/master/sidebar :: admin-sidebar"></div>
+
+    <div class="content-body">
+        <div class="container">
+            <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="page-title-content">
+                            <h3>[[#{collections}]]</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div th:if="${status}=='success'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div th:if="${status}=='error'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+                    <h4 class="card-title mb-3">[[#{collections}]] [[#{list}]]
+                        <div style="float:right"><a th:href="@{/admin/collection/create}" class="btn btn-primary btn-sm"><i
+                                class="fa fa-plus"></i> [[#{add}]]</a></div>
+                    </h4>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive table-icon">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>[[#{title}]]</th>
+                                        <th>[[#{picture}]]</th>
+                                        <th>[[#{author}]]</th>
+                                        <th>[[#{totalItems}]]</th>
+                                        <th colspan="3">[[#{settings}]]</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <th:block th:each="collection,loop : ${collections}">
+                                        <tr>
+                                            <td th:text="${loop.index+1}"></td>
+                                            <td th:text="${collection.getTitle()}"></td>
+                                            <td th:if="${!#strings.equals(collection.getImageUrl(),'null')}">
+                                                <img th:src="${collection.getImageUrl()}"
+                                                     style="width: 80px">
+                                            </td>
+                                            <td th:if="${#strings.equals(collection.getImageUrl(),'null')}">
+                                                <img th:src="@{/images/placeholder-image.png}" style="width: 80px">
+                                            </td>
+                                            <td th:text="${collection.getAuthor()}"></td>
+                                            <td th:text="${collection.getTotalItems()}"></td>
+                                            <td>
+                                                <a th:href="@{'/admin/collection/view/'+${collection.id}}"
+                                                   class="btn btn-success btn-sm"><i class="fa fa-eye"></i> </a>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{'/admin/collection/edit/'+${collection.id}}"
+                                                   class="btn btn-info btn-sm"><i class="fa fa-edit"></i> </a>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{'/admin/collection/delete/'+${collection.id}}"
+                                                      class="inline-flex"
+                                                      method="POST">
+                                                    <button onclick="return confirm('Are you sure you want to delete?');"
+                                                            class="btn btn-danger btn-sm" type="submit">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>

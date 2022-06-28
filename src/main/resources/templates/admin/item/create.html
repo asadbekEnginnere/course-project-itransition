@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="admin/master/head :: admin-header"></head>
+<body class="@@dashboard">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script>
+    $('select').selectpicker();
+</script>
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+
+<div id="main-wrapper" class="admin">
+
+    <div th:replace="admin/master/topheader :: admin-topheader"></div>
+    <div th:replace="admin/master/sidebar :: admin-sidebar"></div>
+
+    <div class="content-body">
+        <div class="container">
+            <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="page-title-content">
+                            <h3>[[#{item}]] [[#{add}]]</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div th:if="${status}=='success'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div th:if="${status}=='error'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form  th:action="@{'/admin/item/'+${collection.id}+'/create'}" method="post" enctype="multipart/form-data" >
+                                <div class="row">
+                                    <div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">[[#{name}]]</label>
+                                            <input name="name" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">[[#{tags}]]</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-12 mb-3">
+                                            <select name="tagsId" class="selectpicker" multiple data-live-search="true">
+                                                <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div th:each="column : ${columns}">
+                                        <div th:if="${column.type=='textarea'}" class="col-12 mb-3">
+                                            <label class="form-label" th:text="${column.name}"></label>
+                                            <textarea th:name="${column.id}" type="text" class="form-control"></textarea>
+                                        </div>
+                                        <div th:if="${column.type=='text'}" class="col-12 mb-3">
+                                            <label class="form-label" th:text="${column.name}"></label>
+                                            <input th:name="${column.id}" type="text" class="form-control">
+                                        </div>
+                                        <div th:if="${column.type=='number'}" class="col-12 mb-3">
+                                            <label class="form-label" th:text="${column.name}"></label>
+                                            <input th:name="${column.id}" type="number" class="form-control">
+                                        </div>
+                                        <div th:if="${column.type=='date'}" class="col-12 mb-3">
+                                            <label class="form-label" th:text="${column.name}"></label>
+                                            <input th:name="${column.id}" type="datetime-local" class="form-control">
+                                        </div>
+                                        <div th:if="${column.type=='image'}" class="col-12 mb-3">
+                                            <label class="form-label" th:text="${column.name}"></label>
+                                            <input th:name="${column.id}" type="file" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-12 mb-3">
+                                            <button type="submit" class="btn btn-primary btn-sm">[[#{add}]] [[#{item}]]</button>
+                                            <a class="btn btn-info btn-sm" th:href="@{'/admin/collection/view/'+${collection.id}}">[[#{back}]]</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+
+</html>

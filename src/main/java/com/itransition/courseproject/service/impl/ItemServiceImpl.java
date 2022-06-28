@@ -13,6 +13,7 @@ import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Collection;
 import com.itransition.courseproject.entity.collection.*;
 import com.itransition.courseproject.entity.enums.CustomColumnDataType;
+import com.itransition.courseproject.entity.enums.Role;
 import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.repository.*;
@@ -113,6 +114,9 @@ public class ItemServiceImpl implements ItemService {
 
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message", message);
+        User user = userService.currenUser();
+        if (user.getRole().equals(Role.ROLE_ADMIN) || user.getRole().equals(Role.ROLE_SUPER_ADMIN))
+            return "redirect:/admin/collection/view/" + id;
         return "redirect:/user/collection/view/" + id;
     }
 
@@ -287,6 +291,9 @@ public class ItemServiceImpl implements ItemService {
 
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message", message);
+        User user = userService.currenUser();
+        if (user.getRole().equals(Role.ROLE_ADMIN) || user.getRole().equals(Role.ROLE_SUPER_ADMIN))
+            return "redirect:/admin/collection/view/" + id;
         return "redirect:/user/collection/view/" + id;
     }
 
@@ -375,6 +382,10 @@ public class ItemServiceImpl implements ItemService {
 
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message", message);
+
+        User user = userService.currenUser();
+        if (user.getRole().equals(Role.ROLE_ADMIN) || user.getRole().equals(Role.ROLE_SUPER_ADMIN))
+            return "redirect:/admin/collection/view/" + collectionId;
         return "redirect:/user/collection/view/" + collectionId;
     }
 

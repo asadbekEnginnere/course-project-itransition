@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="admin/master/head :: admin-header"></head>
+<body class="@@dashboard">
+<div id="preloader"><i>.</i><i>.</i><i>.</i></div>
+
+<div id="main-wrapper" class="admin">
+
+    <div th:replace="admin/master/topheader :: admin-topheader"></div>
+    <div th:replace="admin/master/sidebar :: admin-sidebar"></div>
+
+    <div class="content-body">
+        <div class="container">
+            <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-6">
+                        <div class="page-title-content">
+                            <h3>[[#{collection}]]</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="card items">
+                        <div class="card-body">
+                            <div th:if="${!#strings.equals(collection.getImageUrl(),'null')}"
+                                 class="items-img position-relative">
+                                <img th:src="${collection.getImageUrl()}" height="300px" width="100%"
+                                     class="img-fluid rounded mb-3" alt="">
+                            </div>
+                            <div th:if="${#strings.equals(collection.getImageUrl(),'null')}"
+                                 class="items-img position-relative">
+                                <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3" alt=""
+                                     height="300px" width="100%">
+                            </div>
+                            <a href="">
+                                <h4 class="card-title">[[#{title}]] [[${collection.getTitle()}]]</h4>
+                            </a>
+                            <p></p>
+                            <div class="d-flex justify-content-between">
+                                <div class="text-start">
+                                    <p class="mb-2">[[#{author}]] : [[${collection.getAuthor()}]]</p>
+                                    <p class="mb-2">[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
+                                    <p class="mb-2">[[#{creationTime}]] : [[${collection.getCreationTime()}]]</p>
+                                    <p class="mb-2">[[#{editedAt}]] : [[${collection.getEditedAt()}]]</p>
+                                </div>
+                            </div>
+                            <div class="justify-content-center mt-3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12">
+                    <div th:if="${status}=='success'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+
+                    <div th:if="${status}=='error'">
+                        <div class="alert alert-primary" role="alert">
+                            [[${message}]]
+                        </div>
+                    </div>
+                    <h4 class="card-title mb-3">[[#{items}]] [[#{list}]]
+                        <div style="float:right"><a th:href="@{'/admin/item/'+${collection.getId()}+'/create'}"
+                                                    class="btn btn-primary btn-sm"><i
+                                class="fa fa-plus"></i> [[#{add}]] [[#{item}]]</a></div>
+                    </h4>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive table-icon">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>[[#{name}]]</th>
+                                        <th>[[#{comments}]]</th>
+                                        <th>[[#{likes}]]</th>
+                                        <th>[[#{dislikes}]]</th>
+                                        <th colspan="3">[[#{settings}]]</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <th:block th:each="item,loop : ${items}">
+                                        <tr>
+                                            <td th:text="${loop.index+1}"></td>
+                                            <td th:text="${item.getName()}"></td>
+                                            <td th:text="${item.getCommentCount()}"></td>
+                                            <td th:text="${item.getLikesCount()}"></td>
+                                            <td th:text="${item.getDisLikesCount()}"></td>
+                                            <td>
+                                                <a th:href="@{'/admin/item/'+${collection.id}+'/view/'+${item.id}}"
+                                                   class="btn btn-success btn-sm"><i class="fa fa-eye"></i> </a>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{'/admin/item/'+${collection.id}+'/edit/'+${item.id}}"
+                                                   class="btn btn-info btn-sm"><i class="fa fa-edit"></i> </a>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{'/admin/item/'+${collection.id}+'/delete/'+${item.getId()}}"
+                                                      class="inline-flex"
+                                                      method="POST">
+                                                    <button onclick="return confirm('Are you sure you want to delete?');"
+                                                            class="btn btn-danger btn-sm" type="submit">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

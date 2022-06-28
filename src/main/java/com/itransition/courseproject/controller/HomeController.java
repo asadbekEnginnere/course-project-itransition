@@ -8,6 +8,7 @@ import com.itransition.courseproject.dto.CommentDto;
 import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Comment;
 import com.itransition.courseproject.entity.collection.CustomColumn;
+import com.itransition.courseproject.projection.CollectionProjection;
 import com.itransition.courseproject.projection.CommentProjection;
 import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.repository.CustomColumnRepository;
@@ -57,25 +58,24 @@ public class HomeController {
         return "collection";
     }
 
-    @GetMapping(value = {"/item", "/item/tag/{tagId}"})
+    @GetMapping(value = {"/item", "/item/tag/{tagId}","/item/collection/{collectionId}"})
     public String getItemPage(Model model,
-                              @RequestParam(required = false)Integer collectionId,
-                              @RequestParam(required = false)String collectionName,
-                              @PathVariable(required = false) Integer tagId) {
+                              @PathVariable(required = false) Integer tagId,
+                              @PathVariable(required = false) Integer collectionId) {
 
         List<ItemProjection> allItems = null;
-        String collection="none";
+        CollectionProjection byId=null;
 
         if (collectionId!=null){
             allItems=itemService.getAllItemsByCollectionId(collectionId);
-            collection=collectionName;
+            byId = collectionService.collectionGetById(collectionId);
         }else if (tagId!=null){
             allItems=itemService.getItemByTagId(tagId);
         }else{
             allItems=itemService.getAllItems();
         }
 
-        model.addAttribute("collectionName",collection);
+        model.addAttribute("collection",byId);
         model.addAttribute("items", allItems);
         return "item";
     }

@@ -13,6 +13,7 @@ import com.itransition.courseproject.entity.collection.CollectionItemColumn;
 import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.entity.collection.Topic;
 import com.itransition.courseproject.entity.enums.CustomColumnDataType;
+import com.itransition.courseproject.entity.enums.Role;
 import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.entity.user.UserCollection;
 import com.itransition.courseproject.projection.CollectionProjection;
@@ -67,7 +68,7 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
             if (topicRepository.findById(topicId).isPresent()) {
 
                 String imageUrl = null;
-                if (file!=null && !file.isEmpty()) {
+                if (file != null && !file.isEmpty()) {
                     imageUrl = cloudForImage.uploadImageToCloud(file);
                 }
 
@@ -92,6 +93,9 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
 
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message", message);
+        User user = userService.currenUser();
+        if (user.getRole().equals(Role.ROLE_SUPER_ADMIN) || user.getRole().equals(Role.ROLE_ADMIN))
+            return "redirect:/admin/collection";
         return "redirect:/user/collection";
     }
 
@@ -186,25 +190,29 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
 
 
         if (collectionRepository.findById(collectionDto.getId()).isPresent() && topicRepository.findById(collectionDto.getTopicId()).isPresent()) {
-            try{
+            try {
                 Topic topic = topicRepository.findById(collectionDto.getTopicId()).get();
                 String imageUrl = null;
-                if (file!=null && !file.isEmpty()) {
+                if (file != null && !file.isEmpty()) {
                     imageUrl = cloudForImage.uploadImageToCloud(file);
                 }
                 Collection collection = collectionRepository.findById(collectionDto.getId()).get();
-                if (imageUrl!=null) collection.setImageUrl(imageUrl);
+                if (imageUrl != null) collection.setImageUrl(imageUrl);
                 collection.setName(collectionDto.getName());
                 collection.setDescription(collection.getDescription());
                 collection.setTopic(topic);
                 collectionRepository.save(collection);
-                status="success";
-                message="Successfully Updated";
-            }catch (Exception e){}
+                status = "success";
+                message = "Successfully Updated";
+            } catch (Exception e) {
+            }
         }
 
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message", message);
+        User user = userService.currenUser();
+        if (user.getRole().equals(Role.ROLE_SUPER_ADMIN) || user.getRole().equals(Role.ROLE_ADMIN))
+            return "redirect:/admin/collection";
         return "redirect:/user/collection";
     }
 
@@ -269,6 +277,10 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
 
         ra.addFlashAttribute("status", status);
         ra.addFlashAttribute("message", message);
+
+        User user = userService.currenUser();
+        if (user.getRole().equals(Role.ROLE_SUPER_ADMIN) || user.getRole().equals(Role.ROLE_ADMIN))
+            return "redirect:/admin/collection";
         return "redirect:/user/collection";
     }
 
