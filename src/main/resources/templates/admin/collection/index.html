@@ -47,6 +47,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>[[#{title}]]</th>
+                                        <th>[[#{topic}]]</th>
                                         <th>[[#{picture}]]</th>
                                         <th>[[#{author}]]</th>
                                         <th>[[#{totalItems}]]</th>
@@ -58,6 +59,7 @@
                                         <tr>
                                             <td th:text="${loop.index+1}"></td>
                                             <td th:text="${collection.getTitle()}"></td>
+                                            <td th:text="${collection.getTopic()}"></td>
                                             <td th:if="${!#strings.equals(collection.getImageUrl(),'null')}">
                                                 <img th:src="${collection.getImageUrl()}"
                                                      style="width: 80px">

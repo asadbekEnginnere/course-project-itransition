@@ -11,23 +11,27 @@ import java.util.List;
 public interface CollectionRepository extends JpaRepository<Collection,Integer> {
 
     @Query(nativeQuery = true,
-    value = "select cast(json_build_object('id', result.id,\n" +
-            "                                        'id',result.id,\n" +
-            "                                        'name',result.name,\n" +
-            "                                        'description',result.description,\n" +
-            "                                        'imageUrl',result.imageUrl,\n" +
-            "                                        'creationTime',result.creationTime\n" +
-            "               ) as text)\n" +
-            "from (select collections.id,\n" +
-            "             collections.name,\n" +
-            "             collections.description,\n" +
-            "             coalesce(collections.image_url,'none') as imageUrl,\n" +
-            "             collections.created_at as creationTime\n" +
-            "      from collections\n" +
-            "               join user_collection uc on uc.id = collections.user_collection_id\n" +
-            "               join users u on u.id = uc.user_id\n" +
-            "      where u.id= :id )result ")
-    List<String> getAllCollection(int id);
+    value = "select c.id as id,\n" +
+            "       c.name as title,\n" +
+            "       c.description as description,\n" +
+            "       coalesce(c.image_url,'null') as imageUrl,\n" +
+            "       concat(u.first_name,' ',u.last_name) as author,\n" +
+            "       coalesce(cte.total,0) as totalItems,\n" +
+            "       c.created_at as createdAt,\n" +
+            "       c.updated_at as editedAt,\n" +
+            "       t.name as topic\n" +
+            "from collections c\n" +
+            "         join user_collection uc on uc.id = c.user_collection_id\n" +
+            "         join users u on u.id = uc.user_id\n" +
+            "         join topics t on t.id = c.topic_id\n" +
+            "         left join(\n" +
+            "    select items.collection_id,\n" +
+            "           count(items.collection_id) as total\n" +
+            "    from items\n" +
+            "    group by items.collection_id)cte on c.id=cte.collection_id\n" +
+            "where u.id= :id \n" +
+            "order by totalItems desc ")
+    List<CollectionProjection> getAllCollection(int id);
 
     @Query("select new com.itransition.courseproject.dto.CollectionDto(col.id,col.name,col.description,col.imageUrl) from com.itransition.courseproject.entity.collection.Collection col where col.id= :id")
     CollectionDto getCollection(Integer id);
@@ -39,17 +43,21 @@ public interface CollectionRepository extends JpaRepository<Collection,Integer> 
             "       c.description as description,\n" +
             "       coalesce(c.image_url,'null') as imageUrl,\n" +
             "       concat(u.first_name,' ',u.last_name) as author,\n" +
-            "       coalesce(cte.total,0) as totalItems\n" +
+            "       coalesce(cte.total,0) as totalItems,\n" +
+            "       c.created_at as createdAt,\n" +
+            "       c.updated_at as editedAt,\n" +
+            "       t.name as topic\n" +
             "from collections c\n" +
-            "join user_collection uc on uc.id = c.user_collection_id\n" +
-            "join users u on u.id = uc.user_id\n" +
-            "left join(\n" +
+            "         join user_collection uc on uc.id = c.user_collection_id\n" +
+            "         join users u on u.id = uc.user_id\n" +
+            "    join topics t on t.id = c.topic_id\n" +
+            "         left join(\n" +
             "    select items.collection_id,\n" +
             "           count(items.collection_id) as total\n" +
             "    from items\n" +
             "    group by items.collection_id)cte on c.id=cte.collection_id\n" +
             "order by totalItems\n" +
-            "desc limit 5 ")
+            "        desc limit 5 ")
     List<CollectionProjection> getTopFiveLargestCollection();
 
     @Query(nativeQuery = true,
@@ -58,11 +66,15 @@ public interface CollectionRepository extends JpaRepository<Collection,Integer> 
                     "       c.description as description,\n" +
                     "       coalesce(c.image_url,'null') as imageUrl,\n" +
                     "       concat(u.first_name,' ',u.last_name) as author,\n" +
-                    "       coalesce(cte.total,0) as totalItems\n" +
+                    "       coalesce(cte.total,0) as totalItems,\n" +
+                    "       c.created_at as createdAt,\n" +
+                    "       c.updated_at as editedAt,\n" +
+                    "       t.name as topic\n" +
                     "from collections c\n" +
-                    "join user_collection uc on uc.id = c.user_collection_id\n" +
-                    "join users u on u.id = uc.user_id\n" +
-                    "left join(\n" +
+                    "         join user_collection uc on uc.id = c.user_collection_id\n" +
+                    "         join users u on u.id = uc.user_id\n" +
+                    "    join topics t on t.id = c.topic_id\n" +
+                    "         left join(\n" +
                     "    select items.collection_id,\n" +
                     "           count(items.collection_id) as total\n" +
                     "    from items\n" +
@@ -71,23 +83,24 @@ public interface CollectionRepository extends JpaRepository<Collection,Integer> 
     List<CollectionProjection> getCollectionList();
 
     @Query(nativeQuery = true,
-            value = "select c.id as id,\n" +
-                    "       c.name as title,\n" +
-                    "       c.description as description,\n" +
-                    "       coalesce(c.image_url,'null') as imageUrl,\n" +
-                    "       concat(u.first_name,' ',u.last_name) as author,\n" +
-                    "       coalesce(cte.total,0) as totalItems," +
-                    "       c.created_at as creationTime," +
-                    "       c.updated_at as editedAt \n" +
+            value = "select c.id                                   as id,\n" +
+                    "       c.name                                 as title,\n" +
+                    "       c.description                          as description,\n" +
+                    "       coalesce(c.image_url, 'null')          as imageUrl,\n" +
+                    "       concat(u.first_name, ' ', u.last_name) as author,\n" +
+                    "       coalesce(cte.total, 0)                 as totalItems,\n" +
+                    "       c.created_at                           as createdAt,\n" +
+                    "       c.updated_at                           as editedAt,\n" +
+                    "       t.name as topic\n" +
                     "from collections c\n" +
-                    "join user_collection uc on uc.id = c.user_collection_id\n" +
-                    "join users u on u.id = uc.user_id\n" +
-                    "left join(\n" +
-                    "    select items.collection_id,\n" +
-                    "           count(items.collection_id) as total\n" +
-                    "    from items\n" +
-                    "    group by items.collection_id)cte on c.id=cte.collection_id\n" +
-                    "where c.id= :id ")
+                    "         join user_collection uc on uc.id = c.user_collection_id\n" +
+                    "         join users u on u.id = uc.user_id\n" +
+                    "         join topics t on t.id = c.topic_id\n" +
+                    "         left join(select items.collection_id,\n" +
+                    "                          count(items.collection_id) as total\n" +
+                    "                   from items\n" +
+                    "                   group by items.collection_id) cte on c.id = cte.collection_id\n" +
+                    "where c.id = :id ")
     CollectionProjection collectionById(int id);
 
 
@@ -119,15 +132,14 @@ public interface CollectionRepository extends JpaRepository<Collection,Integer> 
             "       json_agg(cte.*) as customColumns\n" +
             "from collections c\n" +
             "         join topics t on t.id = c.topic_id\n" +
-            "         join (select cz.id    as collectionId,\n" +
+            "         join (select distinct cz.id    as collectionId,\n" +
             "                      cc.id    as id,\n" +
             "                      cc.name  as name,\n" +
             "                      cc.type  as type,\n" +
-            "                      cv.value as value\n" +
+            "                      'null' as value\n" +
             "               from collections cz\n" +
             "                        join collection_item_column cic on cz.id = cic.collection_id\n" +
-            "                        join custom_column cc on cc.id = cic.custom_column_id\n" +
-            "                        join custom_value cv on cc.id = cv.custom_column_id) cte on cte.collectionId = c.id\n" +
+            "                        join custom_column cc on cc.id = cic.custom_column_id) cte on cte.collectionId = c.id\n" +
             "where c.id = :id \n" +
             "group by c.id, c.name, c.description, c.image_url, t.id) result;")
     String collectionWithCustomColumns(int id);

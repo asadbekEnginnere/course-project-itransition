@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <h4 class="card-title mb-3">[[#{topic_list}]]
-                        <div style="float:right"><a th:href="@{/admin/topic/create}"  class="btn btn-primary btn-sm"><i class="ri-plus-bin-line"></i> [[#{add}]]</a></div>
+                        <div style="float:right"><a th:href="@{/admin/topic/create}"  class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> [[#{add}]]</a></div>
                     </h4>
 
                     <div class="card">
@@ -55,14 +55,14 @@
                                             <td th:text="${loop.index+1}"></td>
                                             <td th:text="${topic.name}"></td>
                                             <td>
-                                                <a th:href="@{'/admin/topic/edit/'+${topic.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
+                                                <a th:href="@{'/admin/topic/edit/'+${topic.id}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> </a>
                                             </td>
                                             <td>
                                                 <form th:action="@{'/admin/topic/delete/'+${topic.id}}" class="inline-flex"
                                                       method="POST">
                                                     <button onclick="return confirm('Are you sure you want to delete?');"
                                                             class="btn btn-danger btn-sm" type="submit">
-                                                        [[#{delete}]]
+                                                        <i class="fa fa-trash"></i>
                                                     </button>
                                                 </form>
                                             </td>

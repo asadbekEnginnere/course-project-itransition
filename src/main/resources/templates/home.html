@@ -22,7 +22,8 @@
                             <div class="card-body">
                                 <div th:if="${!#strings.equals(item.getImageUrl(),'null')}"
                                      class="items-img position-relative">
-                                    <img th:src="${item.getImageUrl()}" class="img-fluid rounded mb-3" alt="">
+                                    <img th:src="${item.getImageUrl()}" class="img-fluid rounded mb-3" alt=""
+                                         width="100%" height="250px">
                                     <a th:href="@{'/item/detail/'+${item.getId()}}"><img
                                             th:src="@{/images/profile/3.png}" class="creator" width="50"
                                             alt=""></a>
@@ -30,7 +31,7 @@
                                 <div th:if="${#strings.equals(item.getImageUrl(),'null')}"
                                      class="items-img position-relative">
                                     <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3"
-                                         alt="">
+                                         alt="" width="100%" height="250px">
                                     <a th:href="@{'/item/detail/'+${item.getId()}}"><img
                                             th:src="@{/images/profile/3.png}" class="creator" width="50"
                                             alt=""></a>
@@ -48,13 +49,17 @@
                                         <h5 class="text-muted">[[#{comment}]] : [[${item.getCommentCount()}]]</h5>
                                     </div>
                                     <div class="text-end">
-                                        <p class="mb-2"><strong
-                                                class="text-primary">[[${item.getCollection()}]]</strong></p>
+                                        <p class="mb-2"  th:if="${#strings.length(item.getCollection())>12}">
+                                            <strong class="text-primary" th:text="${#strings.substring(item.getCollection(), 0,10)}">[[${item.getCollection()}]]</strong>
+                                        </p>
+                                        <p class="mb-2"  th:if="${#strings.length(item.getCollection())<=12}">
+                                            <strong class="text-primary" th:text="${item.getCollection()}">[[${item.getCollection()}]]</strong>
+                                        </p>
                                         <div th:if="${#strings.length(item.getAuthorFullName())>10}">
                                             <h5 class="text-muted"
                                                 th:text="${#strings.substring(item.getAuthorFullName(), 0,10)}"></h5>
                                         </div>
-                                        <div th:if="${#strings.length(item.getAuthorFullName())<10}">
+                                        <div th:if="${#strings.length(item.getAuthorFullName())<=10}">
                                             <h5 class="text-muted" th:text="${item.getAuthorFullName()}"></h5>
                                         </div>
                                     </div>
@@ -110,6 +115,7 @@
                                 <div th:if="${#strings.length(collection.getAuthor())<15}">
                                     <p>[[#{author}]] : [[${collection.getAuthor()}]]</p>
                                 </div>
+                                <p>[[#{topic}]] : [[${collection.getTopic()}]]</p>
                                 <p>[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
                                 <a class="btn btn-info" th:href="@{'/item/collection/'+${collection.getId()}}">[[#{detail}]]<i
                                         class="bi bi-arrow-right-short"></i></a>

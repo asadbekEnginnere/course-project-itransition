@@ -42,6 +42,7 @@
                 <div th:if="${#strings.length(collection.getAuthor())<15}">
                   <p>[[#{author}]] : [[${collection.getAuthor()}]]</p>
                 </div>
+                <p>[[#{topic}]] : [[${collection.getTopic()}]]</p>
                 <p>[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
                 <a class="btn btn-info" th:href="@{'/item/collection/'+${collection.getId()}}">[[#{detail}]]<i
                         class="bi bi-arrow-right-short"></i></a>

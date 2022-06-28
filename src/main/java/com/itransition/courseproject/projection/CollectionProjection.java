@@ -10,5 +10,6 @@ public interface CollectionProjection {
     Integer getTotalItems();
     String getCreationTime();
     String getEditedAt();
+    String getTopic();
 
 }

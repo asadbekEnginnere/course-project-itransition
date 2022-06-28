@@ -14,9 +14,10 @@
             <div class="page-title">
                 <div class="row align-items-center justify-content-between">
                     <div class="col-6">
-                        <div class="page-title-content">
+                        <div class="page-title-content px-3">
                             <h3>
-                            <a th:href="@{'/admin/collection/view/'+${collectionId}}" class="btn btn-success">[[#{back}]]</a>
+                                <a th:href="@{'/admin/collection/view/'+${collectionId}}" class="btn btn-success"><i
+                                        class="fa fa-arrow-left"></i> [[#{back}]]</a>
                             </h3>
                         </div>
                     </div>
@@ -30,14 +31,21 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <img th:src="${!#strings.equals(item.itemImageUrl,'null') ? item.itemImageUrl : '/images/placeholder-image.png'}"
-                                         class="img-fluid rounded">
-                                    <br>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <a th:href="@{'/likeDislike/like/add/'+${item.id}}" class="btn btn-success btn-sm"><i class="fa fa-thumbs-up"> [[${likes}]]</i></a>
-                                        <a th:href="@{'/likeDislike/like/view/'+${item.id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-                                        <a th:href="@{'/likeDislike/dislike/add/'+${item.id}}" class="btn btn-danger btn-sm"><i class="fa fa-thumbs-down"></i> [[${dislikes}]]</a>
-                                        <a th:href="@{'/likeDislike/dislike/view/'+${item.id}}" class="btn btn-danger btn-sm"><i class="fa fa-eye"></i></a>
+                                         class="img-fluid rounded" width="100%" height="180px">
+
+                                    <div class="btn-group" style="padding-left: 3.5rem;padding-top: 2rem">
+                                        <a th:href="@{'/likeDislike/like/add/'+${item.id}}"
+                                           class="btn btn-success btn-sm"><i class="fa fa-thumbs-up">
+                                            [[${likes}]]</i></a>
+                                        <a th:href="@{'/likeDislike/like/view/'+${item.id}}"
+                                           class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                        <a th:href="@{'/likeDislike/dislike/add/'+${item.id}}"
+                                           class="btn btn-danger btn-sm"><i class="fa fa-thumbs-down"></i>
+                                            [[${dislikes}]]</a>
+                                        <a th:href="@{'/likeDislike/dislike/view/'+${item.id}}"
+                                           class="btn btn-danger btn-sm"><i class="fa fa-eye"></i></a>
                                     </div>
+
                                     <h4 style="padding-top: 2rem" class="card-title">[[#{comments}]]
                                         [[${comments.size()}]]</h4>
                                     <div class="bid mb-3 card">
@@ -107,7 +115,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
-                                                    <button type="submit" class="btn btn-primary mr-2">[[#{add}]]
+                                                    <button type="submit" class="btn btn-primary mr-2"><i
+                                                            class="fa fa-comment"></i> [[#{add}]]
                                                         [[#{comment}]]
                                                     </button>
                                                 </div>

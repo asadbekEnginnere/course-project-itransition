@@ -41,6 +41,14 @@ public class UserController {
         return "admin/user/user";
     }
 
+    @GetMapping("/view/{userId}")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    public String getAdminUserViewPage(Model model, @PathVariable Integer userId) {
+        UserDto userDto = userService.findById(userId);
+        model.addAttribute("user",userDto);
+        return "admin/user/view";
+    }
+
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")

@@ -22,8 +22,8 @@
                             </form>
                             <ul class="navbar-nav me-auto">
                                 <li class="nav-item dropdown"><a class="nav-link" href="" th:text="#{home}"></a></li>
-                                <li class="nav-item"><a class="nav-link" th:href="@{/collection}" th:text="#{collection}"></a></li>
-                                <li class="nav-item"><a class="nav-link" th:href="@{/item}" th:text="#{item}"></a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/collection}" th:text="#{collections}"></a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/item}" th:text="#{items}"></a></li>
 
                                 <p sec:authorize="!isAuthenticated()">
                                 <li class="nav-item"><a class="nav-link" th:href="@{/signing}" th:text="#{signin}"></a></li>
@@ -36,6 +36,7 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item"  th:href="@{/user/profile}">[[#{profile}]]</a>
                                         <a class="dropdown-item" th:href="@{/user/collection}">[[#{my_collection}]]</a>
+                                        <a class="dropdown-item" th:href="@{/user/collection/create}">[[#{add}]] [[#{collection}]]</a>
                                     </div>
                                 </li>
                                 </p>
@@ -52,12 +53,6 @@
                                         <option value="en">ENG</option>
                                         <option value="uz">UZB</option>
                                     </select>
-<!--                                    <a th:text="#{language}" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--                                    </a>-->
-<!--                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
-<!--                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=uz'}">UZB</a>-->
-<!--                                        <a class="dropdown-item" th:href="${#httpServletRequest.requestURI+'/?lang=en'}">ENG</a>-->
-<!--                                    </div>-->
                                 </li>
                             </ul>
                         </div>

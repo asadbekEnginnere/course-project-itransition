@@ -40,7 +40,7 @@ public class CollectionController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String getCollectionPage(Model model){
-        model.addAttribute("collections",collectionService.getAllData());
+        model.addAttribute("collections",collectionService.getAllCollectionByUserId());
         return "collection/index";
     }
 

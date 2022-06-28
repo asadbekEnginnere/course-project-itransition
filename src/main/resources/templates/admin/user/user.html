@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <h4 class="card-title mb-3">[[#{user_list}]]
-                        <div style="float:right"><a th:href="@{/admin/user/create}" class="btn btn-primary btn-sm"><i class="ri-plus-bin-line"></i> [[#{add}]]</a></div>
+                        <div style="float:right"><a th:href="@{/admin/user/create}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> [[#{add}]]</a></div>
                     </h4>
 
                     <div class="card">
@@ -61,19 +61,22 @@
                                         <td th:text="${user.email}"></td>
                                         <td th:text="${user.role}"></td>
                                         <div th:if="${!user.isBlocked}">
-                                            <td>[[#{active}]]</td>
+                                            <td><span class="badge bg-gradient">[[#{active}]]</span></td>
                                         </div>
                                         <div th:if="${user.isBlocked}">
-                                            <td>[[#{block}]]</td>
+                                            <td><span class="badge bg-danger">[[#{block}]]</span></td>
                                         </div>
                                         <div th:if="${!user.isBlocked and !#strings.equals(user.role,'ROLE_SUPER_ADMIN')}">
-                                            <td><a th:href="@{'/admin/user/block/'+${user.id}}" class="btn btn-danger btn-rounded btn-sm" >[[#{block}]]</a></td>
+                                            <td><a th:href="@{'/admin/user/block/'+${user.id}}" class="btn btn-danger btn-rounded btn-sm" ><i class="fa fa-lock"></i> </a></td>
                                         </div>
                                         <div th:if="${user.isBlocked and !#strings.equals(user.role,'ROLE_SUPER_ADMIN')}">
-                                            <td><a th:href="@{'/admin/user/unblock/'+${user.id}}" class="btn btn-success btn-rounded btn-sm" >[[#{unblock}]]</a></td>
+                                            <td><a th:href="@{'/admin/user/unblock/'+${user.id}}" class="btn btn-success btn-rounded btn-sm" ><i class="fa fa-unlock"></i> </a></td>
                                         </div>
                                         <td>
-                                            <a th:href="@{'/admin/user/edit/'+${user.id}}" class="btn btn-info btn-sm">[[#{edit}]]</a>
+                                            <a th:href="@{'/admin/user/view/'+${user.id}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{'/admin/user/edit/'+${user.id}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> </a>
                                         </td>
                                         <div th:if="${!#strings.equals(user.role,'ROLE_SUPER_ADMIN')}">
                                             <td>
@@ -81,7 +84,7 @@
                                                       method="POST">
                                                     <button onclick="return confirm('Are you sure you want to delete?');"
                                                             class="btn btn-danger btn-sm" type="submit">
-                                                        [[#{delete}]]
+                                                        <i class="fa fa-trash"></i>
                                                     </button>
                                                 </form>
                                             </td>

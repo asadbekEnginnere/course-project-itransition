@@ -29,7 +29,7 @@
                         <a th:href="@{/}">[[#{home}]] </a><span><i class="ri-arrow-right-s-line"></i></span>
                         <a th:href="@{'/user/collection/view/'+${collection.id}}">[[${collection.name}]]</a><span><i class="ri-arrow-right-s-line"></i></span>
                         <a href="">[[#{add}]] [[#{item}]]</a><span><i class="ri-arrow-right-s-line"></i></span>
-                        <a th:href="@{/user/tag/create}" class="btn btn-info btn-warning">[[#{add}]] [[#{tag}]]</a>
+                        <a th:href="@{/user/tag/create}" class="btn btn-info btn-warning"><i class="fa fa-plus"></i> [[#{add}]] [[#{tag}]]</a>
                     </div>
                 </div>
             </div>
@@ -89,8 +89,8 @@
                                     </div>
                                     <div>
                                         <div class="col-12 mb-3">
-                                            <button type="submit" class="btn btn-primary btn-sm">[[#{add}]] [[#{item}]]</button>
-                                            <a class="btn btn-info btn-sm" th:href="@{'/user/collection/view/'+${collection.id}}">[[#{back}]]</a>
+                                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> [[#{add}]] [[#{item}]]</button>
+                                            <a class="btn btn-info btn-sm" th:href="@{'/user/collection/view/'+${collection.id}}"><i class="fa fa-arrow-left"></i> [[#{back}]]</a>
                                         </div>
                                     </div>
                                 </div>

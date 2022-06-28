@@ -65,16 +65,21 @@
                                         <label class="form-label">[[#{collection_item_field_name_defined}]]</label>
                                     </div>
                                     <div class="mt-3">
-                                        <button class="add_field_button btn btn-info btn-sm">[[#{add_more_fields}]]
+                                        <button class="add_field_button btn btn-info btn-sm"><i class="fa fa-plus"></i>
+                                            [[#{add_more_fields}]]
                                         </button>
                                     </div>
-                                    <div class="input_fields_wrap">
+                                    <div class="mt-3">
+                                        <div class="input_fields_wrap">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <button type="submit" class="btn btn-primary btn-sm">[[#{add}]] [[#{collection}]]
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i>
+                                        [[#{add}]] [[#{collection}]]
                                     </button>
-                                    <a class="btn btn-info btn-sm" th:href="@{/user/collection}">[[#{back}]]</a>
+                                    <a class="btn btn-info btn-sm" th:href="@{/user/collection}"><i
+                                            class="fa fa-arrow-left"></i> [[#{back}]]</a>
                                 </div>
                             </form>
                         </div>
@@ -105,18 +110,24 @@
             if (x < max_fields) {
                 x++;
                 $(wrapper).append(
-                    '<div class="input-group mb-3">'
-                    + ' <input type="text" class="form-control mb-3" name="name' + (inputName++) + '" placeholder="Name">'
-                    + ' <select name="type' + (type++) + '" class="form-control mb-4">'
+                    '<div class="input-group mb-3 row">'
+                    + '<div class="col-md-5"> '
+                    + '<input type="text" class="form-control mb-3" name="name' + (inputName++) + '" placeholder="Name">'
+                    + '</div> '
+                    + '<div class="col-md-5"> '
+                    + '   <select name="type' + (type++) + '" class="form-control mb-4">'
                     + '   <option value="textarea">[[#{long_text}]]</option>'
-                    + '  <option value="text">[[#{text}]]</option>'
-                    + ' <option value="number">[[#{number}]]</option>'
-                    + ' <option value="date">[[#{date}]]</option>'
-                    + ' <option value="image">[[#{image}]]</option>'
-                    + '</select>'
-                    + '<div class="input-group-append">'
-                    + '<button class="btn btn-danger remove_field" type="button">[[#{remove}]]</button>'
-                    + '</div></div>');
+                    + '   <option value="text">[[#{text}]]</option>'
+                    + '   <option value="number">[[#{number}]]</option>'
+                    + '   <option value="date">[[#{date}]]</option>'
+                    + '   <option value="image">[[#{image}]]</option>'
+                    + ' </select>'
+                    + '</div> '
+                    + '<div class="col-md-2"> '
+                    + '<button class="btn btn-danger remove_field" type="button"><i class="fa fa-trash"></i></button>'
+                    + '</div> '
+                    + '</div>'
+                );
             }
         });
 

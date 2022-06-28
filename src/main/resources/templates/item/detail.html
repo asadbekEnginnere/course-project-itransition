@@ -33,13 +33,18 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <img th:src="${!#strings.equals(item.itemImageUrl,'null') ? item.itemImageUrl : '/images/placeholder-image.png'}"
-                                         class="img-fluid rounded">
-                                    <br>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <a th:href="@{'/likeDislike/like/add/'+${item.id}}" class="btn btn-success btn-sm"><i class="fa fa-thumbs-up"> [[${likes}]]</i></a>
-                                        <a th:href="@{'/likeDislike/like/view/'+${item.id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-                                        <a th:href="@{'/likeDislike/dislike/add/'+${item.id}}" class="btn btn-danger btn-sm"><i class="fa fa-thumbs-down"></i> [[${dislikes}]]</a>
-                                        <a th:href="@{'/likeDislike/dislike/view/'+${item.id}}" class="btn btn-danger btn-sm"><i class="fa fa-eye"></i></a>
+                                         class="img-fluid rounded" width="100%" height="250px">
+                                    <div class="btn-group" style="padding-left: 3.5rem;padding-top: 2rem">
+                                        <a th:href="@{'/likeDislike/like/add/'+${item.id}}"
+                                           class="btn btn-success btn-sm"><i class="fa fa-thumbs-up">
+                                            [[${likes}]]</i></a>
+                                        <a th:href="@{'/likeDislike/like/view/'+${item.id}}"
+                                           class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                        <a th:href="@{'/likeDislike/dislike/add/'+${item.id}}"
+                                           class="btn btn-danger btn-sm"><i class="fa fa-thumbs-down"></i>
+                                            [[${dislikes}]]</a>
+                                        <a th:href="@{'/likeDislike/dislike/view/'+${item.id}}"
+                                           class="btn btn-danger btn-sm"><i class="fa fa-eye"></i></a>
                                     </div>
                                     <h4 style="padding-top: 2rem" class="card-title">[[#{comments}]]
                                         [[${comments.size()}]]</h4>

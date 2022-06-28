@@ -24,9 +24,6 @@
                 <div class="col-xxl-4 col-xl-12">
                     <div class="card welcome-profile">
                         <div class="card-body">
-                            <div style="float: right">
-                                <a th:href="@{'/admin/user/edit/'+${user.id}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                            </div>
                             <img th:src="@{/images/profile/3.png}" alt="">
                             <h4>[[${user.firstName}]] [[${user.lastName}]]</h4>
                             <p></p>

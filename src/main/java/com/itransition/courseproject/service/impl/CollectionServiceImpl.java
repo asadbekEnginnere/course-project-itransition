@@ -216,22 +216,15 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
         return "redirect:/user/collection";
     }
 
+
+    public List<CollectionProjection> getAllCollectionByUserId() {
+        Integer id = userService.currenUser().getId();
+        return collectionRepository.getAllCollection(id);
+    }
+
     @Override
     public List<CollectionDto> getAllData() {
-        Integer id = userService.currenUser().getId();
-        List<String> allCollection = collectionRepository.getAllCollection(id);
-        List<CollectionDto> collectionDtoList = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            for (String s : allCollection) {
-                CollectionDto collectionDto = mapper.readValue(s, CollectionDto.class);
-                System.out.println(collectionDto);
-                collectionDtoList.add(collectionDto);
-            }
-        } catch (Exception e) {
-        }
-        return collectionDtoList;
+        return null;
     }
 
     @Override

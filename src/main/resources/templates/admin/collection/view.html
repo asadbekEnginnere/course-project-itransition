@@ -25,29 +25,35 @@
                 <div class="col-xxl-12">
                     <div class="card items">
                         <div class="card-body">
-                            <div th:if="${!#strings.equals(collection.getImageUrl(),'null')}"
-                                 class="items-img position-relative">
-                                <img th:src="${collection.getImageUrl()}" height="300px" width="100%"
-                                     class="img-fluid rounded mb-3" alt="">
-                            </div>
-                            <div th:if="${#strings.equals(collection.getImageUrl(),'null')}"
-                                 class="items-img position-relative">
-                                <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3" alt=""
-                                     height="300px" width="100%">
-                            </div>
-                            <a href="">
-                                <h4 class="card-title">[[#{title}]] [[${collection.getTitle()}]]</h4>
-                            </a>
-                            <p></p>
-                            <div class="d-flex justify-content-between">
-                                <div class="text-start">
-                                    <p class="mb-2">[[#{author}]] : [[${collection.getAuthor()}]]</p>
-                                    <p class="mb-2">[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
-                                    <p class="mb-2">[[#{creationTime}]] : [[${collection.getCreationTime()}]]</p>
-                                    <p class="mb-2">[[#{editedAt}]] : [[${collection.getEditedAt()}]]</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div th:if="${!#strings.equals(collection.getImageUrl(),'null')}"
+                                         class="items-img position-relative justify-content-center">
+                                        <img th:src="${collection.getImageUrl()}" height="300px" width="60%"
+                                             class="img-fluid rounded mb-3" alt="">
+                                    </div>
+                                    <div th:if="${#strings.equals(collection.getImageUrl(),'null')}"
+                                         class="items-img position-relative justify-content-center">
+                                        <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3"
+                                             alt=""
+                                             height="300px" width="60%">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="justify-content-center mt-3">
+                                <div class="col-md-6">
+                                    <a href="">
+                                        <h4 class="card-title">[[#{title}]] [[${collection.getTitle()}]]</h4>
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="text-start">
+                                            <p class="mb-2">[[#{author}]] : [[${collection.getAuthor()}]]</p>
+                                            <p class="mb-2">[[#{topic}]] : [[${collection.getTopic()}]]</p>
+                                            <p class="mb-2">[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
+                                            <p class="mb-2">[[#{creationTime}]] :
+                                                [[${collection.getCreationTime()}]]</p>
+                                            <p class="mb-2">[[#{editedAt}]] : [[${collection.getEditedAt()}]]</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

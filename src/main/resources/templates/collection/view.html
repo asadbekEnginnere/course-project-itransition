@@ -20,10 +20,10 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="breadcrumbs">
-                        <a class="btn btn-warning" th:href="@{'/user/collection/item/'+${collection.getId()}+'/create'}">[[#{add}]]
+                    <div style="float: right">
+                        <a class="btn btn-primary btn-sm" th:href="@{'/user/collection/item/'+${collection.getId()}+'/create'}"><i class="fa fa-plus"></i> [[#{add}]]
                             [[#{item}]]</a>
-                        <a class="btn btn-info" th:href="@{/user/collection}">[[#{back}]]</a></div>
+                        <a class="btn btn-danger btn-sm" th:href="@{/user/collection}"><i class="fa fa-arrow-left"></i> [[#{back}]]</a></div>
                 </div>
             </div>
         </div>
@@ -43,32 +43,38 @@
                 </div>
             </div>
             <div class="row align-items-center">
-                <div class="col-xl-6 col-lg-6 col-md-6">
+                <div class="col-xl-12 col-lg-12 col-md-12">
                     <div class="card items">
                         <div class="card-body">
-                            <div th:if="${!#strings.equals(collection.getImageUrl(),'null')}"
-                                 class="items-img position-relative">
-                                <img th:src="${collection.getImageUrl()}" height="350px" width="100%"
-                                     class="img-fluid rounded mb-3" alt="">
-                            </div>
-                            <div th:if="${#strings.equals(collection.getImageUrl(),'null')}"
-                                 class="items-img position-relative">
-                                <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3" alt=""
-                                     height="350px" width="100%">
-                            </div>
-                            <a href="">
-                                <h4 class="card-title">[[#{title}]] [[${collection.getTitle()}]]</h4>
-                            </a>
-                            <p></p>
-                            <div class="d-flex justify-content-between">
-                                <div class="text-start">
-                                    <p class="mb-2">[[#{author}]] : [[${collection.getAuthor()}]]</p>
-                                    <p class="mb-2">[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
-                                    <p class="mb-2">[[#{creationTime}]] : [[${collection.getCreationTime()}]]</p>
-                                    <p class="mb-2">[[#{editedAt}]] : [[${collection.getEditedAt()}]]</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div th:if="${!#strings.equals(collection.getImageUrl(),'null')}"
+                                         class="items-img position-relative justify-content-center">
+                                        <img th:src="${collection.getImageUrl()}" height="300px" width="60%"
+                                             class="img-fluid rounded mb-3" alt="">
+                                    </div>
+                                    <div th:if="${#strings.equals(collection.getImageUrl(),'null')}"
+                                         class="items-img position-relative justify-content-center">
+                                        <img th:src="@{/images/placeholder-image.png}" class="img-fluid rounded mb-3"
+                                             alt=""
+                                             height="300px" width="60%">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="justify-content-center mt-3">
+                                <div class="col-md-6">
+                                    <a href="">
+                                        <h4 class="card-title">[[#{title}]] [[${collection.getTitle()}]]</h4>
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="text-start">
+                                            <p class="mb-2">[[#{author}]] : [[${collection.getAuthor()}]]</p>
+                                            <p class="mb-2">[[#{topic}]] : [[${collection.getTopic()}]]</p>
+                                            <p class="mb-2">[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
+                                            <p class="mb-2">[[#{creationTime}]] :
+                                                [[${collection.getCreationTime()}]]</p>
+                                            <p class="mb-2">[[#{editedAt}]] : [[${collection.getEditedAt()}]]</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,17 +111,16 @@
                                     </div>
                                 </div>
                                 <div class="justify-content-center mt-3">
-                                    <a class="btn btn-success btn-sm"
-                                       th:href="@{'/user/collection/item/'+${collection.id}+'/edit/'+${item.getId()}}">[[#{edit}]]</a>
+                                    <a class="btn btn-primary btn-sm" th:href="@{'/item/detail/'+${item.getId()}}"><i class="fa fa-eye"></i> </a>
+                                    <a class="btn btn-success btn-sm" th:href="@{'/user/collection/item/'+${collection.id}+'/edit/'+${item.getId()}}"><i class="fa fa-edit"></i> </a>
                                     <form th:action="@{'/user/collection/item/'+${collection.id}+'/delete/'+${item.getId()}}"
                                           class="inline-flex"
                                           method="POST">
                                         <button onclick="return confirm('Are you sure you want to delete?');"
                                                 class="btn btn-danger btn-sm" type="submit">
-                                            [[#{delete}]]
+                                            <i class="fa fa-trash"></i>
                                         </button>
                                     </form>
-                                    <a class="btn btn-primary btn-sm" th:href="@{'/item/detail/'+${item.getId()}}">[[#{view}]]</a>
                                 </div>
                             </div>
                         </div>
