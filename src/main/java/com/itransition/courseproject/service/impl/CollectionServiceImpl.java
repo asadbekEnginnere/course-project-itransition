@@ -216,6 +216,11 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
         return "redirect:/user/collection";
     }
 
+    @Override
+    public List<CollectionProjection> getCollectionByTopicId(Integer topicId) {
+        return collectionRepository.getCollectionByTopicId(topicId);
+    }
+
 
     public List<CollectionProjection> getAllCollectionByUserId() {
         Integer id = userService.currenUser().getId();

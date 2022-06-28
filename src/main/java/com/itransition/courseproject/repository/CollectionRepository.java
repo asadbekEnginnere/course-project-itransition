@@ -144,4 +144,26 @@ public interface CollectionRepository extends JpaRepository<Collection,Integer> 
             "group by c.id, c.name, c.description, c.image_url, t.id) result;")
     String collectionWithCustomColumns(int id);
 
+    @Query(nativeQuery = true,
+    value = "select c.id as id,\n" +
+            "       c.name as title,\n" +
+            "       c.description as description,\n" +
+            "       coalesce(c.image_url,'null') as imageUrl,\n" +
+            "       concat(u.first_name,' ',u.last_name) as author,\n" +
+            "       coalesce(cte.total,0) as totalItems,\n" +
+            "       c.created_at as createdAt,\n" +
+            "       c.updated_at as editedAt,\n" +
+            "       t.name as topic\n" +
+            "from collections c\n" +
+            "         join user_collection uc on uc.id = c.user_collection_id\n" +
+            "         join users u on u.id = uc.user_id\n" +
+            "         join topics t on t.id = c.topic_id\n" +
+            "         left join(\n" +
+            "    select items.collection_id,\n" +
+            "           count(items.collection_id) as total\n" +
+            "    from items\n" +
+            "    group by items.collection_id)cte on c.id=cte.collection_id\n" +
+            "where t.id= :id \n" +
+            "order by totalItems desc ")
+    List<CollectionProjection> getCollectionByTopicId(int id);
 }

@@ -169,4 +169,5 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "join users u on u.id = uc.user_id\n" +
             "where u.id= :id ;")
     int getTotalItemsByUserId(int id);
+
 }

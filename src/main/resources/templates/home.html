@@ -75,6 +75,32 @@
         </div>
     </div>
 
+    <div class="top-collection section-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <div class="section-title text-center">
+                        <h2>[[#{topics_cloud}]]</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <th:block th:each="topic : ${topics}">
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <a class="top-collection-content d-block" th:href="@{'/collection/topic/'+${topic.id}}">
+                            <div class="d-flex align-items-center">
+                                <span class="serial"></span>
+                                <div class="flex-grow-1 ms-3">
+                                    <h5>[[${topic.name}]]</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
     <div class="notable-drops section-padding bg-light triangle-top-light triangle-bottom-light">
         <div class="container">
             <div class="row">

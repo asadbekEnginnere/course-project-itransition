@@ -3,32 +3,22 @@ package com.itransition.courseproject.controller;
 
 // Asatbek Xalimjonov 6/14/22 10:06 AM
 
-import com.itransition.courseproject.cloudinary.CloudForImage;
-import com.itransition.courseproject.dto.CommentDto;
 import com.itransition.courseproject.dto.ItemDetailDto;
 import com.itransition.courseproject.entity.collection.Comment;
-import com.itransition.courseproject.entity.collection.CustomColumn;
 import com.itransition.courseproject.projection.CollectionProjection;
 import com.itransition.courseproject.projection.CommentProjection;
 import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.repository.CustomColumnRepository;
 import com.itransition.courseproject.repository.TagRepository;
-import com.itransition.courseproject.service.impl.CollectionServiceImpl;
-import com.itransition.courseproject.service.impl.CommentServiceImpl;
-import com.itransition.courseproject.service.impl.ItemServiceImpl;
-import com.itransition.courseproject.service.impl.LikeDislikeServiceImpl;
+import com.itransition.courseproject.service.impl.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/")
@@ -42,40 +32,54 @@ public class HomeController {
     private final ItemServiceImpl itemService;
     private final CommentServiceImpl commentService;
     private final LikeDislikeServiceImpl likeDislikeService;
+    private final TopicServiceImpl topicService;
 
 
     @GetMapping
     public String getHomePage(Model model) {
         model.addAttribute("items", itemService.getLatestItems());
+        model.addAttribute("topics", topicService.getAllData());
         model.addAttribute("collections", collectionService.getTopFiveLargestCollection());
         model.addAttribute("tags", tagRepository.getAllTags());
         return "home";
     }
 
-    @GetMapping("/collection")
-    public String getCollectionPage(Model model) {
-        model.addAttribute("collections", collectionService.getCollectionList());
+    @GetMapping(value = {"" +
+            "/collection",
+            "/collection/topic/{topicId}"
+    })
+    public String getCollectionPage(Model model, @PathVariable(required = false) Integer topicId) {
+        List<CollectionProjection> collectionList = null;
+        if (topicId != null) {
+            collectionList=collectionService.getCollectionByTopicId(topicId);
+        } else {
+            collectionList = collectionService.getCollectionList();
+        }
+        model.addAttribute("collections", collectionList);
         return "collection";
     }
 
-    @GetMapping(value = {"/item", "/item/tag/{tagId}","/item/collection/{collectionId}"})
+    @GetMapping(value = {"/item",
+            "/item/tag/{tagId}",
+            "/item/collection/{collectionId}"
+    })
     public String getItemPage(Model model,
                               @PathVariable(required = false) Integer tagId,
                               @PathVariable(required = false) Integer collectionId) {
 
         List<ItemProjection> allItems = null;
-        CollectionProjection byId=null;
+        CollectionProjection byId = null;
 
-        if (collectionId!=null){
-            allItems=itemService.getAllItemsByCollectionId(collectionId);
+        if (collectionId != null) {
+            allItems = itemService.getAllItemsByCollectionId(collectionId);
             byId = collectionService.collectionGetById(collectionId);
-        }else if (tagId!=null){
-            allItems=itemService.getItemByTagId(tagId);
-        }else{
-            allItems=itemService.getAllItems();
+        } else if (tagId != null) {
+            allItems = itemService.getItemByTagId(tagId);
+        } else {
+            allItems = itemService.getAllItems();
         }
 
-        model.addAttribute("collection",byId);
+        model.addAttribute("collection", byId);
         model.addAttribute("items", allItems);
         return "item";
     }

@@ -19,4 +19,6 @@ public interface CollectionService {
     CollectionDto getCollectionById(int id);
 
     String updateCollection(CollectionDto collectionDto, RedirectAttributes ra, MultipartFile file);
+
+    List<CollectionProjection> getCollectionByTopicId(Integer topicId);
 }

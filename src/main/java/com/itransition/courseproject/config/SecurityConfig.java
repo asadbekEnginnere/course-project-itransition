@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/",
                         "/signing",
                         "/signup",
-                        "/collection",
+                        "/collection/**",
                         "/item/**",
                         "/css/**",
                         "/icons/**",
