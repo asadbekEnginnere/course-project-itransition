@@ -7,6 +7,7 @@ import com.itransition.courseproject.dto.TagDto;
 import com.itransition.courseproject.dto.TopicDto;
 import com.itransition.courseproject.dto.UserDto;
 import com.itransition.courseproject.entity.collection.Tag;
+import com.itransition.courseproject.repository.*;
 import com.itransition.courseproject.service.impl.TagServiceImpl;
 import com.itransition.courseproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,22 @@ public class AdminController {
 
     private final UserServiceImpl userService;
     private final TagServiceImpl tagService;
+    private final UserRepository userRepository;
+    private final CollectionRepository collectionRepository;
+    private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
+    private final DisLikeRepository disLikeRepository;
 
     @GetMapping("/dashboard")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
-    public String getAdminPage(){
+    public String getAdminPage(Model model){
+        model.addAttribute("users",userRepository.findAll().size());
+        model.addAttribute("collections",collectionRepository.findAll().size());
+        model.addAttribute("items",itemRepository.findAll().size());
+        model.addAttribute("comments",commentRepository.findAll().size());
+        model.addAttribute("likes",likeRepository.findAll().size());
+        model.addAttribute("dislikes",disLikeRepository.findAll().size());
         return "admin/dashboard";
     }
 
