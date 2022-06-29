@@ -41,19 +41,23 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
 
                 int disliked = disLikeRepository.isDisliked(user.getId(), itemId);
                 Item item = itemRepository.findById(itemId).get();
+                int likedByUser = likeRepository.isLikedByUser(user.getId(), itemId);
                 if (disliked > 0) {
                     DisLike disLikeData = disLikeRepository.findByUserAndItem(user, item);
                     disLikeRepository.deleteById(disLikeData.getId());
                 }
 
-                Like like = new Like(
-                        user,
-                        item
-                );
-                likeRepository.save(like);
+                if (likedByUser<1) {
+                    Like like = new Like(
+                            user,
+                            item
+                    );
+                    likeRepository.save(like);
+                }
             } else if (user != null) {
 
                 int likedByUser = likeRepository.isLikedByUser(user.getId(), itemId);
+                int disliked = disLikeRepository.isDisliked(user.getId(), itemId);
                 Item item = itemRepository.findById(itemId).get();
 
                 if (likedByUser > 0) {
@@ -61,11 +65,13 @@ public class LikeDislikeServiceImpl implements LikeDislikeService {
                     likeRepository.deleteById(likeData.getId());
                 }
 
-                DisLike disLike = new DisLike(
-                        user,
-                        item
-                );
-                disLikeRepository.save(disLike);
+                if (disliked<1) {
+                    DisLike disLike = new DisLike(
+                            user,
+                            item
+                    );
+                    disLikeRepository.save(disLike);
+                }
             }
         } catch (Exception ignored) {
         }
