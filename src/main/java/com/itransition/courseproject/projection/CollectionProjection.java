@@ -8,7 +8,7 @@ public interface CollectionProjection {
     String getImageUrl();
     String getAuthor();
     Integer getTotalItems();
-    String getCreationTime();
+    String getCreatedAt();
     String getEditedAt();
     String getTopic();
 
