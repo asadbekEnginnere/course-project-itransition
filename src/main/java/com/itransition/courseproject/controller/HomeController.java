@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -48,7 +49,8 @@ public class HomeController {
             "/collection",
             "/collection/topic/{topicId}"
     })
-    public String getCollectionPage(Model model, @PathVariable(required = false) Integer topicId) {
+    public String getCollectionPage(Model model,
+                                    @PathVariable(required = false) Integer topicId) {
         List<CollectionProjection> collectionList = null;
         if (topicId != null) {
             collectionList=collectionService.getCollectionByTopicId(topicId);
@@ -65,7 +67,8 @@ public class HomeController {
     })
     public String getItemPage(Model model,
                               @PathVariable(required = false) Integer tagId,
-                              @PathVariable(required = false) Integer collectionId) {
+                              @PathVariable(required = false) Integer collectionId,
+                              @RequestParam(required = false) String search) {
 
         List<ItemProjection> allItems = null;
         CollectionProjection byId = null;
@@ -75,6 +78,8 @@ public class HomeController {
             byId = collectionService.collectionGetById(collectionId);
         } else if (tagId != null) {
             allItems = itemService.getItemByTagId(tagId);
+        } else if (search!=null){
+            allItems=itemService.getAllItemsSearch(search);
         } else {
             allItems = itemService.getAllItems();
         }

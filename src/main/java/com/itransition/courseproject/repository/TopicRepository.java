@@ -8,10 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Repository
 public interface TopicRepository extends JpaRepository<Topic,Integer> {
 
     @Query("SELECT new com.itransition.courseproject.dto.TopicDto(topic.id, topic.name) FROM com.itransition.courseproject.entity.collection.Topic topic")

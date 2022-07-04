@@ -4,9 +4,11 @@ import com.itransition.courseproject.entity.collection.Item;
 import com.itransition.courseproject.projection.ItemProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 
@@ -16,9 +18,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
                     "       concat(u.first_name,' ',u.last_name) as authorFullName,\n" +
                     "       c.name as collection,\n" +
                     "       coalesce(cte.value,'null') as imageUrl,\n" +
-                    "       coalesce(count(l.*),0) as likesCount,\n" +
-                    "       coalesce(count(d.*),0) as disLikesCount,\n" +
-                    "       coalesce(count(c2.*),0) as commentCount\n" +
+                    "       coalesce(count(distinct l.*),0) as likesCount,\n" +
+                    "       coalesce(count(distinct d.*),0) as disLikesCount,\n" +
+                    "       coalesce(count(distinct c2.*),0) as commentCount\n" +
                     "from  items i\n" +
                     "          join collections c on c.id = i.collection_id\n" +
                     "          join user_collection uc on uc.id = c.user_collection_id\n" +
@@ -44,9 +46,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
                     "       concat(u.first_name,' ',u.last_name) as authorFullName,\n" +
                     "       c.name as collection,\n" +
                     "       coalesce(cte.value,'null') as imageUrl,\n" +
-                    "       coalesce(count(l.*),0) as likesCount,\n" +
-                    "       coalesce(count(d.*),0) as disLikesCount,\n" +
-                    "       coalesce(count(c2.*),0) as commentCount\n" +
+                    "       coalesce(count(distinct l.*),0) as likesCount,\n" +
+                    "       coalesce(count(distinct d.*),0) as disLikesCount,\n" +
+                    "       coalesce(count(distinct c2.*),0) as commentCount\n" +
                     "from  items i\n" +
                     "          join collections c on c.id = i.collection_id\n" +
                     "          join user_collection uc on uc.id = c.user_collection_id\n" +
@@ -113,9 +115,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "       concat(u.first_name,' ',u.last_name) as authorFullName,\n" +
             "       c.name as collection,\n" +
             "       coalesce(cte.value,'null') as imageUrl,\n" +
-            "       coalesce(count(l.*),0) as likesCount,\n" +
-            "       coalesce(count(d.*),0) as disLikesCount,\n" +
-            "       coalesce(count(c2.*),0) as commentCount\n" +
+            "       coalesce(count(distinct l.*),0) as likesCount,\n" +
+            "       coalesce(count(distinct d.*),0) as disLikesCount,\n" +
+            "       coalesce(count(distinct c2.*),0) as commentCount\n" +
             "from  items i\n" +
             "          join collections c on c.id = i.collection_id\n" +
             "          join user_collection uc on uc.id = c.user_collection_id\n" +
@@ -125,7 +127,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "    from custom_column cc\n" +
             "             join custom_value cv on cc.id = cv.custom_column_id\n" +
             "    where cc.type='image'\n" +
-            ")cte on cte.item_id=i.id\n" +
+            ")cte on cte.item_id=i.id \n" +
             "left join likes l on i.id = l.item_id\n" +
             "left join dislikes d on i.id = d.item_id\n" +
             "left join comments c2 on i.id = c2.item_id\n" +
@@ -140,9 +142,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
                     "       concat(u.first_name, ' ', u.last_name) as authorFullName,\n" +
                     "       c.name                                 as collection,\n" +
                     "       coalesce(cte.value, 'null')            as imageUrl,\n" +
-                    "       coalesce(count(l.*), 0)                as likesCount,\n" +
-                    "       coalesce(count(d.*), 0)                as disLikesCount,\n" +
-                    "       coalesce(count(c2.*), 0)               as commentCount\n" +
+                    "       coalesce(count(distinct l.*), 0)                as likesCount,\n" +
+                    "       coalesce(count(distinct d.*), 0)                as disLikesCount,\n" +
+                    "       coalesce(count(distinct c2.*), 0)               as commentCount\n" +
                     "from items i\n" +
                     "         join collections c on c.id = i.collection_id\n" +
                     "         join user_collection uc on uc.id = c.user_collection_id\n" +
@@ -169,5 +171,35 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "join users u on u.id = uc.user_id\n" +
             "where u.id= :id ;")
     int getTotalItemsByUserId(int id);
+
+
+    @Query(nativeQuery = true,
+    value = "select i.id,\n" +
+            "       i.name,\n" +
+            "       concat(u.first_name, ' ', u.last_name) as authorFullName,\n" +
+            "       c.name                                 as collection,\n" +
+            "       coalesce(cte.value, 'null')            as imageUrl,\n" +
+            "       coalesce(count(distinct l.*), 0)       as likesCount,\n" +
+            "       coalesce(count(distinct d.*), 0)       as disLikesCount,\n" +
+            "       coalesce(count(distinct c2.*), 0)      as commentCount\n" +
+            "from items i\n" +
+            "         join collections c on c.id = i.collection_id\n" +
+            "         join user_collection uc on uc.id = c.user_collection_id\n" +
+            "         join users u on uc.user_id = u.id\n" +
+            "         left join (select cc.id, cv.item_id, cv.value, cc.type\n" +
+            "                    from custom_column cc\n" +
+            "                             join custom_value cv on cc.id = cv.custom_column_id\n" +
+            "                    where cc.type = 'image') cte on cte.item_id = i.id\n" +
+            "         left join likes l on i.id = l.item_id\n" +
+            "         left join dislikes d on i.id = d.item_id\n" +
+            "         left join comments c2 on i.id = c2.item_id\n" +
+            "         join custom_value ccv on i.id = ccv.item_id\n" +
+            "where i.name ilike :inputText\n" +
+            "   or c2.content ilike :inputText\n" +
+            "   or c.name ilike :inputText\n" +
+            "   or ccv.value ilike :inputText\n" +
+            "group by i.id, i.name, concat(u.first_name, ' ', u.last_name), c.name, coalesce(cte.value, 'null')\n" +
+            "order by i.created_at desc ")
+    List<ItemProjection> getAllItemsSearchResult(String inputText);
 
 }

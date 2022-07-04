@@ -6,9 +6,11 @@ import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.projection.LikeDisLikeProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface LikeRepository extends JpaRepository<Like, Integer> {
 
     @Query(nativeQuery = true,

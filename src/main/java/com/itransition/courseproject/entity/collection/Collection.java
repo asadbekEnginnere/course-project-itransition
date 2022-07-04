@@ -24,6 +24,7 @@ public class Collection {
     private Integer id;
 
     private String name;
+
     private String description;
 
     private String imageUrl;

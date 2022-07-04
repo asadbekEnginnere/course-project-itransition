@@ -35,14 +35,20 @@
                         </div>
                     </div>
                     <h4 class="card-title mb-3">[[#{collections}]] [[#{list}]]
-                        <div style="float:right"><a th:href="@{/admin/collection/create}" class="btn btn-primary btn-sm"><i
-                                class="fa fa-plus"></i> [[#{add}]]</a></div>
+                        <div style="float:right">
+                            <a th:href="@{/admin/collection/create}"
+                               class="btn btn-primary btn-sm"><i
+                                    class="fa fa-plus"></i> [[#{add}]]</a>
+                            <button onclick="downloadData()" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export</button>
+                        </div>
                     </h4>
 
                     <div class="card">
                         <div class="card-body">
+                            <input type="text" class="form-control" id="collectionTitle" onkeyup="myFunction()"
+                                   th:placeholder="#{search}" title="Type in a name">
                             <div class="table-responsive table-icon">
-                                <table class="table">
+                                <table class="table" id="collections">
                                     <thead>
                                     <tr>
                                         <th>#</th>
@@ -101,6 +107,79 @@
 
 
 </div>
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, i, j, column_length, count_td;
+        column_length = document.getElementById('collections').rows[0].cells.length;
+        input = document.getElementById("collectionTitle");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("collections");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            count_td = 0;
+            for (j = 1; j < column_length - 1; j++) {
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        count_td++;
+                    }
+                }
+            }
+            if (count_td > 0) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+    //export to csv
+    function downloadData() {
+        exportTableToCSV('data.csv', ',');
+    }
+
+    function downloadCSV(csv, filename) {
+        let csvFile;
+        let downloadLink;
+
+        csvFile = new Blob([csv], {type: 'text/csv'});
+
+        downloadLink = document.createElement('a');
+
+        downloadLink.download = filename;
+
+        downloadLink.href = URL.createObjectURL(csvFile);
+
+        downloadLink.style.display = "none";
+
+        document.body.appendChild(downloadLink);
+
+        downloadLink.click();
+    }
+
+    function exportTableToCSV(filename, separator) {
+        const csv = [];
+        const rows = document.querySelectorAll("table tr");
+
+        for (let i = 0; i < rows.length; i++) {
+
+            let row = [];
+
+            const cols = rows[i].querySelectorAll("td, th");
+
+            for (let j = 0; j < cols.length; j++)
+                // Add double quote to make the value stay in the same column if is separated by comma
+                row.push(`"${cols[j].innerText}"`);
+
+            csv.push(row.join(separator));
+        }
+
+        // Download CSV file
+        downloadCSV(csv.join("\n"), filename);
+    }
+
+</script>
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/scripts.js}"></script>

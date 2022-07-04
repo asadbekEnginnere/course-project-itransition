@@ -7,25 +7,21 @@ package com.itransition.courseproject.common;
 import com.itransition.courseproject.entity.enums.Role;
 import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
     @Value("${spring.sql.init.mode}")
     String initMode;
 
-    final PasswordEncoder passwordEncoder;
-    final UserRepository userRepo;
-
-    public DataLoader(PasswordEncoder passwordEncoder,UserRepository userRepo) {
-        this.passwordEncoder = passwordEncoder;
-        this.userRepo = userRepo;
-    }
-
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepo;
 
     @Override
     public void run(String... args) throws Exception {

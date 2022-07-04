@@ -4,12 +4,12 @@ package com.itransition.courseproject.config;
 // Asatbek Xalimjonov 6/14/22 7:56 PM
 
 import com.cloudinary.Cloudinary;
-import com.itransition.courseproject.entity.user.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.LocaleResolver;
@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Configuration
+@RequiredArgsConstructor
 public class AppConfig implements WebMvcConfigurer {
 
 
@@ -34,6 +35,7 @@ public class AppConfig implements WebMvcConfigurer {
     String apiKey;
     @Value("${cloudinary.api_secret}")
     String apiSecret;
+
 
     @Bean
     public IDialect conditionalCommentDialect() {

@@ -34,6 +34,10 @@ public interface ItemService {
 
     String deleteItemById(Integer collectionId,Integer itemId, RedirectAttributes redirectAttributes);
 
+    List<Item> searchBy(String text);
+
+    List<ItemProjection> getAllItemsSearch(String search);
+
 }
 
 

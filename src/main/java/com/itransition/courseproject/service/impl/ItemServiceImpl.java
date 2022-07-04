@@ -5,7 +5,6 @@ package com.itransition.courseproject.service.impl;
 
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itransition.courseproject.cloudinary.CloudForImage;
 import com.itransition.courseproject.dto.CustomColumnDto;
@@ -28,9 +27,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.*;
 
 @Slf4j
@@ -267,7 +263,11 @@ public class ItemServiceImpl implements ItemService {
                     Item savedItem = itemRepository.save(item);
 
                     String imageUrl = null;
-                    imageUrl = itemImage(file, savedItem, imageUrl);
+                    try {
+
+                        imageUrl = itemImage(file, savedItem, imageUrl);
+                    } catch (Exception exception) {
+                    }
 
                     Map<CustomColumn, String> customColumnStringMap = new HashMap<>();
 
@@ -275,7 +275,6 @@ public class ItemServiceImpl implements ItemService {
                     List<CustomValue> customValueList = new ArrayList<>();
 
                     customColumnMap(savedItem, imageUrl, customColumnStringMap, parameterMap, customValueList);
-
                     deleteCustomColumnValue(customValueList);
 
                     saveCustomColumnValue(savedItem, customColumnStringMap);
@@ -321,7 +320,6 @@ public class ItemServiceImpl implements ItemService {
         while (iterator.hasNext()) {
             multipartFile = file.getFile(iterator.next());
         }
-
         if (multipartFile != null && !multipartFile.isEmpty()) {
             imageUrl = cloudForImage.uploadImageToCloud(multipartFile);
             Iterator<String> mapIterator = multiFileMap.keySet().iterator();
@@ -390,6 +388,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
+    @Override
+    public List<Item> searchBy(String text) {
+        return null;
+    }
+
+    @Override
+    public List<ItemProjection> getAllItemsSearch(String search) {
+        String text = "%" + search + "%";
+        return itemRepository.getAllItemsSearchResult(text);
+    }
 
 }
 

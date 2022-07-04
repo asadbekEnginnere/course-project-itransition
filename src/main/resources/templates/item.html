@@ -47,11 +47,11 @@
                                 <h4 class="card-title">[[#{title}]] [[${collection.getTitle()}]]</h4>
                             </a>
                             <p></p>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-around">
                                 <div class="text-start">
                                     <p class="mb-2">[[#{author}]] : [[${collection.getAuthor()}]]</p>
                                     <p class="mb-2">[[#{totalItems}]] : [[${collection.getTotalItems()}]]</p>
-                                    <p class="mb-2">[[#{creationTime}]] : [[${collection.getCreationTime()}]]</p>
+                                    <p class="mb-2">[[#{creationTime}]] : [[${collection.getCreatedAt()}]]</p>
                                     <p class="mb-2">[[#{editedAt}]] : [[${collection.getEditedAt()}]]</p>
                                 </div>
                             </div>
@@ -60,33 +60,72 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3" th:if="${collection==null}">
-                    <div class="filter-sidebar">
-                        <div class="filter-sidebar-content">
-                            <h5>Status</h5>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault1" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault1">Buy Now</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault2" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault2">On Auction</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault3" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault3">New</label></div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                           id="flexCheckDefault4" value=""><label
-                                    class="form-check-label"
-                                    for="flexCheckDefault4">Has Offers</label></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xxl-10 col-xl-9 col-lg-9 col-md-9">
+                <div class="col-xxl-10 col-xl-9 col-lg-9 col-md-9" th:if="${collection!=null}">
                     <div class="row">
                         <th:block th:each="item : ${items}">
                             <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6">
+                                <div class="card items">
+                                    <div class="card-body">
+                                        <div th:if="${!#strings.equals(item.getImageUrl(),'null')}"
+                                             class="items-img position-relative">
+                                            <img th:src="${item.getImageUrl()}" class="img-fluid rounded mb-3" alt=""
+                                                 width="100%" height="250px">
+                                            <a th:href="@{'/item/detail/'+${item.getId()}}"><img
+                                                    th:src="@{/images/profile/3.png}" class="creator" width="50"
+                                                    alt=""></a>
+                                        </div>
+                                        <div th:if="${#strings.equals(item.getImageUrl(),'null')}"
+                                             class="items-img position-relative">
+                                            <img th:src="@{/images/placeholder-image.png}"
+                                                 class="img-fluid rounded mb-3" alt="" width="100%" height="250px">
+                                            <a th:href="@{'/item/detail/'+${item.getId()}}"><img
+                                                    th:src="@{/images/profile/3.png}" class="creator" width="50"
+                                                    alt=""></a>
+                                        </div>
+                                        <a th:href="@{'/item/detail/'+${item.getId()}}">
+                                            <h4 class="card-title">[[${item.getName()}]]</h4>
+                                        </a>
+                                        <p></p>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="text-start">
+                                                <p class="mb-2">[[#{collection}]]</p>
+                                                <h5 class="text-muted">[[#{author}]]</h5>
+                                                <h5 class="text-muted">[[#{likes}]] : [[${item.getLikesCount()}]]</h5>
+                                                <h5 class="text-muted">[[#{dislikes}]] :
+                                                    [[${item.getDisLikesCount()}]]</h5>
+                                                <h5 class="text-muted">[[#{comment}]] :
+                                                    [[${item.getCommentCount()}]]</h5>
+                                            </div>
+                                            <div class="text-end">
+                                                <p class="mb-2" th:if="${#strings.length(item.getCollection())>12}">
+                                                    <strong class="text-primary"
+                                                            th:text="${#strings.substring(item.getCollection(), 0,10)}">[[${item.getCollection()}]]</strong>
+                                                </p>
+                                                <p class="mb-2" th:if="${#strings.length(item.getCollection())<=12}">
+                                                    <strong class="text-primary" th:text="${item.getCollection()}">[[${item.getCollection()}]]</strong>
+                                                </p>
+                                                <div th:if="${#strings.length(item.getAuthorFullName())>10}">
+                                                    <h5 class="text-muted"
+                                                        th:text="${#strings.substring(item.getAuthorFullName(), 0,10)}"></h5>
+                                                </div>
+                                                <div th:if="${#strings.length(item.getAuthorFullName())<10}">
+                                                    <h5 class="text-muted" th:text="${item.getAuthorFullName()}"></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center mt-3"><a class="btn btn-primary"
+                                                                                           th:href="@{'/item/detail/'+${item.getId()}}">[[#{detail}]]</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12" th:if="${collection==null}">
+                    <div class="row">
+                        <th:block th:each="item : ${items}">
+                            <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6">
                                 <div class="card items">
                                     <div class="card-body">
                                         <div th:if="${!#strings.equals(item.getImageUrl(),'null')}"
