@@ -56,16 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/signing")
-//                .oauth2Login()
-//                .loginPage("/signing")
-//                .defaultSuccessUrl("/success-login")
-                .permitAll()
                 .and()
-                .logout()
-                .deleteCookies("JSESSIONID")
-                .and()
-                .rememberMe()
-                .rememberMeParameter("remember-me-new");
+                .oauth2Login()
+                .loginPage("/signing")
+                .defaultSuccessUrl("/success-login")
+                .permitAll();
     }
 
 
@@ -74,8 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-
 
 
 }

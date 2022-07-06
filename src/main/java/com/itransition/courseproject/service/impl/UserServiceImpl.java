@@ -23,23 +23,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements
-        UserService,
-        UserDetailsService,
-        GenericInterface<UserDto,Integer,String>,
-        ApplicationListener<AuthenticationSuccessEvent> {
+public class UserServiceImpl implements UserService, UserDetailsService, GenericInterface<UserDto, Integer, String>, ApplicationListener<AuthenticationSuccessEvent> {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -49,10 +44,10 @@ public class UserServiceImpl implements
         User user = userRepository.findByUsername(username);
         if (user == null) {
             User userEmail = userRepository.findByEmail(username);
-            if (userEmail==null) {
+            if (userEmail == null) {
                 log.error("User not found");
                 throw new UsernameNotFoundException("User not found");
-            }else {
+            } else {
                 log.info("User found {} user ", username);
             }
             return userEmail;
@@ -64,41 +59,43 @@ public class UserServiceImpl implements
 
 
     @Override
-    public String blockOrUnBlockUserById(Integer id, RedirectAttributes ra,boolean shouldBlockUser) {
+    public String blockOrUnBlockUserById(Integer id, RedirectAttributes ra, boolean shouldBlockUser) {
         if (userRepository.existsById(id)) {
             try {
-                String message=shouldBlockUser ? "Blocked":"Unblocked";
+                String message = shouldBlockUser ? "Blocked" : "Unblocked";
                 User user = userRepository.findById(id).get();
                 if (shouldBlockUser) user.setBlocked(true);
                 else user.setBlocked(false);
                 userRepository.save(user);
                 ra.addFlashAttribute("status", "success");
-                ra.addFlashAttribute("message", "Successfully "+message);
+                ra.addFlashAttribute("message", "Successfully " + message);
                 return "redirect:/admin/user";
-            }catch (Exception e){
+            } catch (Exception e) {
             }
         }
 
         ra.addFlashAttribute("status", "error");
-        ra.addFlashAttribute("message","Not Found");
+        ra.addFlashAttribute("message", "Not Found");
         return "redirect:/admin/user";
     }
 
     @Override
     public UserDto getUserData() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        User currentUser = userRepository.findByUsername(username);
-        return new UserDto(
-                currentUser.getId(),
-                currentUser.getFirstName(),
-                currentUser.getLastName(),
-                currentUser.getUsername(),
-                currentUser.getEmail(),
-                currentUser.getRole(),
-                currentUser.isBlocked(),
-                currentUser.getLastLoginTime()
-        );
+        try {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails) principal).getUsername();
+            User currentUser = userRepository.findByUsername(username);
+            return new UserDto(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getUsername(), currentUser.getEmail(), currentUser.getRole(), currentUser.isBlocked(), currentUser.getLastLoginTime());
+        } catch (Exception e) {
+        }
+        try {
+            DefaultOidcUser oauthUser = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String email = oauthUser.getAttribute("email");
+            User currentUser = userRepository.findByEmail(email);
+            return new UserDto(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getUsername(), currentUser.getEmail(), currentUser.getRole(), currentUser.isBlocked(), currentUser.getLastLoginTime());
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     @Override
@@ -108,70 +105,36 @@ public class UserServiceImpl implements
 
     @Override
     public Page<UserDto> getAllDataByPage(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(
-                page-1,
-                size,
-                Sort.by("id")
-        );
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id"));
         Page<User> userPage = userRepository.findAll(pageable);
         int totalElements = (int) userPage.getTotalElements();
-        return new PageImpl<UserDto>(userPage.getContent()
-                .stream()
-                .map(user -> new UserDto(
-                                user.getId(),
-                                user.getFirstName(),
-                                user.getLastName(),
-                                user.getUsername(),
-                                user.getEmail(),
-                                user.getRole(),
-                                user.isBlocked(),
-                                user.getLastLoginTime()
-                        )
-                )
-                .collect(Collectors.toList()), pageable, totalElements);
+        return new PageImpl<UserDto>(userPage.getContent().stream().map(user -> new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getRole(), user.isBlocked(), user.getLastLoginTime())).collect(Collectors.toList()), pageable, totalElements);
     }
 
     @Override
     public UserDto findById(Integer id) {
         User user = userRepository.findById(id).get();
-        return new UserDto(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole(),
-                user.isBlocked(),
-                user.getLastLoginTime()
-        );
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getRole(), user.isBlocked(), user.getLastLoginTime());
     }
 
     @Override
     public String saveData(UserDto userDto, RedirectAttributes ra) {
-        if (userRepository.findByUsername(userDto.getUsername())==null && userRepository.findByEmail(userDto.getEmail())==null) {
+        if (userRepository.findByUsername(userDto.getUsername()) == null && userRepository.findByEmail(userDto.getEmail()) == null) {
 
             try {
-                User user = new User(
-                        userDto.getFirstName(),
-                        userDto.getLastName(),
-                        userDto.getEmail(),
-                        userDto.getEmail(),
-                        passwordEncoder.encode(userDto.getPassword()),
-                        userDto.getRole(),
-                        false
-                );
+                User user = new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()), userDto.getRole(), false);
 
                 userRepository.save(user);
                 ra.addFlashAttribute("status", "success");
                 ra.addFlashAttribute("message", "Successfully created");
                 return "redirect:/admin/user";
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
 
         ra.addFlashAttribute("status", "error");
-        ra.addFlashAttribute("message","User Already exist with this data");
+        ra.addFlashAttribute("message", "User Already exist with this data");
         return "redirect:/admin/user/create";
     }
 
@@ -184,20 +147,20 @@ public class UserServiceImpl implements
                 user.setEmail(userDto.getEmail());
                 user.setFirstName(userDto.getFirstName());
                 user.setLastName(userDto.getLastName());
-                if (userDto.getRole()!=null)user.setRole(userDto.getRole());
-                if (userDto.getPassword()!=null)user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+                if (userDto.getRole() != null) user.setRole(userDto.getRole());
+                if (userDto.getPassword() != null) user.setPassword(passwordEncoder.encode(userDto.getPassword()));
                 userRepository.save(user);
                 ra.addFlashAttribute("status", "success");
                 ra.addFlashAttribute("message", "Successfully updated");
-                if (getUserData().getId().equals(userDto.getId()))return "redirect:/user/profile";
+                if (getUserData().getId().equals(userDto.getId())) return "redirect:/user/profile";
                 return "redirect:/admin/user";
-            }catch (Exception e){
+            } catch (Exception e) {
             }
         }
 
         ra.addFlashAttribute("status", "error");
-        ra.addFlashAttribute("message","Updating error");
-        if (getUserData().getId().equals(userDto.getId()))return "redirect:/user/profile";
+        ra.addFlashAttribute("message", "Updating error");
+        if (getUserData().getId().equals(userDto.getId())) return "redirect:/user/profile";
         return "redirect:/admin/user";
     }
 
@@ -209,11 +172,11 @@ public class UserServiceImpl implements
                 ra.addFlashAttribute("status", "success");
                 ra.addFlashAttribute("message", "Successfully deleted");
                 return "redirect:/admin/topic";
-            }catch (Exception e){
+            } catch (Exception e) {
             }
         }
         ra.addFlashAttribute("status", "error");
-        ra.addFlashAttribute("message","Deleting Error");
+        ra.addFlashAttribute("message", "Deleting Error");
         return "redirect:/admin/user";
     }
 
@@ -226,27 +189,14 @@ public class UserServiceImpl implements
     @Override
     public String registerUser(UserRegisterDto userDto, RedirectAttributes ra) {
 
-        String message="";
-        if (userRepository.findByEmail(userDto.getEmail())==null) {
+        String message = "";
+        if (userRepository.findByEmail(userDto.getEmail()) == null) {
             try {
 
-                ValidationResult apply =
-                        UserRegistrationValidator.isEmailValid()
-                                .and(UserRegistrationValidator.isPasswordValid())
-                                .and(UserRegistrationValidator.isFirstNameLastName())
-                                .and(UserRegistrationValidator.isPasswordMatch())
-                                .apply(userDto);
+                ValidationResult apply = UserRegistrationValidator.isEmailValid().and(UserRegistrationValidator.isPasswordValid()).and(UserRegistrationValidator.isFirstNameLastName()).and(UserRegistrationValidator.isPasswordMatch()).apply(userDto);
 
                 if (apply.equals(ValidationResult.SUCCESS)) {
-                    User user = new User(
-                            userDto.getFirstName(),
-                            userDto.getLastName(),
-                            userDto.getEmail(),
-                            userDto.getEmail(),
-                            passwordEncoder.encode(userDto.getPassword()),
-                            Role.ROLE_USER,
-                            false
-                    );
+                    User user = new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()), Role.ROLE_USER, false);
 
                     userRepository.save(user);
 
@@ -257,50 +207,79 @@ public class UserServiceImpl implements
 
                 switch (apply) {
                     case EMAIL_NOT_VALID:
-                        message="Email not valid";
+                        message = "Email not valid";
                         break;
                     case PASSWORD_NOT_VALID:
-                        message="Password not valid";
+                        message = "Password not valid";
                         break;
                     case FIRSTNAME_OR_LASTNAME_NOT_VALID:
-                        message="FirstName or LastName length at least 3";
+                        message = "FirstName or LastName length at least 3";
                         break;
                     case PASSWORD_DID_NOT_MATCH:
-                        message="Password did not match";
+                        message = "Password did not match";
                         break;
                 }
-            }catch (Exception e){}
-        }else{
-            message="Email already exist!";
+            } catch (Exception e) {
+            }
+        } else {
+            message = "Email already exist!";
         }
 
         ra.addFlashAttribute("status", "error");
-        ra.addFlashAttribute("message",message);
+        ra.addFlashAttribute("message", message);
         return "redirect:/signup";
     }
 
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
         try {
-            String userName = ((UserDetails) event.getAuthentication().
-                    getPrincipal()).getUsername();
+            String userName = ((UserDetails) event.getAuthentication().getPrincipal()).getUsername();
             User currentUser = userRepository.findByUsername(userName);
             currentUser.setLastLoginTime(LocalDateTime.now());
             userRepository.save(currentUser);
-        }catch (Exception e){
-            log.info("Error "," error logi time");
+        } catch (Exception e) {
+            log.info("Error ", " error logi time");
+        }
+        try {
+            DefaultOidcUser oauthUser = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String email = oauthUser.getAttribute("email");
+            User currentUser = userRepository.findByEmail(email);
+            currentUser.setLastLoginTime(LocalDateTime.now());
+            userRepository.save(currentUser);
+        } catch (Exception e) {
+            log.info("Error ", " error logi time");
         }
     }
 
     @Override
-    public User currenUser(){
+    public User currenUser() {
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = ((UserDetails) principal).getUsername();
             User currentUser = userRepository.findByUsername(username);
             return currentUser;
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
+        try {
+            DefaultOidcUser oauthUser = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String email = oauthUser.getAttribute("email");
+            User currentUser = userRepository.findByEmail(email);
+            return currentUser;
+        } catch (Exception e) {
+        }
         return null;
     }
 
+    public void createUserOauth2(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return;
+        } else {
+            User newUser = new User(email, email, email, email, passwordEncoder.encode(email), Role.ROLE_USER, false);
+
+            userRepository.save(newUser);
+
+        }
+
+    }
 }

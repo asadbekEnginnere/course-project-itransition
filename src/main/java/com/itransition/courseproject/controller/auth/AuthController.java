@@ -63,6 +63,11 @@ public class AuthController {
                         authentication.getAuthorizedClientRegistrationId(),
                         authentication.getName());
 
+        System.out.println(client);
+
+        String email = authentication.getPrincipal().getAttribute("email");
+        userService.createUserOauth2(email);
+
         return "redirect:/";
     }
 
