@@ -10,15 +10,15 @@
 */
 @font-face {
     font-family: "remixicon";
-    src: url("fonts/remixicon.eot%3Ft=1590207869815"); /* IE9*/
-    src: url("fonts/remixicon.eot%3Ft=1590207869815")
+    src: url("fonts/remixicon.eot"); /* IE9*/
+    src: url("fonts/remixicon.eot")
             format("embedded-opentype"),
-        /* IE6-IE8 */ url("fonts/remixicon.woff2%3Ft=1590207869815")
+        /* IE6-IE8 */ url("fonts/remixicon.woff2")
             format("woff2"),
-        url("fonts/remixicon.woff%3Ft=1590207869815") format("woff"),
-        url("fonts/remixicon.ttf%3Ft=1590207869815") format("truetype"),
+        url("fonts/remixicon.woff") format("woff"),
+        url("fonts/remixicon.ttf") format("truetype"),
         /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-            url("fonts/remixicon.svg%3Ft=1590207869815") format("svg"); /* iOS 4.1- */
+            url("fonts/remixicon.svg") format("svg"); /* iOS 4.1- */
     font-display: swap;
 }
 
