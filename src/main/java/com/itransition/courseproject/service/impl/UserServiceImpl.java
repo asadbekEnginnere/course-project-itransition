@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -95,7 +96,14 @@ public class UserServiceImpl implements UserService, UserDetailsService, Generic
             return new UserDto(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getUsername(), currentUser.getEmail(), currentUser.getRole(), currentUser.isBlocked(), currentUser.getLastLoginTime());
         } catch (Exception e) {
         }
-        return null;
+
+        DefaultOAuth2User oauthUser = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = oauthUser.getAttribute("email");
+        String login = oauthUser.getAttribute("login");
+        User currentUser = null;
+        if (email!=null) currentUser = userRepository.findByEmail(email);
+        else if (login!=null) currentUser = userRepository.findByEmail(login);
+        return new UserDto(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getUsername(), currentUser.getEmail(), currentUser.getRole(), currentUser.isBlocked(), currentUser.getLastLoginTime());
     }
 
     @Override
@@ -267,7 +275,14 @@ public class UserServiceImpl implements UserService, UserDetailsService, Generic
             return currentUser;
         } catch (Exception e) {
         }
-        return null;
+
+        DefaultOAuth2User oauthUser = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = oauthUser.getAttribute("email");
+        String login = oauthUser.getAttribute("login");
+        User currentUser = null;
+        if (email!=null) currentUser = userRepository.findByEmail(email);
+        else if (login!=null) currentUser = userRepository.findByEmail(login);
+        return currentUser;
     }
 
     public void createUserOauth2(String email) {
@@ -275,7 +290,8 @@ public class UserServiceImpl implements UserService, UserDetailsService, Generic
         if (user != null) {
             return;
         } else {
-            User newUser = new User(email, email, email, email, passwordEncoder.encode(email), Role.ROLE_USER, false);
+            User newUser = new User(email, email, email, email,
+                    passwordEncoder.encode(email), Role.ROLE_USER, false);
 
             userRepository.save(newUser);
 

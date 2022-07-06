@@ -38,37 +38,40 @@ public class AuthController {
 
 
     @GetMapping("/signing")
-    public String getSigningPage(Model model){
+    public String getSigningPage(Model model) {
         getSocialClient(model);
         return "signing";
     }
 
     @GetMapping("/signup")
-    public String getSignUpPage(Model model){
+    public String getSignUpPage(Model model) {
         getSocialClient(model);
-        model.addAttribute("user",new UserRegisterDto());
+        model.addAttribute("user", new UserRegisterDto());
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String signUpUser(UserRegisterDto userDto,RedirectAttributes ra){
-        return userService.registerUser(userDto,ra);
+    public String signUpUser(UserRegisterDto userDto, RedirectAttributes ra) {
+        return userService.registerUser(userDto, ra);
     }
 
     @GetMapping("/success-login")
-    public String successLogin(HttpServletRequest request, OAuth2AuthenticationToken authentication){
+    public String successLogin(HttpServletRequest request, OAuth2AuthenticationToken authentication) {
 
-        OAuth2AuthorizedClient client = authorizedClientService
-                .loadAuthorizedClient(
-                        authentication.getAuthorizedClientRegistrationId(),
-                        authentication.getName());
+        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(authentication.getAuthorizedClientRegistrationId(), authentication.getName());
 
         System.out.println(client);
 
-        String email = authentication.getPrincipal().getAttribute("email");
-        userService.createUserOauth2(email);
+        try {
+            String email = authentication.getPrincipal().getAttribute("email");
+            String login = authentication.getPrincipal().getAttribute("login");
 
+            if (email != null) userService.createUserOauth2(email);
+            else if (login != null) userService.createUserOauth2(login);
+        } catch (Exception e) {
+        }
         return "redirect:/";
+
     }
 
     private void getSocialClient(Model model) {
@@ -76,14 +79,11 @@ public class AuthController {
         Iterable<ClientRegistration> clientRegistrations = null;
         ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository).as(Iterable.class);
 
-        if (type != ResolvableType.NONE &&
-                ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
+        if (type != ResolvableType.NONE && ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
             clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
         }
 
-        Objects.requireNonNull(clientRegistrations).forEach(registration ->
-                oauth2ClientsAuthorizationUrls.put(registration.getClientName(),
-                        authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
+        Objects.requireNonNull(clientRegistrations).forEach(registration -> oauth2ClientsAuthorizationUrls.put(registration.getClientName(), authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
         model.addAttribute("urls", oauth2ClientsAuthorizationUrls);
     }
 
