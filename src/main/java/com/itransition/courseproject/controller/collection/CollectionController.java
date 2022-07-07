@@ -9,6 +9,7 @@ import com.itransition.courseproject.projection.ItemProjection;
 import com.itransition.courseproject.service.impl.CollectionServiceImpl;
 import com.itransition.courseproject.service.impl.ItemServiceImpl;
 import com.itransition.courseproject.service.impl.TopicServiceImpl;
+import com.itransition.courseproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,10 +37,12 @@ public class CollectionController {
     private final CollectionServiceImpl collectionService;
     private final TopicServiceImpl topicService;
     private final ItemServiceImpl itemService;
+    private final UserServiceImpl userService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_ADMIN')")
     public String getCollectionPage(Model model){
+        model.addAttribute("currentUser",userService.currenUser());
         model.addAttribute("collections",collectionService.getAllCollectionByUserId());
         return "collection/index";
     }

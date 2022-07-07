@@ -72,6 +72,8 @@ public class AppConfig implements WebMvcConfigurer {
         return lci;
     }
 
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());

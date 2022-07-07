@@ -66,8 +66,8 @@ public class AuthController {
             String email = authentication.getPrincipal().getAttribute("email");
             String login = authentication.getPrincipal().getAttribute("login");
 
-            if (email != null) userService.createUserOauth2(email);
-            else if (login != null) userService.createUserOauth2(login);
+            if (email != null) userService.createUserOauth2(email,request);
+            else if (login != null) userService.createUserOauth2(login,request);
         } catch (Exception e) {
         }
         return "redirect:/";

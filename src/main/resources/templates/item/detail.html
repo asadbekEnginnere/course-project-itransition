@@ -69,11 +69,10 @@
                                                         <div class="text-end"><span class=" text-muted"
                                                                                     th:text="${comment.getCommentedAt()}"></span>
                                                         </div>
-                                                        <div sec:authorize="isAuthenticated()">
+                                                        <div sec:authorize="isAuthenticated()" th:if="${currentUser!=null}">
                                                             <input type="hidden" th:value="${comment.getId()}"
                                                                    th:id="${'commentId'+comment.getId()}">
-                                                            <div class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"
-                                                                 th:if="${comment.getUserId()==#authentication.getPrincipal().getId()}">
+                                                            <div class="dropdown" th:if="${#strings.equals(currentUser.role,'ROLE_USER') and comment.getUserId()==currentUser.id}">
                                                                 <button type="button"
                                                                         class="btn p-0 dropdown-toggle hide-arrow bg-success"
                                                                         data-bs-toggle="dropdown">
@@ -96,14 +95,37 @@
                                                                     </a>
                                                                 </div>
                                                             </div>
-                                                            <div class="dropdown" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')">
+                                                            <div class="dropdown" th:if="${#strings.equals(currentUser.role,'ROLE_ADMIN')}">
                                                                 <button type="button"
                                                                         class="btn p-0 dropdown-toggle hide-arrow bg-success"
                                                                         data-bs-toggle="dropdown">
                                                                     <i class="bx bx-dots-vertical-rounded"></i>
                                                                 </button>
                                                                 <div class="dropdown-menu">
-                                                                    <button class="dropdown-item" th:if="${comment.getUserId()==#authentication.getPrincipal().getId()}"
+                                                                    <button class="dropdown-item" th:if="${comment.getUserId()==currentUser.id}"
+                                                                            th:onclick="'editFunction(\'' + ${comment.getId()} + '\');'"
+                                                                    >
+                                                                        <i class="bx bx-edit-alt me-1"></i>
+                                                                        <span><i
+                                                                                class="fa fa-edit"></i> [[#{edit}]]</span>
+                                                                    </button>
+                                                                    <a class="dropdown-item"
+                                                                       th:href="@{'/comment/delete/'+${comment.getId()}}"
+                                                                       onclick="return confirm('Are you sure delete this comment?');">
+                                                                        <i class="bx bx-trash me-1"></i>
+                                                                        <span><i
+                                                                                class="fa fa-trash"></i> [[#{delete}]]</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="dropdown" th:if="${#strings.equals(currentUser.role,'ROLE_SUPER_ADMIN')}">
+                                                                <button type="button"
+                                                                        class="btn p-0 dropdown-toggle hide-arrow bg-success"
+                                                                        data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <button class="dropdown-item" th:if="${comment.getUserId()==currentUser.id}"
                                                                             th:onclick="'editFunction(\'' + ${comment.getId()} + '\');'"
                                                                     >
                                                                         <i class="bx bx-edit-alt me-1"></i>

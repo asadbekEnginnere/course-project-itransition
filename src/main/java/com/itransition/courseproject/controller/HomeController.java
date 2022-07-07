@@ -34,6 +34,7 @@ public class HomeController {
     private final CommentServiceImpl commentService;
     private final LikeDislikeServiceImpl likeDislikeService;
     private final TopicServiceImpl topicService;
+    private final UserServiceImpl userService;
 
 
     @GetMapping
@@ -95,6 +96,7 @@ public class HomeController {
         List<CommentProjection> commentsByItemId = commentService.getCommentsByItemId(id);
         int likes = likeDislikeService.likesCount(id);
         int dislikes = likeDislikeService.disLikesCount(id);
+        model.addAttribute("currentUser",userService.currenUser());
         model.addAttribute("comment", new Comment());
         model.addAttribute("likes", likes);
         model.addAttribute("dislikes", dislikes);

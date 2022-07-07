@@ -17,7 +17,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,9 +33,14 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +49,8 @@ public class UserServiceImpl implements UserService, UserDetailsService, Generic
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private static AuthenticationManager authenticationManager;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -101,8 +113,8 @@ public class UserServiceImpl implements UserService, UserDetailsService, Generic
         String email = oauthUser.getAttribute("email");
         String login = oauthUser.getAttribute("login");
         User currentUser = null;
-        if (email!=null) currentUser = userRepository.findByEmail(email);
-        else if (login!=null) currentUser = userRepository.findByEmail(login);
+        if (email != null) currentUser = userRepository.findByEmail(email);
+        else if (login != null) currentUser = userRepository.findByEmail(login);
         return new UserDto(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getUsername(), currentUser.getEmail(), currentUser.getRole(), currentUser.isBlocked(), currentUser.getLastLoginTime());
     }
 
@@ -276,16 +288,19 @@ public class UserServiceImpl implements UserService, UserDetailsService, Generic
         } catch (Exception e) {
         }
 
-        DefaultOAuth2User oauthUser = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = oauthUser.getAttribute("email");
-        String login = oauthUser.getAttribute("login");
-        User currentUser = null;
-        if (email!=null) currentUser = userRepository.findByEmail(email);
-        else if (login!=null) currentUser = userRepository.findByEmail(login);
-        return currentUser;
+        try {
+            DefaultOAuth2User oauthUser = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String email = oauthUser.getAttribute("email");
+            String login = oauthUser.getAttribute("login");
+            User currentUser = null;
+            if (email != null) currentUser = userRepository.findByEmail(email);
+            else if (login != null) currentUser = userRepository.findByEmail(login);
+        } catch (Exception e) {
+        }
+        return null;
     }
 
-    public void createUserOauth2(String email) {
+    public void createUserOauth2(String email, HttpServletRequest request) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
             return;
@@ -293,9 +308,8 @@ public class UserServiceImpl implements UserService, UserDetailsService, Generic
             User newUser = new User(email, email, email, email,
                     passwordEncoder.encode(email), Role.ROLE_USER, false);
 
-            userRepository.save(newUser);
-
+            User save = userRepository.save(newUser);
         }
-
     }
+
 }

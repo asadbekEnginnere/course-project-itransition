@@ -6,6 +6,7 @@ package com.itransition.courseproject.service.impl;
 
 import com.itransition.courseproject.entity.collection.Comment;
 import com.itransition.courseproject.entity.collection.Item;
+import com.itransition.courseproject.entity.enums.Role;
 import com.itransition.courseproject.entity.user.User;
 import com.itransition.courseproject.projection.CommentProjection;
 import com.itransition.courseproject.repository.CommentRepository;
@@ -98,8 +99,10 @@ public class CommentServiceImpl implements CommentService {
             try {
                 if (commentRepository.findById(commentId).isPresent()) {
                     Comment comment = commentRepository.findById(commentId).get();
-                    comment.setContent(commentContent);
-                    commentRepository.save(comment);
+                    if (comment.getUser().equals(user) || user.getRole().equals(Role.ROLE_ADMIN) || user.getRole().equals(Role.ROLE_SUPER_ADMIN)) {
+                        comment.setContent(commentContent);
+                        commentRepository.save(comment);
+                    }
                 }
             } catch (Exception exception) {
             }
