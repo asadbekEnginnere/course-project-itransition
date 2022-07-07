@@ -86,6 +86,7 @@ public class CollectionServiceImpl implements CollectionService, GenericInterfac
 
                 message = "Successfully created";
                 status = "success";
+
             }
 
         } catch (Exception e) {

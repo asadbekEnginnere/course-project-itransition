@@ -25,7 +25,6 @@ public class CloudForImage {
         try {
             File fileForServer = convertMultiPartToFile(multipartFile);
             Map uploadResult = cloudinary.uploader().upload(fileForServer, ObjectUtils.emptyMap());
-            fileForServer.delete();
             return (String) uploadResult.get("url");
         }catch (IOException ignored){}
         return null;
